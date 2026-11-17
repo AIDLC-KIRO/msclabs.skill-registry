@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Rules &amp; Domains · Dental Dashboard ATX Assessment</title>
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3ED%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <section class="bg-aurora text-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12">
+          <span class="badge glass text-slate-100 border-white/20 mb-4"><span class="dot bg-violet-400"></span> AWS/business-rules-extraction</span>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight"><span class="lang-en">Business Rules Extraction</span><span class="lang-th">การสกัดกฎทางธุรกิจ</span></h1>
+          <p class="mt-3 max-w-2xl text-slate-300"><span class="lang-en">The dental-dashboard-app monolith decomposes into five bounded contexts over a single shared PostgreSQL database. This view maps each domain's features, business rules, owned tables, coupling hotspots and the seams to address during a Strangler Fig migration.</span><span class="lang-th">โมโนลิธ dental-dashboard-app แยกออกเป็น 5 bounded context บนฐานข้อมูล PostgreSQL ชุดเดียวที่ใช้ร่วมกัน มุมมองนี้แสดงฟีเจอร์ กฎทางธุรกิจ ตารางที่แต่ละโดเมนเป็นเจ้าของ จุดที่ผูกกันสูง และ seam ที่ต้องจัดการระหว่างการย้ายระบบแบบ Strangler Fig</span></p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">5</span> <span class="text-xs text-slate-300"><span class="lang-en">Domains</span><span class="lang-th">โดเมน</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">13</span> <span class="text-xs text-slate-300"><span class="lang-en">Tables</span><span class="lang-th">ตาราง</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">36</span> <span class="text-xs text-slate-300"><span class="lang-en">Features</span><span class="lang-th">ฟีเจอร์</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">39</span> <span class="text-xs text-slate-300"><span class="lang-en">Business Rules</span><span class="lang-th">กฎทางธุรกิจ</span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-10 space-y-14">
+
+        <!-- DOMAIN SUMMARY -->
+        <section id="domains-summary">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Domain Summary</span><span class="lang-th">สรุปโดเมน</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">Five bounded contexts extracted from 49 source files (~13,030 LOC). Complexity reflects LOC, entity count and cross-domain coupling. Click a row to open its deep-dive.</span><span class="lang-th">5 bounded context ที่สกัดจากไฟล์ต้นฉบับ 49 ไฟล์ (~13,030 บรรทัด) ระดับความซับซ้อนสะท้อนจำนวนบรรทัด จำนวนเอนทิตี และการผูกกันข้ามโดเมน คลิกที่แถวเพื่อเปิดการเจาะลึก</span></p>
+          <div class="card overflow-hidden">
+            <div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>#</th><th><span class="lang-en">Domain</span><span class="lang-th">โดเมน</span></th><th><span class="lang-en">Complexity</span><span class="lang-th">ความซับซ้อน</span></th><th class="text-right"><span class="lang-en">Tables</span><span class="lang-th">ตาราง</span></th><th class="text-right"><span class="lang-en">Features</span><span class="lang-th">ฟีเจอร์</span></th><th class="text-right"><span class="lang-en">Rules</span><span class="lang-th">กฎ</span></th></tr></thead>
+              <tbody id="summaryRows"></tbody>
+            </table></div>
+          </div>
+        </section>
+
+        <!-- DOMAIN DETAIL CARDS -->
+        <section id="domain-detail">
+          <h2 class="text-2xl font-bold text-slate-900 mb-6"><span class="lang-en">Domain Deep-Dive</span><span class="lang-th">เจาะลึกรายโดเมน</span></h2>
+          <div id="domainCards" class="space-y-4"></div>
+        </section>
+
+        <!-- BOUNDED CONTEXTS -->
+        <section id="bounded-contexts" class="scroll-mt-24">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Bounded Contexts &amp; Context Map</span><span class="lang-th">Bounded Contexts และแผนผังบริบท</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">care-provider is the foundational master-data context every other domain reads from. All five contexts currently persist to one shared dental_db, which is the primary coupling seam to break during decomposition.</span><span class="lang-th">care-provider คือบริบทข้อมูลหลักพื้นฐานที่ทุกโดเมนอ่านข้อมูลไปใช้ ปัจจุบันทั้ง 5 บริบทเก็บข้อมูลลงฐานข้อมูล dental_db ชุดเดียวกัน ซึ่งเป็น seam หลักที่ต้องแยกออกระหว่างการ decomposition</span></p>
+          <div class="mermaid-wrap">
+            <pre class="mermaid">
+graph TB
+    subgraph EXTERNAL["External systems / ภายนอก"]
+        TRAK["TrakCare HIS<br/>OAuth2 REST · 8 endpoints"]
+        OPD["OPD Queue<br/>HTTP POST events"]
+    end
+    subgraph CORE["Dental Dashboard bounded contexts"]
+        CP["Care Provider<br/>master data"]
+        DS["Doctor Schedule"]
+        RM["Room Management"]
+        PA["Patient Appointment"]
+        BK["Booking"]
+    end
+    SK(["Shared Kernel<br/>PGPool · AccessToken · JobScheduler · Logger · HealthCheck"])
+    PG[("dental_db<br/>PostgreSQL · 13 tables · shared")]
+    TRAK --> CP
+    TRAK --> DS
+    TRAK --> PA
+    OPD --> RM
+    DS --> CP
+    RM --> CP
+    PA --> CP
+    PA --> DS
+    PA --> RM
+    BK --> CP
+    CP --> SK
+    DS --> SK
+    RM --> SK
+    PA --> SK
+    BK --> SK
+    CP --> PG
+    DS --> PG
+    RM --> PG
+    PA --> PG
+    BK --> PG
+            </pre>
+          </div>
+        </section>
+
+        <!-- EXECUTION ORDER -->
+        <section id="execution-order" class="scroll-mt-24">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Recommended Extraction Order</span><span class="lang-th">ลำดับการแยกที่แนะนำ</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">Based on dependency analysis — domains with the fewest dependencies are extracted first, validating the approach before tackling complex transactional domains.</span><span class="lang-th">อ้างอิงจากการวิเคราะห์ dependency — โดเมนที่มี dependency น้อยที่สุดจะถูกแยกก่อน เพื่อพิสูจน์แนวทางก่อนจัดการกับโดเมนธุรกรรมที่ซับซ้อน</span></p>
+          <div class="grid md:grid-cols-3 gap-3" id="orderGrid"></div>
+        </section>
+
+        <!-- CROSS-CUTTING -->
+        <section id="cross-cutting" class="scroll-mt-24">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Cross-Cutting Concerns</span><span class="lang-th">Cross-Cutting Concerns</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">System-wide patterns and coupling hotspots that must be addressed during decomposition.</span><span class="lang-th">รูปแบบที่ใช้ทั่วทั้งระบบและจุดที่มีการผูกกันสูง (coupling hotspots) ซึ่งต้องจัดการระหว่างการแยกโครงสร้าง</span></p>
+
+          <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Coupling Hotspots</span><span class="lang-th">จุดผูกกันสูง</span></h3>
+          <div class="space-y-3 mb-8">
+            <div class="card p-5"><div class="flex items-center gap-3 mb-1 flex-wrap"><span class="badge badge-red">High</span><strong class="text-slate-800 text-sm"><code>server/modules/jobsh.js</code> — <span class="lang-en">Orchestrator</span><span class="lang-th">ตัวประสานงาน</span></strong></div><p class="text-sm text-slate-500"><span class="lang-en">Imports and directly calls functions from 7 other modules (careProvider, assistanceDentist, service, careProviderService, patientAppointment, doctorSchedule, healthCheck). This central coordination point must become an event-driven or saga-based coordinator when domains split.</span><span class="lang-th">นำเข้าและเรียกฟังก์ชันจากอีก 7 โมดูลโดยตรง (careProvider, assistanceDentist, service, careProviderService, patientAppointment, doctorSchedule, healthCheck) จุดประสานงานกลางนี้ต้องเปลี่ยนเป็นการประสานแบบ event-driven หรือ saga เมื่อแยกโดเมน</span></p></div>
+            <div class="card p-5"><div class="flex items-center gap-3 mb-1 flex-wrap"><span class="badge badge-red">High</span><strong class="text-slate-800 text-sm"><code>server/event-bridge.js</code> — <span class="lang-en">Multi-Domain Writer</span><span class="lang-th">ตัวเขียนข้ามโดเมน</span></strong></div><p class="text-sm text-slate-500"><span class="lang-en">Writes directly to tables owned by two domains — RoomDetail (room-management) and PatientAppointment (patient-appointment). Must be split into domain-specific event handlers or use inter-service API calls.</span><span class="lang-th">เขียนข้อมูลลงตารางที่เป็นของสองโดเมนโดยตรง — RoomDetail (room-management) และ PatientAppointment (patient-appointment) ต้องแยกเป็น event handler เฉพาะโดเมนหรือเรียก API ระหว่างบริการ</span></p></div>
+            <div class="card p-5"><div class="flex items-center gap-3 mb-1 flex-wrap"><span class="badge badge-red">High</span><strong class="text-slate-800 text-sm"><code>doctorSchedule.js</code> — <span class="lang-en">Workload Query</span><span class="lang-th">คิวรีคำนวณภาระงาน</span></strong></div><p class="text-sm text-slate-500"><span class="lang-en">The workload CTE joins 4 tables across 3 domains (DoctorSchedule, RoomDetail, PatientAppointment, Service) in one query. Requires a materialized view, data replication, or a dedicated reporting service after decomposition.</span><span class="lang-th">คิวรี CTE คำนวณภาระงาน join 4 ตารางจาก 3 โดเมน (DoctorSchedule, RoomDetail, PatientAppointment, Service) ในคิวรีเดียว หลังแยกระบบต้องใช้ materialized view, การจำลองข้อมูล หรือบริการรายงานเฉพาะ</span></p></div>
+            <div class="card p-5"><div class="flex items-center gap-3 mb-1 flex-wrap"><span class="badge badge-amber">Medium</span><strong class="text-slate-800 text-sm"><code>src/routes/index.js</code> — <span class="lang-en">Frontend data hub</span><span class="lang-th">ศูนย์รวมข้อมูลฝั่งหน้าเว็บ</span></strong></div><p class="text-sm text-slate-500"><span class="lang-en">Fetches data from all 5 domains and passes it down as props — the single data-loading point for the entire frontend. In a microservices architecture this becomes a BFF (Backend-for-Frontend) or API gateway.</span><span class="lang-th">ดึงข้อมูลจากทั้ง 5 โดเมนแล้วส่งต่อเป็น props เป็นจุดโหลดข้อมูลจุดเดียวของทั้งหน้าเว็บ ในสถาปัตยกรรมไมโครเซอร์วิสจะกลายเป็น BFF (Backend-for-Frontend) หรือ API gateway</span></p></div>
+          </div>
+        </section>
+
+        <!-- INTEGRATIONS -->
+        <section id="integrations" class="scroll-mt-24">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">External Integrations</span><span class="lang-th">การเชื่อมต่อภายนอก</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">The platform integrates with one HIS of record and two event sources. All external data ultimately lands in the single dental_db.</span><span class="lang-th">แพลตฟอร์มเชื่อมต่อกับระบบ HIS หลักหนึ่งระบบและแหล่งเหตุการณ์สองแหล่ง ข้อมูลภายนอกทั้งหมดสุดท้ายจะลงที่ฐานข้อมูล dental_db ชุดเดียว</span></p>
+          <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="card p-5">
+              <div class="flex items-center gap-2 mb-2"><span class="w-9 h-9 rounded-lg bg-sky-100 text-sky-600 grid place-items-center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span><strong class="text-slate-800 text-sm">TrakCare HIS</strong></div>
+              <p class="text-xs text-slate-500"><span class="lang-en">OAuth2 password-grant REST API (8 endpoints). Inbound sync of care providers, assistants, services, appointments and doctor schedules — 60s polling for appointments, daily for master data. TLS verification is disabled.</span><span class="lang-th">REST API แบบ OAuth2 password-grant (8 endpoint) ดึงข้อมูลผู้ให้บริการ ผู้ช่วย บริการ นัดหมาย และตารางแพทย์เข้าระบบ — โพลทุก 60 วินาทีสำหรับนัดหมาย และรายวันสำหรับ master data ปิดการตรวจสอบ TLS</span></p>
+            </div>
+            <div class="card p-5">
+              <div class="flex items-center gap-2 mb-2"><span class="w-9 h-9 rounded-lg bg-rose-100 text-rose-600 grid place-items-center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span><strong class="text-slate-800 text-sm">OPD Queue</strong></div>
+              <p class="text-xs text-slate-500"><span class="lang-en">External event source (hospital middleware / nurse station). HTTP POST to the Event Bridge on port 8080 — <code>/roomDetail</code> (doctor login/logout) and <code>/patientStatus</code> (Call / Hold / End Service). Event-driven, on demand.</span><span class="lang-th">แหล่งเหตุการณ์ภายนอก (middleware โรงพยาบาล / สถานีพยาบาล) ส่ง HTTP POST ไปยัง Event Bridge พอร์ต 8080 — <code>/roomDetail</code> (แพทย์เข้า/ออกห้อง) และ <code>/patientStatus</code> (เรียก / พัก / เสร็จสิ้น) แบบ event-driven ตามเหตุการณ์</span></p>
+            </div>
+            <div class="card p-5">
+              <div class="flex items-center gap-2 mb-2"><span class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 grid place-items-center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></span><strong class="text-slate-800 text-sm"><span class="lang-en">Frontend WebSocket</span><span class="lang-th">WebSocket ฝั่งหน้าเว็บ</span></strong></div>
+              <p class="text-xs text-slate-500"><span class="lang-en">The React SPA holds a Socket.IO connection to the Event Bridge (ws:// dev, wss:// prod) for real-time room/patient pushes, complemented by 6-second polling of the App Service.</span><span class="lang-th">React SPA เปิดการเชื่อมต่อ Socket.IO ไปยัง Event Bridge (ws:// สำหรับ dev, wss:// สำหรับ prod) เพื่อรับการอัปเดตห้อง/ผู้ป่วยแบบเรียลไทม์ เสริมด้วยการโพล App Service ทุก 6 วินาที</span></p>
+            </div>
+          </div>
+
+          <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Database Connections</span><span class="lang-th">การเชื่อมต่อฐานข้อมูล</span></h3>
+          <div class="card overflow-hidden">
+            <div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th><span class="lang-en">Database</span><span class="lang-th">ฐานข้อมูล</span></th><th>DataContext</th><th><span class="lang-en">Primary Domain(s)</span><span class="lang-th">โดเมนหลัก</span></th></tr></thead>
+              <tbody>
+                <tr><td><strong>dental_db</strong><br/><span class="text-xs text-slate-400">PostgreSQL 14.2 · 13 tables</span></td><td><code>pgpool.js</code> · <span class="lang-en">single pool (max 20)</span><span class="lang-th">พูลเดียว (สูงสุด 20)</span></td><td><span class="lang-en">All 5 domains share this one database — the primary coupling seam</span><span class="lang-th">ทั้ง 5 โดเมนใช้ฐานข้อมูลนี้ร่วมกัน — เป็น seam หลักของการผูกกัน</span></td></tr>
+                <tr><td>TrakCare HIS<br/><span class="text-xs text-slate-400"><span class="lang-en">external</span><span class="lang-th">ภายนอก</span></span></td><td><code>accessToken.js</code> · axios</td><td>care-provider · doctor-schedule · patient-appointment</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </section>
+
+        <!-- SERVER CONNECTIONS & DEPLOYMENT TOPOLOGY -->
+        <section id="server-connections" class="scroll-mt-24">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Server Connections &amp; Deployment Topology</span><span class="lang-th">การเชื่อมต่อเซิร์ฟเวอร์และโครงสร้างการติดตั้ง</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">How each domain connects to the database and external systems. Unlike a multi-database estate, this app funnels every domain through one PostgreSQL instance and two Node processes — so the shared database and the Event Bridge are the seams to address when splitting the monolith.</span><span class="lang-th">แต่ละโดเมนเชื่อมต่อกับฐานข้อมูลและระบบภายนอกอย่างไร ต่างจากระบบหลายฐานข้อมูล แอปนี้ส่งทุกโดเมนผ่าน PostgreSQL อินสแตนซ์เดียวและโปรเซส Node สองตัว ดังนั้นฐานข้อมูลที่ใช้ร่วมกันและ Event Bridge จึงเป็น seam ที่ต้องจัดการเมื่อแยก monolith</span></p>
+
+          <!-- Legend -->
+          <div class="flex flex-wrap items-center gap-3 mb-4 text-xs">
+            <span class="chip text-rose-600 bg-rose-50 border-rose-200 font-semibold">RW — <span class="lang-en">Read/Write</span><span class="lang-th">อ่าน/เขียน</span></span>
+            <span class="chip text-sky-700 bg-sky-50 border-sky-200 font-semibold">RO — <span class="lang-en">Read-only</span><span class="lang-th">อ่านอย่างเดียว</span></span>
+          </div>
+
+          <!-- Domain -> Server Matrix -->
+          <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Domain → Data Source Matrix</span><span class="lang-th">เมทริกซ์ โดเมน → แหล่งข้อมูล</span></h3>
+          <div class="card overflow-hidden mb-4">
+            <div class="overflow-x-auto"><table class="tbl text-center text-xs whitespace-nowrap">
+              <thead><tr>
+                <th class="text-left"><span class="lang-en">Domain / Service</span><span class="lang-th">โดเมน / บริการ</span></th>
+                <th>dental_db</th>
+                <th class="text-left"><span class="lang-en">External</span><span class="lang-th">ภายนอก</span></th>
+              </tr></thead>
+              <tbody id="serverMatrixRows"></tbody>
+            </table></div>
+          </div>
+          <p class="text-xs text-slate-500 mb-8">
+            <span class="lang-en">Every domain reads and writes the same dental_db instance through a shared connection pool. There is no per-service data isolation today — the target state gives each extracted service its own schema or database.</span>
+            <span class="lang-th">ทุกโดเมนอ่านและเขียนที่ dental_db อินสแตนซ์เดียวกันผ่านพูลการเชื่อมต่อร่วม ปัจจุบันยังไม่มีการแยกข้อมูลต่อบริการ — เป้าหมายคือให้แต่ละบริการที่แยกออกมามี schema หรือฐานข้อมูลของตัวเอง</span>
+          </p>
+
+          <!-- Diagram 1: connections by DB server -->
+          <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Connections by Data Source (primary view)</span><span class="lang-th">การเชื่อมต่อแยกตามแหล่งข้อมูล (มุมมองหลัก)</span></h3>
+          <div class="mermaid-wrap mb-8">
+            <pre class="mermaid">
+graph LR
+    CP["Care Provider"] --> PG[("dental_db")]
+    DS["Doctor Schedule"] --> PG
+    RM["Room Management"] --> PG
+    PA["Patient Appointment"] --> PG
+    BK["Booking"] --> PG
+    CP -.->|"sync"| TRAK["TrakCare HIS"]
+    DS -.->|"sync"| TRAK
+    PA -.->|"sync"| TRAK
+    RM -.->|"events"| OPD["OPD Queue"]
+            </pre>
+          </div>
+
+          <!-- Diagram 2: coupling seams -->
+          <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Shared Resources That Create Coupling (split seams)</span><span class="lang-th">ทรัพยากรที่ใช้ร่วมกันจนเกิด Coupling (seam ตอนแยกระบบ)</span></h3>
+          <div class="mermaid-wrap mb-8">
+            <pre class="mermaid">
+graph TB
+    subgraph SEAMS["Coupling seams to break"]
+        PG[("dental_db<br/>single shared database")]
+        JOB["jobsh.js<br/>orchestrator → 7 modules"]
+        EB["event-bridge.js<br/>writes RoomDetail + PatientAppointment"]
+    end
+    CP["Care Provider"] --> PG
+    DS["Doctor Schedule"] --> PG
+    RM["Room Management"] --> PG
+    PA["Patient Appointment"] --> PG
+    BK["Booking"] --> PG
+    JOB --> CP
+    JOB --> DS
+    JOB --> PA
+    EB --> RM
+    EB --> PA
+            </pre>
+          </div>
+
+          <!-- Diagram 3: cyclic dependency -->
+          <div class="grid lg:grid-cols-2 gap-6 mb-8 items-start">
+            <div>
+              <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Cyclic Dependency</span><span class="lang-th">การพึ่งพาแบบวงจร</span></h3>
+              <div class="mermaid-wrap">
+                <pre class="mermaid">
+graph LR
+    PA["Patient Appointment"] -->|"reads schedule slots<br/>for workload"| DS["Doctor Schedule"]
+    DS -->|"workload CTE reads<br/>appointments"| PA
+                </pre>
+              </div>
+            </div>
+            <div class="rounded-xl bg-indigo-50 border border-indigo-200 p-5 mt-11">
+              <div class="text-sm font-bold text-indigo-800 mb-1"><span class="lang-en">Resolution</span><span class="lang-th">แนวทางแก้</span></div>
+              <p class="text-sm text-indigo-900/80"><span class="lang-en">patient-appointment and doctor-schedule reference each other for workload calculation. Break the cycle by extracting workload into a dedicated read-model (materialized view or a small analytics service) that consumes events from both contexts, so neither service calls the other synchronously.</span><span class="lang-th">patient-appointment และ doctor-schedule อ้างอิงกันเพื่อคำนวณภาระงาน แก้วงจรด้วยการแยกการคำนวณภาระงานออกเป็น read-model เฉพาะ (materialized view หรือบริการวิเคราะห์ขนาดเล็ก) ที่รับ event จากทั้งสองบริบท เพื่อไม่ให้บริการใดเรียกกันแบบ synchronous</span></p>
+            </div>
+          </div>
+
+          <!-- Diagram 4: deployment view -->
+          <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Deployment View (Physical / Runtime)</span><span class="lang-th">มุมมองการติดตั้ง (Physical / Runtime)</span></h3>
+          <div class="mermaid-wrap mb-8">
+            <pre class="mermaid">
+graph TB
+    subgraph HOST["App server · app-host-dev · PM2"]
+        APP["App Service<br/>REST :8081 · cluster"]
+        EB["Event Bridge<br/>Socket.IO :8080 · fork"]
+        SCH["Scheduler<br/>cron · fork"]
+        SPA["React SPA<br/>:3001"]
+    end
+    DB[("Database server · db-host<br/>PostgreSQL :5432 · dental_db")]
+    TRAK["TrakCare HIS"]
+    OPD["OPD Queue"]
+    SPA -->|"REST · 6s poll"| APP
+    SPA <-->|"WebSocket"| EB
+    OPD -->|"POST events"| EB
+    APP --> DB
+    EB --> DB
+    SCH --> DB
+    SCH -->|"sync 06:00-22:00"| TRAK
+    APP -->|"delegated login"| TRAK
+            </pre>
+          </div>
+
+          <!-- Key notes from server perspective -->
+          <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Key Notes (server perspective)</span><span class="lang-th">หมายเหตุสำคัญ (จากมุมมอง server)</span></h3>
+          <div class="space-y-3">
+            <div class="card p-4 text-sm"><strong class="text-slate-800"><code>dental_db</code> — <span class="lang-en">single shared database</span><span class="lang-th">ฐานข้อมูลร่วมชุดเดียว</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">One PostgreSQL instance holds all 13 tables for all 5 domains with no schema isolation. This is the single largest obstacle to independent deployment.</span><span class="lang-th">PostgreSQL อินสแตนซ์เดียวเก็บทั้ง 13 ตารางของทั้ง 5 โดเมนโดยไม่มีการแยก schema เป็นอุปสรรคใหญ่ที่สุดต่อการ deploy อิสระ</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800"><code>event-bridge.js</code></strong><p class="text-slate-500 mt-1"><span class="lang-en">A single fork-mode process is the only writer for OPD-sourced room and patient-status events, writing across two domains' tables.</span><span class="lang-th">โปรเซส fork เดียวเป็นตัวเขียนเพียงตัวเดียวสำหรับ event ห้องและสถานะผู้ป่วยจาก OPD โดยเขียนข้ามตารางของสองโดเมน</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800"><code>scheduler.js</code></strong><p class="text-slate-500 mt-1"><span class="lang-en">Cron process is the only writer for TrakCare-sourced master data and appointments; other services read the results from cache/DB.</span><span class="lang-th">โปรเซส cron เป็นตัวเขียนเพียงตัวเดียวสำหรับ master data และนัดหมายจาก TrakCare บริการอื่นอ่านผลลัพธ์จากแคช/ฐานข้อมูล</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800"><code>in-memory cache</code></strong><p class="text-slate-500 mt-1"><span class="lang-en">Each module keeps process-local arrays refreshed on a 60s interval and on events. PM2 cluster mode means each worker has an independent, potentially divergent cache.</span><span class="lang-th">แต่ละโมดูลเก็บ array ในหน่วยความจำของโปรเซส รีเฟรชทุก 60 วินาทีและเมื่อมี event โหมด cluster ของ PM2 ทำให้แต่ละ worker มีแคชแยกกันและอาจไม่ตรงกัน</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Target: dedicated data stores</span><span class="lang-th">เป้าหมาย: ฐานข้อมูลเฉพาะบริการ</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">After extraction, each service should own its schema/database, with care-provider master data exposed via API or replicated read-models rather than shared tables.</span><span class="lang-th">หลังการแยก แต่ละบริการควรเป็นเจ้าของ schema/ฐานข้อมูลของตัวเอง โดยเปิดเผยข้อมูลหลัก care-provider ผ่าน API หรือ read-model ที่จำลองไว้แทนการใช้ตารางร่วม</span></p></div>
+            <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-rose-700"><span class="lang-en">Security &amp; resilience</span><span class="lang-th">ความปลอดภัย &amp; ความทนทาน</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">Single DB with no replica is a SPOF; TLS verification to TrakCare is disabled; credentials sit in plaintext .env files. Address these before or alongside decomposition.</span><span class="lang-th">ฐานข้อมูลชุดเดียวไม่มี replica เป็น SPOF การตรวจสอบ TLS ไปยัง TrakCare ถูกปิด และข้อมูลรับรองอยู่ในไฟล์ .env แบบข้อความธรรมดา ควรแก้ก่อนหรือระหว่างการ decomposition</span></p></div>
+          </div>
+        </section>
+
+        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+          <a href="modernization.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+            <div><div class="text-xs text-slate-400"><span class="lang-en">Next</span><span class="lang-th">ถัดไป</span></div><div class="font-bold text-slate-800"><span class="lang-en">Modernization Readiness</span><span class="lang-th">ความพร้อมสู่ความทันสมัย</span></div></div>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a href="roadmap.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+            <div><div class="text-xs text-slate-400"><span class="lang-en">Related</span><span class="lang-th">ที่เกี่ยวข้อง</span></div><div class="font-bold text-slate-800"><span class="lang-en">Modernization Roadmap</span><span class="lang-th">แผนการปรับปรุง</span></div></div>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 text-center text-xs text-slate-400">© <span data-year></span> CUSTOMER_NAME · <span class="lang-en">Generated from AWS Transform (ATX) reports</span><span class="lang-th">สร้างจากรายงาน AWS Transform (ATX)</span></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+  (function () {
+    // Domain objects. Source of truth: business-rules-extraction/domain-decomposition-overview/domain-manifest.json
+    // { n, slug (full), en, th, size, tables, features, rules, color, db, oEn, oTh, entities[], files[] }
+    const domains = [
+      { n:1, slug:"patient-appointment", en:"Patient Appointment", th:"นัดหมายผู้ป่วย", size:"Large", tables:4, features:10, rules:11, color:"indigo",
+        db:"PatientAppointment · PatientAppointmentHistory · PatientAppointmentTemp · PatientStatus",
+        oEn:"Manages the lifecycle of dental patient appointments from TrakCare sync through status transitions (Booked → Arrived → Processing → Hold → End Service → Canceled) to history archival, including the real-time 30-room dashboard display.",
+        oTh:"จัดการวงจรชีวิตการนัดหมายผู้ป่วยทันตกรรม ตั้งแต่ซิงก์จาก TrakCare การเปลี่ยนสถานะ (จอง → มาถึง → กำลังรักษา → พัก → เสร็จสิ้น → ยกเลิก) จนถึงการเก็บประวัติ พร้อมแสดงผลแดชบอร์ด 30 ห้องแบบเรียลไทม์",
+        entities:["PatientAppointment","PatientAppointmentHistory","PatientAppointmentTemp","PatientStatus"],
+        files:["server/modules/patientAppointment.js","src/pages/Dashboard/index.js","src/routes/index.js","src/pages/Schedule/table.js"] },
+      { n:2, slug:"care-provider", en:"Care Provider", th:"ผู้ให้บริการ (แพทย์/ผู้ช่วย)", size:"Medium", tables:4, features:7, rules:8, color:"emerald",
+        db:"CareProvider · AssistanceDentist · Service · CareProviderService",
+        oEn:"Maintains master data for dental staff (dentists and assistants) and the service catalog, synchronized from TrakCare HIS. It is the foundational reference every other domain reads from.",
+        oTh:"ดูแลข้อมูลหลักของบุคลากรทันตกรรม (แพทย์และผู้ช่วย) และแคตตาล็อกบริการ ซิงก์จาก TrakCare HIS เป็นข้อมูลอ้างอิงพื้นฐานที่ทุกโดเมนอ่านไปใช้",
+        entities:["CareProvider","AssistanceDentist","Service","CareProviderService"],
+        files:["server/modules/careProvider.js","server/modules/assistanceDentist.js","server/modules/service.js","server/modules/careProviderService.js"] },
+      { n:3, slug:"doctor-schedule", en:"Doctor Schedule", th:"ตารางเวรแพทย์", size:"Medium", tables:2, features:5, rules:6, color:"violet",
+        db:"DoctorSchedule · DoctorScheduleTemp",
+        oEn:"Synchronizes doctor time slots from TrakCare and computes workload utilization metrics used by the dashboard (booked service time ÷ on-duty time).",
+        oTh:"ซิงก์ช่วงเวลาปฏิบัติงานของแพทย์จาก TrakCare และคำนวณเมตริกภาระงานที่แดชบอร์ดใช้ (เวลาบริการที่จอง ÷ เวลาปฏิบัติงาน)",
+        entities:["DoctorSchedule","DoctorScheduleTemp"],
+        files:["server/modules/doctorSchedule.js"] },
+      { n:4, slug:"room-management", en:"Room Management", th:"จัดการห้องตรวจ", size:"Small", tables:1, features:7, rules:6, color:"sky",
+        db:"RoomDetail",
+        oEn:"Handles real-time tracking of dental treatment room assignments via event-driven check-in/check-out from the OPD Queue, broadcasting changes over Socket.IO. Enforces one doctor per room and one room per doctor.",
+        oTh:"ติดตามการมอบหมายห้องตรวจแบบเรียลไทม์ผ่านการเข้า/ออกห้องแบบ event-driven จาก OPD Queue และกระจายการเปลี่ยนแปลงผ่าน Socket.IO บังคับกฎหนึ่งแพทย์ต่อหนึ่งห้อง และหนึ่งห้องต่อหนึ่งแพทย์",
+        entities:["RoomDetail"],
+        files:["server/modules/roomDetail.js","server/event-bridge.js"] },
+      { n:5, slug:"booking", en:"Booking", th:"การจองห้อง", size:"Medium", tables:2, features:7, rules:8, color:"amber",
+        db:"BookingRoom · Workcase",
+        oEn:"Manages advance room scheduling via a calendar UI and Excel bulk import, with permission-based access control and work-case categories (Normal, Leave, Special Examination, Other). Distinct from real-time room state.",
+        oTh:"จัดการการวางแผนจองห้องล่วงหน้าผ่านปฏิทินและการนำเข้า Excel พร้อมควบคุมสิทธิ์การเข้าถึงและประเภท work-case (ปกติ, ลา, ตรวจพิเศษ, อื่น ๆ) แยกจากสถานะห้องแบบเรียลไทม์",
+        entities:["BookingRoom","Workcase"],
+        files:["server/modules/booking.js","server/modules/upload.js","src/pages/Calendar/index.js"] },
+    ];
+
+    const sizeBadge = { Large:"badge-red", Medium:"badge-amber", Small:"badge-green" };
+    const sizeTh = { Large:"ใหญ่", Medium:"กลาง", Small:"เล็ก" };
+    // full slug map — index uses the same value (domain-detail keys by full slug)
+    const FULL = { "patient-appointment":"patient-appointment", "care-provider":"care-provider", "doctor-schedule":"doctor-schedule", "room-management":"room-management", "booking":"booking" };
+
+    // summary table (ordered by domain number 1..5)
+    const sorted = [...domains].sort((a,b)=>a.n-b.n);
+    document.getElementById("summaryRows").innerHTML = sorted.map(d => `
+      <tr class="cursor-pointer" onclick="location.href='domain-detail.html#domain=${FULL[d.slug]}'">
+        <td class="text-slate-400">${d.n}</td>
+        <td><a href="domain-detail.html#domain=${FULL[d.slug]}" class="font-semibold text-indigo-600 hover:text-indigo-800"><span class="lang-en">${d.en}</span><span class="lang-th">${d.th}</span></a></td>
+        <td><span class="badge ${sizeBadge[d.size]}"><span class="lang-en">${d.size}</span><span class="lang-th">${sizeTh[d.size]}</span></span></td>
+        <td class="text-right font-semibold">${d.tables}</td>
+        <td class="text-right">${d.features}</td>
+        <td class="text-right">${d.rules}</td>
+      </tr>`).join("");
+
+    // detail cards
+    document.getElementById("domainCards").innerHTML = domains.map(d => `
+      <details id="domain-${d.slug}" class="card overflow-hidden scroll-mt-24 group">
+        <summary class="p-5 cursor-pointer list-none flex items-center gap-4 hover:bg-slate-50">
+          <div class="w-11 h-11 rounded-xl bg-${d.color}-100 text-${d.color}-600 grid place-items-center font-black text-lg shrink-0">${d.en.charAt(0)}</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-slate-900"><span class="lang-en">${d.en}</span><span class="lang-th">${d.th}</span></div>
+            <div class="text-xs text-slate-400 truncate">${d.db}</div>
+          </div>
+          <div class="hidden sm:flex gap-2 shrink-0">
+            <span class="chip">${d.tables} <span class="lang-en">tables</span><span class="lang-th">ตาราง</span></span>
+            <span class="badge ${sizeBadge[d.size]}"><span class="lang-en">${d.size}</span><span class="lang-th">${sizeTh[d.size]}</span></span>
+          </div>
+          <svg class="text-slate-400 transition group-open:rotate-180 shrink-0" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="px-5 pb-6 pt-1 border-t border-slate-100">
+          <p class="text-sm text-slate-600 leading-relaxed my-4"><span class="lang-en">${d.oEn}</span><span class="lang-th">${d.oTh}</span></p>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2"><span class="lang-en">Key Entities</span><span class="lang-th">เอนทิตีหลัก</span></div>
+              <div class="flex flex-wrap gap-1.5">${d.entities.map(e=>`<span class="chip font-mono text-[0.7rem]">${e}</span>`).join("")}</div>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2"><span class="lang-en">Source Files</span><span class="lang-th">ไฟล์ซอร์ส</span></div>
+              <ul class="space-y-1 text-xs text-slate-600 font-mono">${d.files.map(f=>`<li class="flex gap-2"><span class="text-${d.color}-400">›</span>${f}</li>`).join("")}</ul>
+            </div>
+          </div>
+          <a href="domain-detail.html#domain=${FULL[d.slug]}" class="mt-5 inline-flex items-center gap-2 bg-${d.color}-600 hover:bg-${d.color}-700 text-white text-sm font-bold px-4 py-2.5 rounded-xl transition">
+            <span class="lang-en">Open full deep-dive</span><span class="lang-th">เปิดการเจาะลึกฉบับเต็ม</span>
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+      </details>`).join("");
+
+    // extraction order — source: domain-decomposition-overview/execution-order.md
+    const order = [
+      { p:1, en:"Care Provider", th:"ผู้ให้บริการ", rEn:"Foundation master data; no domain dependencies.", rTh:"ข้อมูลหลักพื้นฐาน ไม่มี dependency กับโดเมนอื่น" },
+      { p:2, en:"Doctor Schedule", th:"ตารางเวรแพทย์", rEn:"Depends on care-provider (DoctorCode = CarpCode).", rTh:"ขึ้นกับ care-provider (DoctorCode = CarpCode)" },
+      { p:3, en:"Room Management", th:"จัดการห้องตรวจ", rEn:"Depends on care-provider (CarpCode, AssistCode).", rTh:"ขึ้นกับ care-provider (CarpCode, AssistCode)" },
+      { p:4, en:"Patient Appointment", th:"นัดหมายผู้ป่วย", rEn:"Depends on care-provider, doctor-schedule, room-management.", rTh:"ขึ้นกับ care-provider, doctor-schedule, room-management" },
+      { p:5, en:"Booking", th:"การจองห้อง", rEn:"Depends only on care-provider — can be extracted in parallel with phases 2-3.", rTh:"ขึ้นกับ care-provider เท่านั้น — แยกขนานกับเฟส 2-3 ได้" },
+    ];
+    const phaseColor = (p)=> p<=2?"emerald":p<=4?"sky":"violet";
+    document.getElementById("orderGrid").innerHTML = order.map(o=>`
+      <div class="card p-4 flex items-start gap-3">
+        <span class="w-8 h-8 rounded-lg bg-${phaseColor(o.p)}-100 text-${phaseColor(o.p)}-700 grid place-items-center font-black text-sm shrink-0">${o.p}</span>
+        <div><div class="font-semibold text-slate-800 text-sm"><span class="lang-en">${o.en}</span><span class="lang-th">${o.th}</span></div><div class="text-xs text-slate-500 mt-0.5"><span class="lang-en">${o.rEn}</span><span class="lang-th">${o.rTh}</span></div></div>
+      </div>`).join("");
+
+    // server connection matrix (Domain -> data source). Single column: dental_db.
+    const matrix = [
+      { en:"Care Provider", th:"ผู้ให้บริการ", c:["RW"], ext:{ en:"TrakCare HIS", th:"TrakCare HIS" } },
+      { en:"Doctor Schedule", th:"ตารางเวรแพทย์", c:["RW"], ext:{ en:"TrakCare HIS", th:"TrakCare HIS" } },
+      { en:"Room Management", th:"จัดการห้องตรวจ", c:["RW"], ext:{ en:"OPD Queue", th:"OPD Queue" } },
+      { en:"Patient Appointment", th:"นัดหมายผู้ป่วย", c:["RW"], ext:{ en:"TrakCare · OPD", th:"TrakCare · OPD" } },
+      { en:"Booking", th:"การจองห้อง", c:["RW"], ext:{ en:"Excel import", th:"นำเข้า Excel" } },
+    ];
+    const cell = (v) => {
+      if (!v) return '<td class="text-slate-200">·</td>';
+      const cls = v === "RW" ? "text-rose-700 bg-rose-50" : "text-sky-700 bg-sky-50";
+      return `<td><span class="inline-block px-1.5 py-0.5 rounded font-bold ${cls}">${v}</span></td>`;
+    };
+    const matrixEl = document.getElementById("serverMatrixRows");
+    if (matrixEl) matrixEl.innerHTML = matrix.map(m => `
+      <tr>
+        <td class="text-left font-semibold text-slate-700"><span class="lang-en">${m.en}</span><span class="lang-th">${m.th}</span></td>
+        ${m.c.map(cell).join("")}
+        <td class="text-left">${m.ext ? `<span class="chip text-slate-600 border-slate-200 bg-slate-50"><span class="lang-en">${m.ext.en}</span><span class="lang-th">${m.ext.th}</span></span>` : '<span class="text-slate-300">—</span>'}</td>
+      </tr>`).join("");
+
+    // open a domain if hash targets it
+    if (location.hash) { const t = document.querySelector(location.hash); if (t && t.tagName === "DETAILS") t.open = true; }
+    document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+  })();
+  </script>
+</body>
+</html>

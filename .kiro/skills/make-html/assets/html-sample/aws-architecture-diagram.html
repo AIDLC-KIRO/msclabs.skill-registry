@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dental Dashboard Production Architecture - Database Connections</title>
+        <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3ES%3C/text%3E%3C/svg%3E" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+        .diagram-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        .title-section {
+            margin-bottom: 32px;
+            border-left: 4px solid #0071e3;
+            padding-left: 16px;
+        }
+        .title-section h1 {
+            font-size: 24px;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+        }
+        .title-section p {
+            font-size: 14px;
+            color: #6e6e73;
+        }
+        .diagram-wrapper {
+            position: relative;
+            min-height: 900px;
+        }
+
+        /* App Server */
+        .app-server {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 520px;
+        }
+        .app-server-box {
+            border: 2px solid #0071e3;
+            border-radius: 12px;
+            padding: 20px;
+            background: #f5f3ff;
+            text-align: center;
+        }
+        .app-server-label {
+            font-size: 12px;
+            color: #0071e3;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .app-server-ip {
+            font-size: 11px;
+            color: #0a84ff;
+            margin-bottom: 12px;
+        }
+        .app-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 4px;
+        }
+        .app-tech {
+            font-size: 12px;
+            color: #6e6e73;
+        }
+        .local-db {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #c4b5fd;
+        }
+        .local-db-label {
+            font-size: 11px;
+            color: #0058b8;
+            font-weight: 600;
+        }
+        .local-db-name {
+            display: inline-block;
+            background: #0058b8;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* Users */
+        .users-section {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .user-badge {
+            background: #e8f2fd;
+            color: #0058b8;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* External Systems */
+        .external-systems {
+            position: absolute;
+            top: 200px;
+            right: 20px;
+            width: 200px;
+        }
+        .external-box {
+            border: 2px dashed #ff9500;
+            border-radius: 10px;
+            padding: 16px;
+            background: #fff7ed;
+        }
+        .external-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #c93400;
+            margin-bottom: 10px;
+        }
+        .external-item {
+            background: white;
+            border: 1px solid #fed7aa;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: #9a3412;
+            margin-bottom: 6px;
+        }
+
+        /* Database Servers */
+        .db-servers {
+            position: absolute;
+            top: 280px;
+            left: 0;
+            right: 0;
+        }
+        .db-servers-title {
+            text-align: center;
+            font-size: 13px;
+            color: #6e6e73;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .db-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 0 10px;
+        }
+        .db-server-card {
+            border: 2px solid #d2d2d7;
+            border-radius: 10px;
+            padding: 14px;
+            background: white;
+            transition: all 0.2s;
+        }
+        .db-server-card:hover {
+            border-color: #007aff;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.15);
+        }
+        .db-server-card.primary {
+            border-color: #d70015;
+            background: #fef2f2;
+        }
+        .db-server-card.d365 {
+            border-color: #0071e3;
+            background: #eff6ff;
+        }
+        .db-server-card.archive {
+            border-color: #6b7280;
+            background: #f9fafb;
+        }
+        .db-server-card.misc {
+            border-color: #059669;
+            background: #ecfdf5;
+        }
+        .db-server-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 2px;
+        }
+        .db-server-icon {
+            font-size: 14px;
+            margin-right: 4px;
+        }
+        .db-server-count {
+            font-size: 10px;
+            color: #6e6e73;
+            margin-bottom: 8px;
+        }
+        .db-list {
+            list-style: none;
+        }
+        .db-list li {
+            font-size: 11px;
+            color: #6e6e73;
+            padding: 3px 0;
+            padding-left: 14px;
+            position: relative;
+        }
+        .db-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            background: #86868b;
+        }
+        .db-server-card.primary .db-list li::before { background: #ff3b30; }
+        .db-server-card.d365 .db-list li::before { background: #007aff; }
+        .db-server-card.archive .db-list li::before { background: #6b7280; }
+        .db-server-card.misc .db-list li::before { background: #34c759; }
+
+        /* Connection lines - simplified with CSS */
+        .connection-arrow {
+            position: absolute;
+            top: 180px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, #0071e3, #007aff);
+        }
+        .connection-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #007aff;
+        }
+        .connection-label {
+            position: absolute;
+            top: 210px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #0071e3;
+            background: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        /* Summary */
+        .summary-section {
+            position: absolute;
+            top: 720px;
+            left: 0;
+            right: 0;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .summary-card {
+            text-align: center;
+            padding: 16px;
+            border-radius: 10px;
+            background: #f5f5f7;
+        }
+        .summary-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1d1d1f;
+        }
+        .summary-label {
+            font-size: 12px;
+            color: #6e6e73;
+            margin-top: 4px;
+        }
+
+        /* LDAP */
+        .ldap-section {
+            position: absolute;
+            top: 200px;
+            left: 20px;
+            width: 180px;
+        }
+        .ldap-box {
+            border: 2px dashed #0a84ff;
+            border-radius: 10px;
+            padding: 14px;
+            background: #faf5ff;
+        }
+        .ldap-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #0058b8;
+            margin-bottom: 8px;
+        }
+        .ldap-item {
+            font-size: 10px;
+            color: #6b47c4;
+            margin-bottom: 4px;
+        }
+
+        /* Legend */
+        .legend {
+            margin-top: 24px;
+            padding: 16px;
+            background: #f5f5f7;
+            border-radius: 8px;
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #6e6e73;
+        }
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            border: 2px solid;
+        }
+        .legend-dot.primary { border-color: #d70015; background: #fef2f2; }
+        .legend-dot.d365 { border-color: #0071e3; background: #eff6ff; }
+        .legend-dot.archive { border-color: #6b7280; background: #f9fafb; }
+        .legend-dot.misc { border-color: #059669; background: #ecfdf5; }
+        .legend-dot.local { border-color: #0058b8; background: #f5f3ff; }
+    </style>
+</head>
+<body>
+    <div class="diagram-container">
+        <div class="title-section">
+            <h1>Dental Dashboard Production Architecture - Database Topology</h1>
+            <p>App Server: app-host (prod) / app-host-dev (dev) | Environment: Production — app-host.CUSTOMER_DOMAIN | Data Source จากไฟล์ assessment วันที่ 27 ส.ค. 2026 (ATX assessment; DB snapshot dental-db-20241224.sql)</p>
+        </div>
+
+        <div class="diagram-wrapper">
+            <!-- App Server -->
+            <div class="app-server">
+                <div class="app-server-box">
+                    <div class="app-server-label">APP SERVER (Node.js / PM2)</div>
+                    <div class="app-server-ip">app-host (prod) · app-host-dev (dev) — LAN internal-subnet</div>
+                    <div class="app-name">dental-dashboard-app v1.1.0</div>
+                    <div class="app-tech">Express 4.21 · Socket.IO 4.8 · React 16.13 · PM2<br>app-service :8081 (cluster) · event-bridge :8080 (fork) · scheduler (ไม่มี port, cron) · React :3001</div>
+                    <div class="local-db">
+                        <div class="local-db-label">Local Database บนเครื่อง App Server</div>
+                        <span class="local-db-name">— ไม่มี (in-memory cache เท่านั้น)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LDAP -->
+            <div class="ldap-section">
+                <div class="ldap-box">
+                    <div class="ldap-title">Active Directory / LDAP</div>
+                    <div class="ldap-item">— not documented (ไม่พบ AD/LDAP)</div>
+                    <div class="ldap-item">Auth ผ่าน TrakCare OAuth2 · POST /api/iam/login</div>
+                </div>
+            </div>
+
+            <!-- External Systems -->
+            <div class="external-systems">
+                <div class="external-box">
+                    <div class="external-title">External Systems</div>
+                    <div class="external-item">TrakCare HIS — REST/HTTPS, OAuth2 Bearer (hospital LAN)</div>
+                    <div class="external-item">OPD Queue — HTTP POST /roomDetail, /patientStatus → :8080</div>
+                    <div class="external-item">Reverse proxy — app-host.CUSTOMER_DOMAIN:8000 (HTTPS)</div>
+                    <div class="external-item">Reverse proxy — app-host.CUSTOMER_DOMAIN:8443 (WSS)</div>
+                </div>
+            </div>
+
+            <!-- Connection Arrow -->
+            <div class="connection-arrow"></div>
+            <div class="connection-label">PostgreSQL TCP :5432 · pg pool max 20 · ไม่มี encryption at rest</div>
+
+            <!-- Database Servers -->
+            <div class="db-servers">
+                <div class="db-servers-title">Remote Database Server (PostgreSQL 14.2) — 1 เครื่องต่อ environment, ไม่มี replica</div>
+                <div class="db-grid">
+                    <!-- db-server-1 -->
+                    <div class="db-server-card primary">
+                        <div class="db-server-name"><span class="db-server-icon">🗄️</span>db-host (prod) · db-host-dev (dev)</div>
+                        <div class="db-server-count">PostgreSQL 14.2 :5432 · 1 database · 13 tables · pool max 20 · ไม่มี replica</div>
+                        <ul class="db-list">
+                            <li>dental_db — 13 tables (driver pg 8.7.3)</li>
+                            <li>Appointments: PatientAppointment / …Temp / …History</li>
+                            <li>Providers: CareProvider, CareProviderService, AssistanceDentist</li>
+                            <li>Schedule: DoctorSchedule, DoctorScheduleTemp</li>
+                            <li>Rooms: RoomDetail, BookingRoom</li>
+                            <li>Reference: Service, PatientStatus, Workcase</li>
+                        </ul>
+                    </div>
+
+                    <!-- db-server-2 -->
+                    <div class="db-server-card primary">
+                        <div class="db-server-name"><span class="db-server-icon">🗄️</span>—</div>
+                        <div class="db-server-count">—</div>
+                        <ul class="db-list">
+                            <li>—</li>
+                        </ul>
+                    </div>
+
+                    <!-- db-server-3 -->
+                    <div class="db-server-card primary">
+                        <div class="db-server-name"><span class="db-server-icon">🗄️</span>—</div>
+                        <div class="db-server-count">—</div>
+                        <ul class="db-list">
+                            <li>—</li>
+                        </ul>
+                    </div>
+
+                    <!-- db-server-4 -->
+                    <div class="db-server-card primary">
+                        <div class="db-server-name"><span class="db-server-icon">🗄️</span>—</div>
+                        <div class="db-server-count">—</div>
+                        <ul class="db-list">
+                            <li>—</li>
+                        </ul>
+                    </div>
+
+                    <!-- db-server-5 -->
+                    <div class="db-server-card primary">
+                        <div class="db-server-name"><span class="db-server-icon">🗄️</span>—</div>
+                        <div class="db-server-count">—</div>
+                        <ul class="db-list">
+                            <li>—</li>
+                        </ul>
+                    </div>
+
+                    <!-- db-server-6 -->
+                    <div class="db-server-card d365">
+                        <div class="db-server-name"><span class="db-server-icon">🗄️</span>—</div>
+                        <div class="db-server-count">—</div>
+                        <ul class="db-list">
+                            <li>—</li>
+                            <li>—</li>
+                            <li>—</li>
+                        </ul>
+                    </div>
+
+                    <!-- db-server-7 -->
+                    <div class="db-server-card d365">
+                        <div class="db-server-name"><span class="db-server-icon">🗄️</span>—</div>
+                        <div class="db-server-count">—</div>
+                        <ul class="db-list">
+                            <li>—</li>
+                        </ul>
+                    </div>
+
+                    <!-- db-server-8 -->
+                    <div class="db-server-card misc">
+                        <div class="db-server-name"><span class="db-server-icon">🗄️</span>—</div>
+                        <div class="db-server-count">—</div>
+                        <ul class="db-list">
+                            <li>—</li>
+                        </ul>
+                    </div>
+
+                    <!-- db-server-9 -->
+                    <div class="db-server-card archive">
+                        <div class="db-server-name"><span class="db-server-icon">🗄️</span>—</div>
+                        <div class="db-server-count">—</div>
+                        <ul class="db-list">
+                            <li>—</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-section">
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-number">1</div>
+                        <div class="summary-label">Database Servers (รวม localhost)</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number">1</div>
+                        <div class="summary-label">Databases (unique catalogs)</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number">1</div>
+                        <div class="summary-label">Connection Strings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend" style="margin-top: 780px;">
+            <div class="legend-item">
+                <div class="legend-dot local"></div>
+                Local DB (อยู่บนเครื่อง App Server) — ไม่มีในระบบนี้
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot primary"></div>
+                PostgreSQL DB Server (internal network internal-subnet)
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot d365"></div>
+                — ไม่ใช้งาน / unused tier
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot misc"></div>
+                — ไม่ใช้งาน / unused tier
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot archive"></div>
+                — ไม่ใช้งาน / unused tier (archive อยู่ในตาราง PatientAppointmentHistory)
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modernization Readiness · Dental Dashboard ATX Assessment</title>
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3ED%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <section class="bg-aurora text-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12">
+          <span class="badge glass text-slate-100 border-white/20 mb-4"><span class="dot bg-sky-400"></span> AWS/modernization-readiness-analysis</span>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight"><span class="lang-en">Modernization Readiness Analysis</span><span class="lang-th">การวิเคราะห์ความพร้อมสู่ความทันสมัย</span></h1>
+          <p class="mt-3 max-w-2xl text-slate-300"><span class="lang-en">A scored evaluation across five modernization dimensions with detailed findings and recommended AWS modernization pathways.</span><span class="lang-th">การประเมินแบบให้คะแนนใน 5 มิติของการปรับปรุงให้ทันสมัย พร้อมผลการประเมินโดยละเอียดและเส้นทางการปรับปรุงบน AWS ที่แนะนำ</span></p>
+          <div class="mt-6 flex flex-wrap items-center gap-4">
+            <div class="glass rounded-2xl px-5 py-3 flex items-center gap-3">
+              <span class="text-4xl font-black kpi">1.50</span><span class="text-slate-400 text-sm">/ 4.0</span>
+              <span class="badge badge-amber ml-1"><span class="lang-en">Needs Work</span><span class="lang-th">ต้องปรับปรุง</span></span>
+            </div>
+            <div class="text-sm text-slate-300"><span class="lang-en">Archetype:</span><span class="lang-th">รูปแบบ:</span> <strong class="text-white">stateful-crud</strong> · <span class="lang-en">Repo type:</span><span class="lang-th">ประเภท repo:</span> <strong class="text-white">application</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-10 space-y-14">
+
+        <!-- CLASSIFICATION -->
+        <section class="grid lg:grid-cols-3 gap-6">
+          <div class="card p-6 lg:col-span-2">
+            <h2 class="text-xl font-bold text-slate-900 mb-3"><span class="lang-en">Classification</span><span class="lang-th">การจัดระดับ</span></h2>
+            <div class="rounded-xl bg-amber-50 border border-amber-200 p-4 mb-4">
+              <div class="font-bold text-amber-700 mb-1">🟠 <span class="lang-en">Tier: Needs Work · Remediation Required</span><span class="lang-th">ระดับ: ต้องปรับปรุง · ต้องแก้ไข</span></div>
+              <p class="text-sm text-amber-800"><span class="lang-en">Questions across five categories produced 10 High, 23 Medium and 1 Low finding. The rule <code>2–11 High &rarr; Remediation Required</code> matched. Three categories (INF, SEC, OPS) are individually rated Not Ready, but the weighted overall of 1.50 lands in the Needs Work band.</span><span class="lang-th">การประเมินใน 5 หมวด พบประเด็นระดับสูง 10 กลาง 23 และต่ำ 1 รายการ ตรงกับกฎ <code>2–11 High &rarr; ต้องแก้ไข</code> โดยสามหมวด (INF, SEC, OPS) ถูกจัดระดับ "ยังไม่พร้อม" รายหมวด แต่คะแนนรวมถ่วงน้ำหนัก 1.50 อยู่ในช่วง "ต้องปรับปรุง"</span></p>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed"><span class="lang-en"><strong>Archetype justification:</strong> Auto-detected as stateful-crud: the application owns a PostgreSQL database and performs CRUD on patient appointments, room details and bookings. Workflow-orchestration questions were skipped because the scheduled jobs are simple recurring cron tasks rather than multi-step coordination.</span><span class="lang-th"><strong>เหตุผลของรูปแบบ:</strong> ระบบถูกตรวจพบอัตโนมัติว่าเป็น stateful-crud เพราะเป็นเจ้าของฐานข้อมูล PostgreSQL และทำงาน CRUD กับนัดหมายผู้ป่วย รายละเอียดห้องตรวจ และการจอง ส่วนคำถามด้าน workflow orchestration ถูกข้ามไป เนื่องจากงานตามกำหนดเวลาเป็น cron แบบทำซ้ำง่าย ไม่ใช่การประสานงานหลายขั้นตอน</span></p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200">has_persistent_data_store</span>
+              <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200">has_deployed_workload</span>
+              <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200">has_api_surface</span>
+              <span class="chip text-rose-600 bg-rose-50 border-rose-200">no multi_instance_deployment</span>
+              <span class="chip text-rose-600 bg-rose-50 border-rose-200">no iac_provisioning</span>
+            </div>
+          </div>
+          <div class="card p-6 flex flex-col items-center justify-center">
+            <div class="ring" data-p="37.5" style="--ring-c:#ff9500;--sz:150px;">
+              <div class="text-center"><div class="text-4xl font-black text-slate-900 kpi">1.50</div><div class="text-xs text-slate-400 font-semibold">/ 4.0</div></div>
+            </div>
+            <div class="text-xs text-slate-500 mt-4 text-center"><span class="lang-en">Overall weighted across 5 categories</span><span class="lang-th">คะแนนรวมถ่วงน้ำหนักจาก 5 หมวด</span></div>
+          </div>
+        </section>
+
+        <!-- SCORE SUMMARY -->
+        <section id="scores">
+          <h2 class="text-2xl font-bold text-slate-900 mb-6"><span class="lang-en">Score Summary</span><span class="lang-th">สรุปคะแนน</span></h2>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4" id="scoreCards"></div>
+          <div class="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-4 text-xs text-slate-500 font-mono leading-relaxed">
+            (1.09 + 2.00 + 2.25 + 1.17 + 1.00) ÷ 5 = <strong class="text-slate-700">1.50</strong>
+          </div>
+        </section>
+
+        <!-- FINDINGS -->
+        <section id="findings" class="scroll-mt-24">
+          <div class="flex items-center justify-between flex-wrap gap-3 mb-2">
+            <h2 class="text-2xl font-bold text-slate-900"><span class="lang-en">Detailed Findings</span><span class="lang-th">ผลการประเมินโดยละเอียด</span></h2>
+            <div class="flex flex-wrap gap-1.5" id="findingFilters"></div>
+          </div>
+          <p class="text-slate-600 mb-6"><span class="lang-en">Filter by category. Each finding includes score, gap, and AWS recommendation. Click to expand.</span><span class="lang-th">กรองตามหมวด แต่ละประเด็นมีคะแนน ช่องว่าง และคำแนะนำบน AWS คลิกเพื่อขยาย</span></p>
+          <div id="findingsList" class="space-y-2.5"></div>
+        </section>
+
+        <!-- PATHWAYS -->
+        <section id="pathways" class="scroll-mt-24">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">AWS Modernization Pathways</span><span class="lang-th">เส้นทางการปรับปรุงบน AWS</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">Four of seven pathways were triggered based on the assessment findings.</span><span class="lang-th">มีเส้นทาง 4 จาก 7 เส้นทางที่ถูกกระตุ้น (triggered) ตามผลการประเมิน</span></p>
+          <div class="grid md:grid-cols-2 gap-4" id="pathwayCards"></div>
+        </section>
+
+        <!-- DECOMPOSITION -->
+        <section id="decomposition" class="scroll-mt-24">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Decomposition Strategy</span><span class="lang-th">กลยุทธ์การแยกโครงสร้าง</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">A phased approach is recommended: strengthen the modular monolith first, then apply the Strangler Fig pattern. A big-bang rewrite is recommended against.</span><span class="lang-th">แนะนำแนวทางแบบเป็นระยะ: เสริมความแข็งแรงของ modular monolith ก่อน แล้วจึงใช้รูปแบบ Strangler Fig ไม่แนะนำให้เขียนใหม่ทั้งหมดในครั้งเดียว</span></p>
+          <div class="card overflow-hidden mb-8">
+            <div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th><span class="lang-en">Approach</span><span class="lang-th">แนวทาง</span></th><th><span class="lang-en">Effort</span><span class="lang-th">ความพยายาม</span></th><th><span class="lang-en">Recommendation</span><span class="lang-th">คำแนะนำ</span></th></tr></thead>
+              <tbody>
+                <tr><td><strong>Strengthen as Modular Monolith</strong></td><td><span class="badge badge-green">Low · 2–6 mo</span></td><td>✅ <span class="lang-en">Recommended Phase 1 — establish module boundaries per domain first.</span><span class="lang-th">แนะนำเป็นเฟส 1 — สร้างขอบเขตโมดูลตามโดเมนก่อน</span></td></tr>
+                <tr><td><strong>Strangler Fig (Parallel Track)</strong></td><td><span class="badge badge-amber">Med–High · 6–18 mo</span></td><td>✅ <span class="lang-en">Recommended Phase 2 — extract high-value bounded contexts incrementally.</span><span class="lang-th">แนะนำเป็นเฟส 2 — แยก bounded context ที่มีมูลค่าสูงทีละส่วน</span></td></tr>
+                <tr><td><strong>Conditional / Adaptive</strong></td><td><span class="badge badge-amber">Low–Med</span></td><td>✅ <span class="lang-en">Recommended if capacity is constrained.</span><span class="lang-th">แนะนำหากมีทรัพยากรจำกัด</span></td></tr>
+                <tr><td><strong>Big-Bang Rewrite</strong></td><td><span class="badge badge-red">Very High · 12–24+ mo</span></td><td>⚠️ <span class="lang-en">Recommended against — the app is functional; incremental is safer.</span><span class="lang-th">ไม่แนะนำ — แอปยังใช้งานได้ การทำแบบค่อยเป็นค่อยไปปลอดภัยกว่า</span></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+
+          <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Target Architecture Direction</span><span class="lang-th">ทิศทางสถาปัตยกรรมเป้าหมาย</span></h3>
+          <div class="mermaid-wrap">
+            <pre class="mermaid">
+graph TB
+    subgraph EDGE["Edge"]
+        CF["CloudFront + S3<br/>React SPA"]
+        AGW["API Gateway<br/>REST + WebSocket"]
+    end
+    subgraph SVC["Bounded contexts · ECS Fargate"]
+        CP["Care Provider<br/>Service"]
+        PA["Patient Appointment<br/>Service"]
+        DS["Doctor Schedule<br/>Service"]
+        RM["Room Management<br/>Service"]
+        BK["Booking Service"]
+    end
+    subgraph MSG["Messaging"]
+        EVB["EventBridge / SQS<br/>event hub"]
+    end
+    subgraph DATA["Managed data"]
+        RDS[("Aurora PostgreSQL<br/>Multi-AZ · per-service schema")]
+        S3[("S3<br/>Excel uploads")]
+        SM["Secrets Manager"]
+    end
+    subgraph OBS["Operations"]
+        CW["CloudWatch<br/>metrics · alarms"]
+        XR["X-Ray<br/>tracing"]
+    end
+    ACL["Anti-corruption layer"]
+    TRAK["TrakCare HIS"]
+    OPD["OPD Queue"]
+    CF --> AGW
+    AGW --> CP
+    AGW --> PA
+    AGW --> DS
+    AGW --> RM
+    AGW --> BK
+    OPD --> EVB
+    EVB --> RM
+    EVB --> PA
+    CP --> RDS
+    PA --> RDS
+    DS --> RDS
+    RM --> RDS
+    BK --> RDS
+    BK --> S3
+    CP --> ACL
+    PA --> ACL
+    DS --> ACL
+    ACL --> TRAK
+    AGW --> SM
+    PA --> CW
+    EVB --> XR
+            </pre>
+          </div>
+
+          <h3 class="text-lg font-bold text-slate-800 mb-3 mt-8"><span class="lang-en">Pattern Recommendations</span><span class="lang-th">คำแนะนำรูปแบบ (Patterns)</span></h3>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div class="card p-4 text-sm"><strong class="text-slate-800">Anti-corruption Layer</strong><p class="text-slate-500 mt-1"><span class="lang-en">Wrap the TrakCare REST contract behind an adapter so the new services never depend on its field names or the empty-string conventions the current code relies on.</span><span class="lang-th">ห่อสัญญา REST ของ TrakCare ไว้หลัง adapter เพื่อให้เซอร์วิสใหม่ไม่ต้องผูกกับชื่อฟิลด์หรือธรรมเนียมการใช้สตริงว่างที่โค้ดปัจจุบันพึ่งพา</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800">Saga Pattern</strong><p class="text-slate-500 mt-1"><span class="lang-en">Replace the multi-step temp-table staging transaction with a saga so appointment sync can compensate cleanly when a step fails midway.</span><span class="lang-th">แทนที่ธุรกรรมหลายขั้นตอนที่ใช้ตารางชั่วคราวด้วยรูปแบบ saga เพื่อให้การซิงก์นัดหมายย้อนกลับได้อย่างสะอาดเมื่อขั้นตอนใดล้มเหลวกลางทาง</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800">Event Sourcing</strong><p class="text-slate-500 mt-1"><span class="lang-en">The room login/logout and patient status flows are already event-shaped; persisting those events gives an audit trail the current schema cannot provide.</span><span class="lang-th">กระแสการเข้าออกห้องตรวจและสถานะผู้ป่วยมีลักษณะเป็นเหตุการณ์อยู่แล้ว การจัดเก็บเหตุการณ์เหล่านั้นจะให้ร่องรอยการตรวจสอบที่สคีมาปัจจุบันทำไม่ได้</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800">Hexagonal Architecture</strong><p class="text-slate-500 mt-1"><span class="lang-en">Separate the SQL and TrakCare adapters from business rules so the status-mapping CASE and the 10-minute alert logic become testable in isolation.</span><span class="lang-th">แยก adapter ของ SQL และ TrakCare ออกจากกฎทางธุรกิจ เพื่อให้ CASE ที่แปลงสถานะและตรรกะแจ้งเตือน 10 นาทีทดสอบแยกส่วนได้</span></p></div>
+          </div>
+        </section>
+
+        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+          <a href="roadmap.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+            <div><div class="text-xs text-slate-400"><span class="lang-en">Next</span><span class="lang-th">ถัดไป</span></div><div class="font-bold text-slate-800"><span class="lang-en">Modernization Roadmap</span><span class="lang-th">แผนการปรับปรุง</span></div></div>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a href="codebase.html#security" class="card card-hover p-5 flex-1 flex items-center justify-between">
+            <div><div class="text-xs text-slate-400"><span class="lang-en">Related</span><span class="lang-th">ที่เกี่ยวข้อง</span></div><div class="font-bold text-slate-800"><span class="lang-en">Security Analysis</span><span class="lang-th">การวิเคราะห์ความปลอดภัย</span></div></div>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 text-center text-xs text-slate-400">© <span data-year></span> CUSTOMER_NAME · <span class="lang-en">Generated from AWS Transform (ATX) reports</span><span class="lang-th">สร้างจากรายงาน AWS Transform (ATX)</span></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+  (function () {
+    // ----- Score cards -----
+    const cats = [
+      { code:"INF", en:"Infrastructure & DevOps", th:"โครงสร้างพื้นฐาน & DevOps", score:1.09, pct:27.25 },
+      { code:"APP", en:"Application Architecture", th:"สถาปัตยกรรมแอปพลิเคชัน", score:2.00, pct:50 },
+      { code:"DATA", en:"Data Platform", th:"แพลตฟอร์มข้อมูล", score:2.25, pct:56.25 },
+      { code:"SEC", en:"Security Baseline", th:"พื้นฐานความปลอดภัย", score:1.17, pct:29.25 },
+      { code:"OPS", en:"Operations & Observability", th:"ปฏิบัติการ & Observability", score:1.00, pct:25 },
+    ];
+    const ratingOf = (s)=> s<1.5 ? {en:"Not Ready",th:"ยังไม่พร้อม",cls:"badge-red"} : s<2.5 ? {en:"Needs Work",th:"ต้องปรับปรุง",cls:"badge-amber"} : {en:"Ready",th:"พร้อม",cls:"badge-green"};
+    document.getElementById("scoreCards").innerHTML = cats.map(c=>{
+      const r = ratingOf(c.score); const col = c.score<1.5?"#ff3b30":c.score<2.5?"#ff9500":"#34c759";
+      return `<div class="card p-5">
+        <div class="flex items-center justify-between mb-3"><span class="chip font-bold">${c.code}</span><span class="badge ${r.cls}"><span class="lang-en">${r.en}</span><span class="lang-th">${r.th}</span></span></div>
+        <div class="text-3xl font-black text-slate-900 kpi">${c.score.toFixed(2)}</div>
+        <div class="text-xs text-slate-500 mb-3"><span class="lang-en">${c.en}</span><span class="lang-th">${c.th}</span></div>
+        <div class="bar"><span data-w="${c.pct}%" style="background:${col}"></span></div>
+      </div>`;
+    }).join("");
+
+    // ----- Findings -----
+    /* [
+      {
+            "cat": "INF",
+            "id": "INF-Q1",
+            "s": 1,
+            "crit": true,
+            "en": "No managed compute",
+            "th": "ไม่มี managed compute",
+            "gEn": "All compute runs on bare-metal or VM infrastructure managed via PM2 — no ECS, EKS, Lambda or Fargate, no auto-scaling.",
+            "gTh": "compute ทั้งหมดรันบน bare-metal หรือ VM ที่จัดการด้วย PM2 ไม่มี ECS, EKS, Lambda หรือ Fargate และไม่มี auto-scaling",
+            "rEn": "Containerize the three Node processes and deploy to ECS Fargate or EKS.",
+            "rTh": "แปลงโปรเซส Node ทั้งสามเป็นคอนเทนเนอร์ แล้ว deploy บน ECS Fargate หรือ EKS"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q2",
+            "s": 1,
+            "crit": true,
+            "en": "Self-managed PostgreSQL",
+            "th": "จัดการ PostgreSQL ด้วยตนเอง",
+            "gEn": "PostgreSQL 14.2 is self-managed on internal servers with manual patching, backup and no failover.",
+            "gTh": "PostgreSQL 14.2 ดูแลเองบนเซิร์ฟเวอร์ภายใน โดย patch และสำรองข้อมูลด้วยมือ และไม่มีระบบ failover",
+            "rEn": "Migrate to Amazon RDS or Aurora PostgreSQL with Multi-AZ.",
+            "rTh": "ย้ายไปใช้ Amazon RDS หรือ Aurora PostgreSQL แบบ Multi-AZ"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q4",
+            "s": 2,
+            "crit": false,
+            "en": "Self-managed Socket.IO",
+            "th": "จัดการ Socket.IO ด้วยตนเอง",
+            "gEn": "Event distribution relies on a single self-hosted Socket.IO process with no managed messaging.",
+            "gTh": "การกระจายเหตุการณ์อาศัยโปรเซส Socket.IO ที่ดูแลเองเพียงตัวเดียว ไม่มีบริการ messaging แบบ managed",
+            "rEn": "Consider API Gateway WebSocket, EventBridge or MSK for fan-out.",
+            "rTh": "พิจารณาใช้ API Gateway WebSocket, EventBridge หรือ MSK เพื่อกระจายเหตุการณ์"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q5",
+            "s": 1,
+            "crit": true,
+            "en": "No network security controls",
+            "th": "ไม่มีการควบคุมความปลอดภัยเครือข่าย",
+            "gEn": "Wildcard CORS and disabled TLS verification leave the services effectively open.",
+            "gTh": "การตั้ง CORS เป็น wildcard และปิดการตรวจ TLS ทำให้เซอร์วิสเปิดโล่ง",
+            "rEn": "Introduce WAF, security groups and restrict CORS to known origins.",
+            "rTh": "เพิ่ม WAF, security group และจำกัด CORS ให้เฉพาะ origin ที่รู้จัก"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q6",
+            "s": 1,
+            "crit": false,
+            "en": "No API gateway",
+            "th": "ไม่มี API gateway",
+            "gEn": "The Express server is exposed directly with no gateway for throttling or auth.",
+            "gTh": "เปิด Express server ตรงโดยไม่มีเกตเวย์สำหรับจำกัดอัตราหรือยืนยันตัวตน",
+            "rEn": "Front the API with Amazon API Gateway or an ALB.",
+            "rTh": "วาง Amazon API Gateway หรือ ALB ไว้หน้า API"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q7",
+            "s": 1,
+            "crit": false,
+            "en": "No auto-scaling",
+            "th": "ไม่มี auto-scaling",
+            "gEn": "Static capacity on a single application server.",
+            "gTh": "ความจุคงที่บนเครื่องแอปพลิเคชันเพียงเครื่องเดียว",
+            "rEn": "Adopt managed compute with target-tracking auto-scaling.",
+            "rTh": "ใช้ managed compute พร้อม auto-scaling แบบ target tracking"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q8",
+            "s": 1,
+            "crit": false,
+            "en": "No automated backups",
+            "th": "ไม่มีการสำรองข้อมูลอัตโนมัติ",
+            "gEn": "Backups depend on manual pg_dump with no tested restore.",
+            "gTh": "การสำรองข้อมูลใช้ pg_dump ด้วยมือ และไม่มีการทดสอบกู้คืน",
+            "rEn": "Enable RDS automated backups and PITR, and rehearse restores.",
+            "rTh": "เปิด automated backup และ PITR ของ RDS แล้วซ้อมกู้คืนข้อมูล"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q9",
+            "s": 1,
+            "crit": false,
+            "en": "Single point of failure",
+            "th": "มีจุดล้มเหลวเดียว",
+            "gEn": "One app host and one database instance with no Multi-AZ or redundancy.",
+            "gTh": "มีเครื่องแอปและฐานข้อมูลชุดเดียว ไม่มี Multi-AZ หรือระบบสำรอง",
+            "rEn": "Deploy across at least two Availability Zones.",
+            "rTh": "กระจายการติดตั้งอย่างน้อยสอง Availability Zone"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q10",
+            "s": 1,
+            "crit": true,
+            "en": "No infrastructure as code",
+            "th": "ไม่มี Infrastructure as Code",
+            "gEn": "0% IaC coverage — every environment is built by hand.",
+            "gTh": "ความครอบคลุม IaC เป็น 0% ทุกสภาพแวดล้อมสร้างด้วยมือ",
+            "rEn": "Define the stack in CDK or Terraform and provision from code.",
+            "rTh": "นิยามโครงสร้างพื้นฐานด้วย CDK หรือ Terraform และสร้างจากโค้ด"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q11",
+            "s": 1,
+            "crit": true,
+            "en": "No CI/CD",
+            "th": "ไม่มี CI/CD",
+            "gEn": "Deployment is a manual PM2 batch script with no pipeline or gates.",
+            "gTh": "การ deploy ใช้สคริปต์ batch ของ PM2 ด้วยมือ ไม่มี pipeline หรือด่านตรวจ",
+            "rEn": "Build a CodePipeline or GitHub Actions pipeline with automated tests.",
+            "rTh": "สร้าง pipeline ด้วย CodePipeline หรือ GitHub Actions พร้อมการทดสอบอัตโนมัติ"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q1",
+            "s": 2,
+            "crit": false,
+            "en": "Legacy JavaScript stack",
+            "th": "สแตก JavaScript ที่ล้าสมัย",
+            "gEn": "React 16, CRA 3, Webpack 4 and Material UI 4 are all end of life.",
+            "gTh": "React 16, CRA 3, Webpack 4 และ Material UI 4 หมดระยะสนับสนุนทั้งหมด",
+            "rEn": "Upgrade to React 18+ on Vite, and MUI 5+.",
+            "rTh": "อัปเกรดเป็น React 18+ บน Vite และ MUI 5+"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q2",
+            "s": 1,
+            "crit": true,
+            "en": "Tightly-coupled monolith",
+            "th": "Monolith ที่ผูกกันแน่น",
+            "gEn": "No module boundaries; all three services share one database schema.",
+            "gTh": "ไม่มีขอบเขตของโมดูล เซอร์วิสทั้งสามใช้สคีมาฐานข้อมูลร่วมกัน",
+            "rEn": "Decompose into the five bounded contexts using Strangler Fig.",
+            "rTh": "แยกออกเป็น 5 bounded context ด้วยรูปแบบ Strangler Fig"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q3",
+            "s": 2,
+            "crit": false,
+            "en": "Primarily synchronous",
+            "th": "ทำงานแบบ synchronous เป็นหลัก",
+            "gEn": "Limited async handling, all self-managed.",
+            "gTh": "การทำงานแบบ async มีจำกัดและดูแลเองทั้งหมด",
+            "rEn": "Introduce managed queues for long-running work.",
+            "rTh": "เพิ่มคิวแบบ managed สำหรับงานที่ใช้เวลานาน"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q4",
+            "s": 2,
+            "crit": false,
+            "en": "Background sync without status tracking",
+            "th": "งานซิงก์เบื้องหลังไม่มีการติดตามสถานะ",
+            "gEn": "The 60-second TrakCare sync has no job status or retry visibility.",
+            "gTh": "การซิงก์ TrakCare ทุก 60 วินาทีไม่มีสถานะงานหรือการมองเห็นการ retry",
+            "rEn": "Track job state and surface failures as metrics.",
+            "rTh": "บันทึกสถานะงานและแสดงความล้มเหลวเป็น metric"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q5",
+            "s": 2,
+            "crit": false,
+            "en": "No API versioning",
+            "th": "ไม่มีการกำหนดเวอร์ชัน API",
+            "gEn": "All 19 endpoints are unversioned.",
+            "gTh": "endpoint ทั้ง 19 เส้นทางไม่มีการระบุเวอร์ชัน",
+            "rEn": "Introduce /v1 prefixes before the migration.",
+            "rTh": "เพิ่ม prefix /v1 ก่อนเริ่มย้ายระบบ"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q6",
+            "s": 2,
+            "crit": false,
+            "en": "Hard-coded IP addresses",
+            "th": "ระบุ IP ตายตัว",
+            "gEn": "Hosts are pinned as IPs in environment variables with no service discovery.",
+            "gTh": "ระบุเครื่องเป็นเลข IP ในตัวแปรสภาพแวดล้อม ไม่มี service discovery",
+            "rEn": "Use DNS-based service discovery such as Cloud Map.",
+            "rTh": "ใช้ service discovery ผ่าน DNS เช่น Cloud Map"
+      },
+      {
+            "cat": "DATA",
+            "id": "DATA-Q1",
+            "s": 1,
+            "crit": true,
+            "en": "Uploads on local filesystem",
+            "th": "อัปโหลดไฟล์ลงดิสก์ในเครื่อง",
+            "gEn": "Excel uploads are written to local disk — no object storage, lost if the host is replaced.",
+            "gTh": "ไฟล์ Excel ที่อัปโหลดถูกเขียนลงดิสก์ในเครื่อง ไม่มี object storage และจะหายเมื่อเปลี่ยนเครื่อง",
+            "rEn": "Move uploads to Amazon S3.",
+            "rTh": "ย้ายไฟล์ที่อัปโหลดไปเก็บบน Amazon S3"
+      },
+      {
+            "cat": "DATA",
+            "id": "DATA-Q3",
+            "s": 2,
+            "crit": false,
+            "en": "PostgreSQL 14.2 nearing EOL",
+            "th": "PostgreSQL 14.2 ใกล้หมดระยะสนับสนุน",
+            "gEn": "No version upgrade strategy is documented.",
+            "gTh": "ไม่มีเอกสารกำหนดแนวทางอัปเกรดเวอร์ชัน",
+            "rEn": "Plan a managed upgrade path on RDS.",
+            "rTh": "วางแผนเส้นทางอัปเกรดแบบ managed บน RDS"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q2",
+            "s": 1,
+            "crit": true,
+            "en": "No encryption at rest",
+            "th": "ไม่มีการเข้ารหัสข้อมูลที่จัดเก็บ",
+            "gEn": "Neither the database nor uploaded files are encrypted at rest.",
+            "gTh": "ทั้งฐานข้อมูลและไฟล์ที่อัปโหลดไม่ได้เข้ารหัสขณะจัดเก็บ",
+            "rEn": "Enable KMS encryption on RDS and S3.",
+            "rTh": "เปิดการเข้ารหัสด้วย KMS บน RDS และ S3"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q3",
+            "s": 2,
+            "crit": false,
+            "en": "API key auth disabled",
+            "th": "ปิดการยืนยันตัวตนด้วย API key",
+            "gEn": "ENABLE_API_KEY is false in all four environment files.",
+            "gTh": "ค่า ENABLE_API_KEY เป็น false ในไฟล์สภาพแวดล้อมทั้งสี่ไฟล์",
+            "rEn": "Enable the key check, then move to IAM or Cognito.",
+            "rTh": "เปิดการตรวจ API key แล้วเปลี่ยนไปใช้ IAM หรือ Cognito"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q4",
+            "s": 1,
+            "crit": false,
+            "en": "No centralized identity",
+            "th": "ไม่มีระบบตัวตนแบบรวมศูนย์",
+            "gEn": "Authentication is delegated to proprietary TrakCare login only.",
+            "gTh": "การยืนยันตัวตนส่งต่อไปยังระบบล็อกอินเฉพาะของ TrakCare เท่านั้น",
+            "rEn": "Federate through Cognito or IAM Identity Center.",
+            "rTh": "เชื่อมต่อผ่าน Cognito หรือ IAM Identity Center"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q5",
+            "s": 1,
+            "crit": true,
+            "en": "Plaintext credentials in repository",
+            "th": "ข้อมูลรับรองแบบข้อความธรรมดาใน repository",
+            "gEn": "Database, API and TrakCare credentials are committed in .env files.",
+            "gTh": "รหัสผ่านฐานข้อมูล API key และข้อมูลรับรอง TrakCare ถูก commit ไว้ในไฟล์ .env",
+            "rEn": "Move every secret to Secrets Manager or Parameter Store and rotate.",
+            "rTh": "ย้ายความลับทั้งหมดไปที่ Secrets Manager หรือ Parameter Store และหมุนเวียนรหัส"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q6",
+            "s": 1,
+            "crit": false,
+            "en": "No compute hardening",
+            "th": "ไม่มีการเสริมความแข็งแรงของ compute",
+            "gEn": "TLS verification is disabled in the Event Bridge process.",
+            "gTh": "ปิดการตรวจสอบ TLS ในโปรเซส Event Bridge",
+            "rEn": "Remove the TLS bypass and install the proper CA chain.",
+            "rTh": "ลบการข้ามตรวจ TLS และติดตั้งใบรับรอง CA ที่ถูกต้อง"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q7",
+            "s": 2,
+            "crit": false,
+            "en": "SonarQube not automated",
+            "th": "SonarQube ไม่ได้ทำงานอัตโนมัติ",
+            "gEn": "SonarQube is configured but never runs in a pipeline.",
+            "gTh": "มีการตั้งค่า SonarQube แต่ไม่เคยรันใน pipeline",
+            "rEn": "Run SAST and dependency scanning on every commit.",
+            "rTh": "รัน SAST และการสแกน dependency ทุกครั้งที่ commit"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q1",
+            "s": 1,
+            "crit": false,
+            "en": "No distributed tracing",
+            "th": "ไม่มี distributed tracing",
+            "gEn": "No OpenTelemetry or X-Ray instrumentation exists.",
+            "gTh": "ไม่มีการติดตั้ง OpenTelemetry หรือ X-Ray",
+            "rEn": "Instrument the services with OpenTelemetry into X-Ray.",
+            "rTh": "ติดตั้ง OpenTelemetry ในเซอร์วิสและส่งข้อมูลไปยัง X-Ray"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q2",
+            "s": 1,
+            "crit": false,
+            "en": "No SLO definitions",
+            "th": "ไม่มีการกำหนด SLO",
+            "gEn": "No service level objectives or error budgets are defined.",
+            "gTh": "ไม่มีการกำหนดเป้าหมายระดับบริการหรือ error budget",
+            "rEn": "Define SLOs for dashboard freshness and event latency.",
+            "rTh": "กำหนด SLO สำหรับความสดของข้อมูลบนแดชบอร์ดและความหน่วงของเหตุการณ์"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q3",
+            "s": 1,
+            "crit": false,
+            "en": "No business metrics",
+            "th": "ไม่มี metric เชิงธุรกิจ",
+            "gEn": "Only file-based logging exists; no metrics are emitted.",
+            "gTh": "มีเพียงการบันทึกล็อกลงไฟล์ ไม่มีการส่ง metric",
+            "rEn": "Publish CloudWatch metrics for queue depth and wait time.",
+            "rTh": "ส่ง metric ไปยัง CloudWatch เช่น ความยาวคิวและเวลารอ"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q4",
+            "s": 1,
+            "crit": false,
+            "en": "No alerting",
+            "th": "ไม่มีระบบแจ้งเตือน",
+            "gEn": "No anomaly detection or alarms are configured.",
+            "gTh": "ไม่มีการตั้งค่าตรวจจับความผิดปกติหรือการแจ้งเตือน",
+            "rEn": "Create CloudWatch alarms with SNS notification.",
+            "rTh": "สร้าง CloudWatch alarm พร้อมแจ้งเตือนผ่าน SNS"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q6",
+            "s": 1,
+            "crit": true,
+            "en": "Virtually no automated testing",
+            "th": "แทบไม่มีการทดสอบอัตโนมัติ",
+            "gEn": "One UI unit test covers the entire product; no backend tests.",
+            "gTh": "มีการทดสอบหน่วยฝั่ง UI เพียงหนึ่งไฟล์สำหรับทั้งระบบ และไม่มีการทดสอบฝั่งเซิร์ฟเวอร์",
+            "rEn": "Build unit and integration suites before refactoring.",
+            "rTh": "สร้างชุดทดสอบระดับหน่วยและระดับการเชื่อมต่อก่อนเริ่ม refactor"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q7",
+            "s": 1,
+            "crit": false,
+            "en": "No incident response automation",
+            "th": "ไม่มีระบบตอบสนองเหตุการณ์อัตโนมัติ",
+            "gEn": "Incident handling is ad hoc with no runbooks.",
+            "gTh": "การจัดการเหตุการณ์ทำแบบเฉพาะหน้าและไม่มี runbook",
+            "rEn": "Write runbooks and automate with Systems Manager.",
+            "rTh": "เขียน runbook และทำอัตโนมัติด้วย Systems Manager"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q8",
+            "s": 1,
+            "crit": false,
+            "en": "No observability ownership",
+            "th": "ไม่มีผู้รับผิดชอบด้าน observability",
+            "gEn": "No dashboards exist and no alarm owners are assigned.",
+            "gTh": "ไม่มีแดชบอร์ดและไม่มีการมอบหมายผู้ดูแลการแจ้งเตือน",
+            "rEn": "Assign owners and build CloudWatch dashboards.",
+            "rTh": "มอบหมายผู้รับผิดชอบและสร้างแดชบอร์ดบน CloudWatch"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q9",
+            "s": 1,
+            "crit": false,
+            "en": "No resource tagging governance",
+            "th": "ไม่มีการกำกับการติดแท็กทรัพยากร",
+            "gEn": "No tagging standard is defined for cost or ownership.",
+            "gTh": "ไม่มีมาตรฐานการติดแท็กเพื่อคุมต้นทุนหรือระบุเจ้าของ",
+            "rEn": "Enforce a tagging policy via AWS Organizations.",
+            "rTh": "บังคับใช้นโยบายการติดแท็กผ่าน AWS Organizations"
+      }
+] -> JS array of finding objects.
+       Shape: { cat:"INF"|"APP"|"DATA"|"SEC"|"OPS", id:"CODE-QN",
+                s: 0..4 numeric score (0 with na:true = N/A),
+                na?:true, crit?:true,
+                en, th,      // finding title (EN / TH)
+                gEn, gTh,    // gap description (EN / TH)
+                rEn, rTh }   // AWS recommendation (EN / TH) */
+    const F = [
+      {
+            "cat": "INF",
+            "id": "INF-Q1",
+            "s": 1,
+            "crit": true,
+            "en": "No managed compute",
+            "th": "ไม่มี managed compute",
+            "gEn": "All compute runs on bare-metal or VM infrastructure managed via PM2 — no ECS, EKS, Lambda or Fargate, no auto-scaling.",
+            "gTh": "compute ทั้งหมดรันบน bare-metal หรือ VM ที่จัดการด้วย PM2 ไม่มี ECS, EKS, Lambda หรือ Fargate และไม่มี auto-scaling",
+            "rEn": "Containerize the three Node processes and deploy to ECS Fargate or EKS.",
+            "rTh": "แปลงโปรเซส Node ทั้งสามเป็นคอนเทนเนอร์ แล้ว deploy บน ECS Fargate หรือ EKS"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q2",
+            "s": 1,
+            "crit": true,
+            "en": "Self-managed PostgreSQL",
+            "th": "จัดการ PostgreSQL ด้วยตนเอง",
+            "gEn": "PostgreSQL 14.2 is self-managed on internal servers with manual patching, backup and no failover.",
+            "gTh": "PostgreSQL 14.2 ดูแลเองบนเซิร์ฟเวอร์ภายใน โดย patch และสำรองข้อมูลด้วยมือ และไม่มีระบบ failover",
+            "rEn": "Migrate to Amazon RDS or Aurora PostgreSQL with Multi-AZ.",
+            "rTh": "ย้ายไปใช้ Amazon RDS หรือ Aurora PostgreSQL แบบ Multi-AZ"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q4",
+            "s": 2,
+            "crit": false,
+            "en": "Self-managed Socket.IO",
+            "th": "จัดการ Socket.IO ด้วยตนเอง",
+            "gEn": "Event distribution relies on a single self-hosted Socket.IO process with no managed messaging.",
+            "gTh": "การกระจายเหตุการณ์อาศัยโปรเซส Socket.IO ที่ดูแลเองเพียงตัวเดียว ไม่มีบริการ messaging แบบ managed",
+            "rEn": "Consider API Gateway WebSocket, EventBridge or MSK for fan-out.",
+            "rTh": "พิจารณาใช้ API Gateway WebSocket, EventBridge หรือ MSK เพื่อกระจายเหตุการณ์"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q5",
+            "s": 1,
+            "crit": true,
+            "en": "No network security controls",
+            "th": "ไม่มีการควบคุมความปลอดภัยเครือข่าย",
+            "gEn": "Wildcard CORS and disabled TLS verification leave the services effectively open.",
+            "gTh": "การตั้ง CORS เป็น wildcard และปิดการตรวจ TLS ทำให้เซอร์วิสเปิดโล่ง",
+            "rEn": "Introduce WAF, security groups and restrict CORS to known origins.",
+            "rTh": "เพิ่ม WAF, security group และจำกัด CORS ให้เฉพาะ origin ที่รู้จัก"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q6",
+            "s": 1,
+            "crit": false,
+            "en": "No API gateway",
+            "th": "ไม่มี API gateway",
+            "gEn": "The Express server is exposed directly with no gateway for throttling or auth.",
+            "gTh": "เปิด Express server ตรงโดยไม่มีเกตเวย์สำหรับจำกัดอัตราหรือยืนยันตัวตน",
+            "rEn": "Front the API with Amazon API Gateway or an ALB.",
+            "rTh": "วาง Amazon API Gateway หรือ ALB ไว้หน้า API"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q7",
+            "s": 1,
+            "crit": false,
+            "en": "No auto-scaling",
+            "th": "ไม่มี auto-scaling",
+            "gEn": "Static capacity on a single application server.",
+            "gTh": "ความจุคงที่บนเครื่องแอปพลิเคชันเพียงเครื่องเดียว",
+            "rEn": "Adopt managed compute with target-tracking auto-scaling.",
+            "rTh": "ใช้ managed compute พร้อม auto-scaling แบบ target tracking"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q8",
+            "s": 1,
+            "crit": false,
+            "en": "No automated backups",
+            "th": "ไม่มีการสำรองข้อมูลอัตโนมัติ",
+            "gEn": "Backups depend on manual pg_dump with no tested restore.",
+            "gTh": "การสำรองข้อมูลใช้ pg_dump ด้วยมือ และไม่มีการทดสอบกู้คืน",
+            "rEn": "Enable RDS automated backups and PITR, and rehearse restores.",
+            "rTh": "เปิด automated backup และ PITR ของ RDS แล้วซ้อมกู้คืนข้อมูล"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q9",
+            "s": 1,
+            "crit": false,
+            "en": "Single point of failure",
+            "th": "มีจุดล้มเหลวเดียว",
+            "gEn": "One app host and one database instance with no Multi-AZ or redundancy.",
+            "gTh": "มีเครื่องแอปและฐานข้อมูลชุดเดียว ไม่มี Multi-AZ หรือระบบสำรอง",
+            "rEn": "Deploy across at least two Availability Zones.",
+            "rTh": "กระจายการติดตั้งอย่างน้อยสอง Availability Zone"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q10",
+            "s": 1,
+            "crit": true,
+            "en": "No infrastructure as code",
+            "th": "ไม่มี Infrastructure as Code",
+            "gEn": "0% IaC coverage — every environment is built by hand.",
+            "gTh": "ความครอบคลุม IaC เป็น 0% ทุกสภาพแวดล้อมสร้างด้วยมือ",
+            "rEn": "Define the stack in CDK or Terraform and provision from code.",
+            "rTh": "นิยามโครงสร้างพื้นฐานด้วย CDK หรือ Terraform และสร้างจากโค้ด"
+      },
+      {
+            "cat": "INF",
+            "id": "INF-Q11",
+            "s": 1,
+            "crit": true,
+            "en": "No CI/CD",
+            "th": "ไม่มี CI/CD",
+            "gEn": "Deployment is a manual PM2 batch script with no pipeline or gates.",
+            "gTh": "การ deploy ใช้สคริปต์ batch ของ PM2 ด้วยมือ ไม่มี pipeline หรือด่านตรวจ",
+            "rEn": "Build a CodePipeline or GitHub Actions pipeline with automated tests.",
+            "rTh": "สร้าง pipeline ด้วย CodePipeline หรือ GitHub Actions พร้อมการทดสอบอัตโนมัติ"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q1",
+            "s": 2,
+            "crit": false,
+            "en": "Legacy JavaScript stack",
+            "th": "สแตก JavaScript ที่ล้าสมัย",
+            "gEn": "React 16, CRA 3, Webpack 4 and Material UI 4 are all end of life.",
+            "gTh": "React 16, CRA 3, Webpack 4 และ Material UI 4 หมดระยะสนับสนุนทั้งหมด",
+            "rEn": "Upgrade to React 18+ on Vite, and MUI 5+.",
+            "rTh": "อัปเกรดเป็น React 18+ บน Vite และ MUI 5+"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q2",
+            "s": 1,
+            "crit": true,
+            "en": "Tightly-coupled monolith",
+            "th": "Monolith ที่ผูกกันแน่น",
+            "gEn": "No module boundaries; all three services share one database schema.",
+            "gTh": "ไม่มีขอบเขตของโมดูล เซอร์วิสทั้งสามใช้สคีมาฐานข้อมูลร่วมกัน",
+            "rEn": "Decompose into the five bounded contexts using Strangler Fig.",
+            "rTh": "แยกออกเป็น 5 bounded context ด้วยรูปแบบ Strangler Fig"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q3",
+            "s": 2,
+            "crit": false,
+            "en": "Primarily synchronous",
+            "th": "ทำงานแบบ synchronous เป็นหลัก",
+            "gEn": "Limited async handling, all self-managed.",
+            "gTh": "การทำงานแบบ async มีจำกัดและดูแลเองทั้งหมด",
+            "rEn": "Introduce managed queues for long-running work.",
+            "rTh": "เพิ่มคิวแบบ managed สำหรับงานที่ใช้เวลานาน"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q4",
+            "s": 2,
+            "crit": false,
+            "en": "Background sync without status tracking",
+            "th": "งานซิงก์เบื้องหลังไม่มีการติดตามสถานะ",
+            "gEn": "The 60-second TrakCare sync has no job status or retry visibility.",
+            "gTh": "การซิงก์ TrakCare ทุก 60 วินาทีไม่มีสถานะงานหรือการมองเห็นการ retry",
+            "rEn": "Track job state and surface failures as metrics.",
+            "rTh": "บันทึกสถานะงานและแสดงความล้มเหลวเป็น metric"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q5",
+            "s": 2,
+            "crit": false,
+            "en": "No API versioning",
+            "th": "ไม่มีการกำหนดเวอร์ชัน API",
+            "gEn": "All 19 endpoints are unversioned.",
+            "gTh": "endpoint ทั้ง 19 เส้นทางไม่มีการระบุเวอร์ชัน",
+            "rEn": "Introduce /v1 prefixes before the migration.",
+            "rTh": "เพิ่ม prefix /v1 ก่อนเริ่มย้ายระบบ"
+      },
+      {
+            "cat": "APP",
+            "id": "APP-Q6",
+            "s": 2,
+            "crit": false,
+            "en": "Hard-coded IP addresses",
+            "th": "ระบุ IP ตายตัว",
+            "gEn": "Hosts are pinned as IPs in environment variables with no service discovery.",
+            "gTh": "ระบุเครื่องเป็นเลข IP ในตัวแปรสภาพแวดล้อม ไม่มี service discovery",
+            "rEn": "Use DNS-based service discovery such as Cloud Map.",
+            "rTh": "ใช้ service discovery ผ่าน DNS เช่น Cloud Map"
+      },
+      {
+            "cat": "DATA",
+            "id": "DATA-Q1",
+            "s": 1,
+            "crit": true,
+            "en": "Uploads on local filesystem",
+            "th": "อัปโหลดไฟล์ลงดิสก์ในเครื่อง",
+            "gEn": "Excel uploads are written to local disk — no object storage, lost if the host is replaced.",
+            "gTh": "ไฟล์ Excel ที่อัปโหลดถูกเขียนลงดิสก์ในเครื่อง ไม่มี object storage และจะหายเมื่อเปลี่ยนเครื่อง",
+            "rEn": "Move uploads to Amazon S3.",
+            "rTh": "ย้ายไฟล์ที่อัปโหลดไปเก็บบน Amazon S3"
+      },
+      {
+            "cat": "DATA",
+            "id": "DATA-Q3",
+            "s": 2,
+            "crit": false,
+            "en": "PostgreSQL 14.2 nearing EOL",
+            "th": "PostgreSQL 14.2 ใกล้หมดระยะสนับสนุน",
+            "gEn": "No version upgrade strategy is documented.",
+            "gTh": "ไม่มีเอกสารกำหนดแนวทางอัปเกรดเวอร์ชัน",
+            "rEn": "Plan a managed upgrade path on RDS.",
+            "rTh": "วางแผนเส้นทางอัปเกรดแบบ managed บน RDS"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q2",
+            "s": 1,
+            "crit": true,
+            "en": "No encryption at rest",
+            "th": "ไม่มีการเข้ารหัสข้อมูลที่จัดเก็บ",
+            "gEn": "Neither the database nor uploaded files are encrypted at rest.",
+            "gTh": "ทั้งฐานข้อมูลและไฟล์ที่อัปโหลดไม่ได้เข้ารหัสขณะจัดเก็บ",
+            "rEn": "Enable KMS encryption on RDS and S3.",
+            "rTh": "เปิดการเข้ารหัสด้วย KMS บน RDS และ S3"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q3",
+            "s": 2,
+            "crit": false,
+            "en": "API key auth disabled",
+            "th": "ปิดการยืนยันตัวตนด้วย API key",
+            "gEn": "ENABLE_API_KEY is false in all four environment files.",
+            "gTh": "ค่า ENABLE_API_KEY เป็น false ในไฟล์สภาพแวดล้อมทั้งสี่ไฟล์",
+            "rEn": "Enable the key check, then move to IAM or Cognito.",
+            "rTh": "เปิดการตรวจ API key แล้วเปลี่ยนไปใช้ IAM หรือ Cognito"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q4",
+            "s": 1,
+            "crit": false,
+            "en": "No centralized identity",
+            "th": "ไม่มีระบบตัวตนแบบรวมศูนย์",
+            "gEn": "Authentication is delegated to proprietary TrakCare login only.",
+            "gTh": "การยืนยันตัวตนส่งต่อไปยังระบบล็อกอินเฉพาะของ TrakCare เท่านั้น",
+            "rEn": "Federate through Cognito or IAM Identity Center.",
+            "rTh": "เชื่อมต่อผ่าน Cognito หรือ IAM Identity Center"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q5",
+            "s": 1,
+            "crit": true,
+            "en": "Plaintext credentials in repository",
+            "th": "ข้อมูลรับรองแบบข้อความธรรมดาใน repository",
+            "gEn": "Database, API and TrakCare credentials are committed in .env files.",
+            "gTh": "รหัสผ่านฐานข้อมูล API key และข้อมูลรับรอง TrakCare ถูก commit ไว้ในไฟล์ .env",
+            "rEn": "Move every secret to Secrets Manager or Parameter Store and rotate.",
+            "rTh": "ย้ายความลับทั้งหมดไปที่ Secrets Manager หรือ Parameter Store และหมุนเวียนรหัส"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q6",
+            "s": 1,
+            "crit": false,
+            "en": "No compute hardening",
+            "th": "ไม่มีการเสริมความแข็งแรงของ compute",
+            "gEn": "TLS verification is disabled in the Event Bridge process.",
+            "gTh": "ปิดการตรวจสอบ TLS ในโปรเซส Event Bridge",
+            "rEn": "Remove the TLS bypass and install the proper CA chain.",
+            "rTh": "ลบการข้ามตรวจ TLS และติดตั้งใบรับรอง CA ที่ถูกต้อง"
+      },
+      {
+            "cat": "SEC",
+            "id": "SEC-Q7",
+            "s": 2,
+            "crit": false,
+            "en": "SonarQube not automated",
+            "th": "SonarQube ไม่ได้ทำงานอัตโนมัติ",
+            "gEn": "SonarQube is configured but never runs in a pipeline.",
+            "gTh": "มีการตั้งค่า SonarQube แต่ไม่เคยรันใน pipeline",
+            "rEn": "Run SAST and dependency scanning on every commit.",
+            "rTh": "รัน SAST และการสแกน dependency ทุกครั้งที่ commit"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q1",
+            "s": 1,
+            "crit": false,
+            "en": "No distributed tracing",
+            "th": "ไม่มี distributed tracing",
+            "gEn": "No OpenTelemetry or X-Ray instrumentation exists.",
+            "gTh": "ไม่มีการติดตั้ง OpenTelemetry หรือ X-Ray",
+            "rEn": "Instrument the services with OpenTelemetry into X-Ray.",
+            "rTh": "ติดตั้ง OpenTelemetry ในเซอร์วิสและส่งข้อมูลไปยัง X-Ray"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q2",
+            "s": 1,
+            "crit": false,
+            "en": "No SLO definitions",
+            "th": "ไม่มีการกำหนด SLO",
+            "gEn": "No service level objectives or error budgets are defined.",
+            "gTh": "ไม่มีการกำหนดเป้าหมายระดับบริการหรือ error budget",
+            "rEn": "Define SLOs for dashboard freshness and event latency.",
+            "rTh": "กำหนด SLO สำหรับความสดของข้อมูลบนแดชบอร์ดและความหน่วงของเหตุการณ์"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q3",
+            "s": 1,
+            "crit": false,
+            "en": "No business metrics",
+            "th": "ไม่มี metric เชิงธุรกิจ",
+            "gEn": "Only file-based logging exists; no metrics are emitted.",
+            "gTh": "มีเพียงการบันทึกล็อกลงไฟล์ ไม่มีการส่ง metric",
+            "rEn": "Publish CloudWatch metrics for queue depth and wait time.",
+            "rTh": "ส่ง metric ไปยัง CloudWatch เช่น ความยาวคิวและเวลารอ"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q4",
+            "s": 1,
+            "crit": false,
+            "en": "No alerting",
+            "th": "ไม่มีระบบแจ้งเตือน",
+            "gEn": "No anomaly detection or alarms are configured.",
+            "gTh": "ไม่มีการตั้งค่าตรวจจับความผิดปกติหรือการแจ้งเตือน",
+            "rEn": "Create CloudWatch alarms with SNS notification.",
+            "rTh": "สร้าง CloudWatch alarm พร้อมแจ้งเตือนผ่าน SNS"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q6",
+            "s": 1,
+            "crit": true,
+            "en": "Virtually no automated testing",
+            "th": "แทบไม่มีการทดสอบอัตโนมัติ",
+            "gEn": "One UI unit test covers the entire product; no backend tests.",
+            "gTh": "มีการทดสอบหน่วยฝั่ง UI เพียงหนึ่งไฟล์สำหรับทั้งระบบ และไม่มีการทดสอบฝั่งเซิร์ฟเวอร์",
+            "rEn": "Build unit and integration suites before refactoring.",
+            "rTh": "สร้างชุดทดสอบระดับหน่วยและระดับการเชื่อมต่อก่อนเริ่ม refactor"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q7",
+            "s": 1,
+            "crit": false,
+            "en": "No incident response automation",
+            "th": "ไม่มีระบบตอบสนองเหตุการณ์อัตโนมัติ",
+            "gEn": "Incident handling is ad hoc with no runbooks.",
+            "gTh": "การจัดการเหตุการณ์ทำแบบเฉพาะหน้าและไม่มี runbook",
+            "rEn": "Write runbooks and automate with Systems Manager.",
+            "rTh": "เขียน runbook และทำอัตโนมัติด้วย Systems Manager"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q8",
+            "s": 1,
+            "crit": false,
+            "en": "No observability ownership",
+            "th": "ไม่มีผู้รับผิดชอบด้าน observability",
+            "gEn": "No dashboards exist and no alarm owners are assigned.",
+            "gTh": "ไม่มีแดชบอร์ดและไม่มีการมอบหมายผู้ดูแลการแจ้งเตือน",
+            "rEn": "Assign owners and build CloudWatch dashboards.",
+            "rTh": "มอบหมายผู้รับผิดชอบและสร้างแดชบอร์ดบน CloudWatch"
+      },
+      {
+            "cat": "OPS",
+            "id": "OPS-Q9",
+            "s": 1,
+            "crit": false,
+            "en": "No resource tagging governance",
+            "th": "ไม่มีการกำกับการติดแท็กทรัพยากร",
+            "gEn": "No tagging standard is defined for cost or ownership.",
+            "gTh": "ไม่มีมาตรฐานการติดแท็กเพื่อคุมต้นทุนหรือระบุเจ้าของ",
+            "rEn": "Enforce a tagging policy via AWS Organizations.",
+            "rTh": "บังคับใช้นโยบายการติดแท็กผ่าน AWS Organizations"
+      }
+];
+
+    const catMeta = { INF:{c:"indigo"}, APP:{c:"violet"}, DATA:{c:"emerald"}, SEC:{c:"rose"}, OPS:{c:"amber"} };
+    const scoreBadge = (f) => {
+      if (f.na) return `<span class="badge badge-slate">N/A</span>`;
+      const cls = f.s<=1?"badge-red":f.s===2?"badge-amber":"badge-green";
+      return `<span class="badge ${cls}">${f.s} / 4</span>`;
+    };
+    const sevTag = (f) => f.crit ? `<span class="badge badge-red">CRITICAL</span>` : "";
+
+    function renderFindings(filter) {
+      const list = document.getElementById("findingsList");
+      const items = F.filter(f => filter === "ALL" || f.cat === filter);
+      list.innerHTML = items.map(f => `
+        <details class="card overflow-hidden group">
+          <summary class="p-4 cursor-pointer list-none flex items-center gap-3 hover:bg-slate-50">
+            <span class="chip font-bold text-${catMeta[f.cat].c}-700 bg-${catMeta[f.cat].c}-50 border-${catMeta[f.cat].c}-200 shrink-0">${f.id}</span>
+            <span class="font-semibold text-slate-800 text-sm flex-1 min-w-0"><span class="lang-en">${f.en}</span><span class="lang-th">${f.th}</span></span>
+            ${sevTag(f)}
+            ${scoreBadge(f)}
+            <svg class="text-slate-400 transition group-open:rotate-180 shrink-0" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="px-4 pb-4 pt-1 border-t border-slate-100 space-y-3 text-sm">
+            <div><div class="text-xs font-bold uppercase tracking-wide text-rose-500 mb-1"><span class="lang-en">Gap</span><span class="lang-th">ช่องว่าง</span></div><p class="text-slate-600"><span class="lang-en">${f.gEn}</span><span class="lang-th">${f.gTh}</span></p></div>
+            <div><div class="text-xs font-bold uppercase tracking-wide text-emerald-600 mb-1"><span class="lang-en">AWS Recommendation</span><span class="lang-th">คำแนะนำบน AWS</span></div><p class="text-slate-600"><span class="lang-en">${f.rEn}</span><span class="lang-th">${f.rTh}</span></p></div>
+          </div>
+        </details>`).join("");
+      document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+    }
+
+    const filters = [["ALL","All","ทั้งหมด"],["INF","INF","INF"],["APP","APP","APP"],["DATA","DATA","DATA"],["SEC","SEC","SEC"],["OPS","OPS","OPS"]];
+    const fWrap = document.getElementById("findingFilters");
+    fWrap.innerHTML = filters.map((f,i)=>`<button data-filter="${f[0]}" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition ${i===0?'bg-indigo-600 text-white border-indigo-600':'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}"><span class="lang-en">${f[1]}</span><span class="lang-th">${f[2]}</span></button>`).join("");
+    fWrap.querySelectorAll(".filter-btn").forEach(btn=>btn.addEventListener("click",()=>{
+      fWrap.querySelectorAll(".filter-btn").forEach(b=>b.className="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:border-indigo-300");
+      btn.className="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-indigo-600 text-white border-indigo-600";
+      renderFindings(btn.getAttribute("data-filter"));
+    }));
+    renderFindings("ALL");
+
+    // ----- Pathways -----
+    /* [
+      {
+            "name": "Move to Cloud Native",
+            "th": "ย้ายสู่ Cloud Native",
+            "status": "Triggered",
+            "pr": "High",
+            "ef": "High",
+            "svc": [
+                  "ECS Fargate",
+                  "EKS",
+                  "API Gateway",
+                  "EventBridge"
+            ],
+            "en": "Triggered by the tightly-coupled monolith (APP-Q2=2) with no managed compute (INF-Q1=1). Decompose into five bounded contexts.",
+            "tha": "ถูกกระตุ้นจาก monolith ที่ผูกกันแน่น (APP-Q2=2) และการไม่มี managed compute (INF-Q1=1) ควรแยกออกเป็น 5 bounded context"
+      },
+      {
+            "name": "Move to Containers",
+            "th": "ย้ายสู่คอนเทนเนอร์",
+            "status": "Triggered",
+            "pr": "Medium",
+            "ef": "Medium",
+            "svc": [
+                  "ECS",
+                  "ECR",
+                  "Fargate"
+            ],
+            "en": "No container definitions exist in the repository; the three PM2 processes are natural container units.",
+            "tha": "ยังไม่มีไฟล์นิยามคอนเทนเนอร์ใน repository และโปรเซส PM2 ทั้งสามเหมาะจะแยกเป็นคอนเทนเนอร์"
+      },
+      {
+            "name": "Move to Open Source",
+            "th": "ย้ายสู่โอเพนซอร์ส",
+            "status": "Not Triggered",
+            "pr": null,
+            "ef": null,
+            "svc": [],
+            "en": "PostgreSQL is already open source and no commercial database engine was detected.",
+            "tha": "PostgreSQL เป็นโอเพนซอร์สอยู่แล้ว และไม่พบเอนจินฐานข้อมูลเชิงพาณิชย์"
+      },
+      {
+            "name": "Move to Managed Databases",
+            "th": "ย้ายสู่ฐานข้อมูลแบบ Managed",
+            "status": "Triggered",
+            "pr": "High",
+            "ef": "Medium",
+            "svc": [
+                  "RDS PostgreSQL",
+                  "Aurora",
+                  "DMS"
+            ],
+            "en": "PostgreSQL 14.2 is self-managed on internal servers (INF-Q2=1) with manual patching and no failover.",
+            "tha": "PostgreSQL 14.2 ดูแลเองบนเซิร์ฟเวอร์ภายใน (INF-Q2=1) ต้อง patch ด้วยมือและไม่มีระบบ failover"
+      },
+      {
+            "name": "Move to Managed Analytics",
+            "th": "ย้ายสู่ Analytics แบบ Managed",
+            "status": "Not Triggered",
+            "pr": null,
+            "ef": null,
+            "svc": [],
+            "en": "No streaming, ETL or analytics workload was found — the application is a CRUD dashboard.",
+            "tha": "ไม่พบงานแบบ streaming, ETL หรือ analytics เพราะระบบเป็นแดชบอร์ดแบบ CRUD"
+      },
+      {
+            "name": "Move to Modern DevOps",
+            "th": "ย้ายสู่ DevOps สมัยใหม่",
+            "status": "Triggered",
+            "pr": "High",
+            "ef": "Medium",
+            "svc": [
+                  "CodePipeline",
+                  "CDK",
+                  "CloudWatch",
+                  "X-Ray"
+            ],
+            "en": "No IaC (INF-Q10=1) and no CI/CD (INF-Q11=1), with almost no automated tests (OPS-Q6=1).",
+            "tha": "ไม่มี IaC (INF-Q10=1) และไม่มี CI/CD (INF-Q11=1) รวมถึงแทบไม่มีการทดสอบอัตโนมัติ (OPS-Q6=1)"
+      },
+      {
+            "name": "Move to AI",
+            "th": "ย้ายสู่ AI",
+            "status": "Not Triggered",
+            "pr": null,
+            "ef": null,
+            "svc": [],
+            "en": "No AI or agent intent was detected; the stated target is Go plus React.js.",
+            "tha": "ไม่พบความต้องการด้าน AI หรือ agent เป้าหมายที่ระบุไว้คือ Go ร่วมกับ React.js"
+      }
+] -> JS array of pathway objects.
+       Shape: { name, th,        // pathway name (EN / TH)
+                status:"Triggered"|"Not Triggered",
+                pr, ef,          // priority / effort ("High"|"Medium"|"-")
+                svc:[ ...AWS service labels ],
+                en, tha }        // description (EN / TH) */
+    const P = [
+      {
+            "name": "Move to Cloud Native",
+            "th": "ย้ายสู่ Cloud Native",
+            "status": "Triggered",
+            "pr": "High",
+            "ef": "High",
+            "svc": [
+                  "ECS Fargate",
+                  "EKS",
+                  "API Gateway",
+                  "EventBridge"
+            ],
+            "en": "Triggered by the tightly-coupled monolith (APP-Q2=2) with no managed compute (INF-Q1=1). Decompose into five bounded contexts.",
+            "tha": "ถูกกระตุ้นจาก monolith ที่ผูกกันแน่น (APP-Q2=2) และการไม่มี managed compute (INF-Q1=1) ควรแยกออกเป็น 5 bounded context"
+      },
+      {
+            "name": "Move to Containers",
+            "th": "ย้ายสู่คอนเทนเนอร์",
+            "status": "Triggered",
+            "pr": "Medium",
+            "ef": "Medium",
+            "svc": [
+                  "ECS",
+                  "ECR",
+                  "Fargate"
+            ],
+            "en": "No container definitions exist in the repository; the three PM2 processes are natural container units.",
+            "tha": "ยังไม่มีไฟล์นิยามคอนเทนเนอร์ใน repository และโปรเซส PM2 ทั้งสามเหมาะจะแยกเป็นคอนเทนเนอร์"
+      },
+      {
+            "name": "Move to Open Source",
+            "th": "ย้ายสู่โอเพนซอร์ส",
+            "status": "Not Triggered",
+            "pr": null,
+            "ef": null,
+            "svc": [],
+            "en": "PostgreSQL is already open source and no commercial database engine was detected.",
+            "tha": "PostgreSQL เป็นโอเพนซอร์สอยู่แล้ว และไม่พบเอนจินฐานข้อมูลเชิงพาณิชย์"
+      },
+      {
+            "name": "Move to Managed Databases",
+            "th": "ย้ายสู่ฐานข้อมูลแบบ Managed",
+            "status": "Triggered",
+            "pr": "High",
+            "ef": "Medium",
+            "svc": [
+                  "RDS PostgreSQL",
+                  "Aurora",
+                  "DMS"
+            ],
+            "en": "PostgreSQL 14.2 is self-managed on internal servers (INF-Q2=1) with manual patching and no failover.",
+            "tha": "PostgreSQL 14.2 ดูแลเองบนเซิร์ฟเวอร์ภายใน (INF-Q2=1) ต้อง patch ด้วยมือและไม่มีระบบ failover"
+      },
+      {
+            "name": "Move to Managed Analytics",
+            "th": "ย้ายสู่ Analytics แบบ Managed",
+            "status": "Not Triggered",
+            "pr": null,
+            "ef": null,
+            "svc": [],
+            "en": "No streaming, ETL or analytics workload was found — the application is a CRUD dashboard.",
+            "tha": "ไม่พบงานแบบ streaming, ETL หรือ analytics เพราะระบบเป็นแดชบอร์ดแบบ CRUD"
+      },
+      {
+            "name": "Move to Modern DevOps",
+            "th": "ย้ายสู่ DevOps สมัยใหม่",
+            "status": "Triggered",
+            "pr": "High",
+            "ef": "Medium",
+            "svc": [
+                  "CodePipeline",
+                  "CDK",
+                  "CloudWatch",
+                  "X-Ray"
+            ],
+            "en": "No IaC (INF-Q10=1) and no CI/CD (INF-Q11=1), with almost no automated tests (OPS-Q6=1).",
+            "tha": "ไม่มี IaC (INF-Q10=1) และไม่มี CI/CD (INF-Q11=1) รวมถึงแทบไม่มีการทดสอบอัตโนมัติ (OPS-Q6=1)"
+      },
+      {
+            "name": "Move to AI",
+            "th": "ย้ายสู่ AI",
+            "status": "Not Triggered",
+            "pr": null,
+            "ef": null,
+            "svc": [],
+            "en": "No AI or agent intent was detected; the stated target is Go plus React.js.",
+            "tha": "ไม่พบความต้องการด้าน AI หรือ agent เป้าหมายที่ระบุไว้คือ Go ร่วมกับ React.js"
+      }
+];
+    const prBadge = (p)=> p==="High"?"badge-red":p==="Medium"?"badge-amber":"badge-slate";
+    document.getElementById("pathwayCards").innerHTML = P.map(p=>{
+      const trig = p.status==="Triggered";
+      return `<div class="card p-5 ${trig?'':'opacity-70'}">
+        <div class="flex items-start justify-between gap-2 mb-2">
+          <div class="font-bold text-slate-900"><span class="lang-en">${p.name}</span><span class="lang-th">${p.th}</span></div>
+          <span class="badge ${trig?'badge-green':'badge-slate'}"><span class="lang-en">${p.status}</span><span class="lang-th">${trig?'ถูกกระตุ้น':'ไม่ถูกกระตุ้น'}</span></span>
+        </div>
+        ${trig?`<div class="flex gap-2 mb-3"><span class="chip"><span class="lang-en">Priority</span><span class="lang-th">ลำดับความสำคัญ</span>: <strong class="ml-1">${p.pr}</strong></span><span class="chip"><span class="lang-en">Effort</span><span class="lang-th">ความพยายาม</span>: <strong class="ml-1">${p.ef}</strong></span></div>`:''}
+        <p class="text-sm text-slate-500 mb-3"><span class="lang-en">${p.en}</span><span class="lang-th">${p.tha}</span></p>
+        ${p.svc.length?`<div class="flex flex-wrap gap-1.5">${p.svc.map(s=>`<span class="chip text-[0.7rem] text-sky-700 bg-sky-50 border-sky-200">${s}</span>`).join("")}</div>`:''}
+      </div>`;
+    }).join("");
+
+    document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+  })();
+  </script>
+</body>
+</html>

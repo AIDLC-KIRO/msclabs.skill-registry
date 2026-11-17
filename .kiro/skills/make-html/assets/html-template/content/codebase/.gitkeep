@@ -1,0 +1,10 @@
+# Keeps content/codebase/ in the bundle.
+#
+# The scaffold ships this tree EMPTY on purpose: no demo data, so nothing from another
+# engagement can leak into a customer deliverable. But an empty directory is not a thing
+# git can carry, and it does not survive most archive-and-copy paths either — so without
+# this file the directory disappears the moment the skill is committed or packaged, and
+# step 5's `cp -R <cca-source>/. content/codebase/` fails for everyone but the author.
+#
+# Step 5 fills this from the CCA source (e.g. ATXDocumentation/). Leave the file in place;
+# build-embed.js ignores dotfiles.

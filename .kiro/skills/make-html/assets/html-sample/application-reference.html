@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Application Reference · Dental Dashboard ATX Assessment</title>
+  <meta name="description" content="Complete developer deep-dive for the Dental Dashboard application — identity, program structure, runtime configuration, page & endpoint inventory, service classes, data access, data models, core workflows, business rules, integrations, and database schema." />
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3ED%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+  <style>
+    .tree-pre { background:#1d1d1f; color:#a1a1a6; border-radius:14px; padding:1.15rem 1.35rem; overflow-x:auto; font-family:'JetBrains Mono',ui-monospace,monospace; font-size:.78rem; line-height:1.7; border:1px solid #1d1d1f; }
+    .tree-pre .c { color:#6e6e73; }
+    .tree-pre .d { color:#7dd3fc; }
+    .tree-pre .f { color:#c9e2fb; }
+    .cfg code { font-size:.8rem; }
+  </style>
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <!-- Hero -->
+      <section class="bg-aurora text-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12">
+          <span class="badge glass text-slate-100 border-white/20 mb-4"><span class="dot bg-emerald-400"></span> <span class="lang-en">Developer Deep-Dive</span><span class="lang-th">เจาะลึกสำหรับนักพัฒนา</span></span>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight"><span class="lang-en">Application Reference</span><span class="lang-th">คู่มืออ้างอิงแอปพลิเคชัน</span></h1>
+          <p class="mt-3 max-w-3xl text-slate-300"><span class="lang-en">Developer-level reference for <strong>dental-dashboard-app v1.1.0</strong> — three PM2-managed Node.js processes plus a React 16 single-page app that keep a 30-room dental clinic in sync with the TrakCare hospital information system and the OPD queue in real time.</span><span class="lang-th">คู่มืออ้างอิงระดับนักพัฒนาสำหรับ <strong>dental-dashboard-app v1.1.0</strong> — โปรเซส Node.js สามตัวที่จัดการด้วย PM2 พร้อม React 16 แบบ single-page ที่ทำให้คลินิกทันตกรรม 30 ห้องซิงก์กับระบบสารสนเทศโรงพยาบาล TrakCare และระบบคิว OPD แบบเรียลไทม์</span></p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">63</span> <span class="text-xs text-slate-300"><span class="lang-en">Active source files</span><span class="lang-th">ไฟล์ซอร์สที่ใช้งาน</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">19</span> <span class="text-xs text-slate-300"><span class="lang-en">REST endpoints</span><span class="lang-th">REST endpoint</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">13</span> <span class="text-xs text-slate-300"><span class="lang-en">Database tables</span><span class="lang-th">ตารางฐานข้อมูล</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">6</span> <span class="text-xs text-slate-300"><span class="lang-en">Socket.IO events</span><span class="lang-th">อีเวนต์ Socket.IO</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">32</span> <span class="text-xs text-slate-300"><span class="lang-en">Production dependencies</span><span class="lang-th">Dependency ที่ใช้จริง</span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-10 grid lg:grid-cols-[1fr_220px] gap-10">
+        <div class="doc space-y-14 min-w-0">
+
+          <!-- IDENTITY -->
+          <section id="identity" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Application Identity &amp; Entry Points</span><span class="lang-th">ข้อมูลระบุแอปและจุดเริ่มต้น</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">Four runtime entry points: three backend processes bundled by Webpack into <code>dist/</code> and launched by PM2, plus a React SPA served on port 3001 in development. Every setting is loaded from a <code>.env*</code> file chosen by <code>NODE_ENV</code>.</span><span class="lang-th">มีจุดเริ่มต้นรันไทม์ 4 จุด: โปรเซสแบ็กเอนด์ 3 ตัวที่ Webpack รวมไว้ใน <code>dist/</code> และรันด้วย PM2 พร้อม React SPA ที่เปิดบนพอร์ต 3001 ในโหมดพัฒนา ค่าตั้งทั้งหมดอ่านจากไฟล์ <code>.env*</code> ตามค่า <code>NODE_ENV</code></span></p>
+            <div class="grid sm:grid-cols-2 gap-4 mb-6">
+              <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+                <thead><tr><th colspan="2"><span class="lang-en">Identity</span><span class="lang-th">ข้อมูลระบุ</span></th></tr></thead>
+                <tbody>
+                  <tr><td><span class="lang-en">Package name</span><span class="lang-th">ชื่อแพ็กเกจ</span></td><td><code>dental-dashboard-app</code></td></tr>
+                  <tr><td><span class="lang-en">Version</span><span class="lang-th">เวอร์ชัน</span></td><td><code>1.1.0</code></td></tr>
+                  <tr><td><span class="lang-en">Description</span><span class="lang-th">คำอธิบาย</span></td><td><span class="lang-en">Real-time dental clinic operations management</span><span class="lang-th">ระบบบริหารงานคลินิกทันตกรรมแบบเรียลไทม์</span></td></tr>
+                  <tr><td><span class="lang-en">Author</span><span class="lang-th">ผู้พัฒนา</span></td><td>AUTHOR_REDACTED</td></tr>
+                  <tr><td><span class="lang-en">License</span><span class="lang-th">สัญญาอนุญาต</span></td><td><span class="lang-en">Proprietary</span><span class="lang-th">Proprietary (สงวนลิขสิทธิ์)</span></td></tr>
+                  <tr><td><span class="lang-en">Language</span><span class="lang-th">ภาษา</span></td><td><span class="lang-en">JavaScript ES6+ — no TypeScript</span><span class="lang-th">JavaScript ES6+ — ไม่มี TypeScript</span></td></tr>
+                  <tr><td><span class="lang-en">Backend</span><span class="lang-th">แบ็กเอนด์</span></td><td>Express <code>4.21.0</code> · Socket.IO <code>4.8.0</code></td></tr>
+                  <tr><td><span class="lang-en">Frontend</span><span class="lang-th">ฟรอนต์เอนด์</span></td><td>React <code>16.13.1</code> · Material UI 4 · Ant Design 4 · Bulma</td></tr>
+                  <tr><td><span class="lang-en">Database</span><span class="lang-th">ฐานข้อมูล</span></td><td>PostgreSQL <code>14.2</code> · driver <code>pg 8.7.3</code></td></tr>
+                  <tr><td><span class="lang-en">Build</span><span class="lang-th">การบิลด์</span></td><td>Webpack <code>4.42.0</code> · Babel 7.9 · react-scripts 3.4.1</td></tr>
+                  <tr><td><span class="lang-en">Process manager</span><span class="lang-th">ตัวจัดการโปรเซส</span></td><td>PM2 — <code>ecosystem.config.js</code></td></tr>
+                  <tr><td><span class="lang-en">Scheduler</span><span class="lang-th">ตัวตั้งเวลา</span></td><td><code>node-schedule 1.3.2</code></td></tr>
+                </tbody>
+              </table></div></div>
+              <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+                <thead><tr><th><span class="lang-en">Entry Point</span><span class="lang-th">จุดเริ่มต้น</span></th><th><span class="lang-en">Purpose</span><span class="lang-th">วัตถุประสงค์</span></th></tr></thead>
+                <tbody>
+                  <tr><td><code>server/app.js</code></td><td><span class="lang-en">App Service — REST API on port <strong>8081</strong>, PM2 cluster mode, Swagger UI at <code>/api-docs</code>, Socket.IO client of the Event Bridge.</span><span class="lang-th">App Service — REST API พอร์ต <strong>8081</strong> รันแบบ cluster ด้วย PM2, Swagger UI ที่ <code>/api-docs</code> และเป็น Socket.IO client ของ Event Bridge</span></td></tr>
+                  <tr><td><code>server/event-bridge.js</code></td><td><span class="lang-en">Event Bridge — Socket.IO server on port <strong>8080</strong>; accepts OPD Queue POSTs, writes to PostgreSQL, broadcasts to all clients.</span><span class="lang-th">Event Bridge — Socket.IO server พอร์ต <strong>8080</strong> รับ POST จากระบบคิว OPD เขียนลง PostgreSQL แล้วกระจายอีเวนต์ให้ทุก client</span></td></tr>
+                  <tr><td><code>server/scheduler.js</code></td><td><span class="lang-en">Scheduler — node-schedule cron jobs for TrakCare master-data and appointment sync, daily archive and log purge. No port.</span><span class="lang-th">Scheduler — cron ด้วย node-schedule สำหรับซิงก์ master data และนัดหมายจาก TrakCare, archive รายวันและล้างไฟล์ล็อก ไม่เปิดพอร์ต</span></td></tr>
+                  <tr><td><code>src/index.js</code></td><td><span class="lang-en">React SPA entry — renders <code>App.js</code> with HashRouter, served on port <strong>3001</strong> in development or as a static build.</span><span class="lang-th">จุดเริ่มต้น React SPA — เรนเดอร์ <code>App.js</code> ด้วย HashRouter เปิดบนพอร์ต <strong>3001</strong> ตอนพัฒนา หรือเสิร์ฟเป็น static build</span></td></tr>
+                  <tr><td><code>dist/*/main.js</code></td><td><span class="lang-en">Webpack outputs actually launched by PM2 — <code>dist/app</code>, <code>dist/event-bridge</code>, <code>dist/scheduler</code>.</span><span class="lang-th">ผลลัพธ์จาก Webpack ที่ PM2 เรียกใช้จริง — <code>dist/app</code>, <code>dist/event-bridge</code>, <code>dist/scheduler</code></span></td></tr>
+                </tbody>
+              </table></div></div>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Environments</span><span class="lang-th">สภาพแวดล้อม</span></h3>
+            <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>Environment</th><th>Pipeline</th><th>Server / Agent</th></tr></thead>
+              <tbody>
+                <tr><td><span class="lang-en">Development</span><span class="lang-th">Development</span></td><td><code>.env.development</code> · <code>npm run app</code></td><td>DB <code>db-host-dev:5432</code> · app host <code>app-host-dev</code> · React dev server <code>:3001</code></td></tr>
+                <tr><td><span class="lang-en">Test</span><span class="lang-th">Test</span></td><td><code>.env.test</code> · <code>npm test</code></td><td><span class="lang-en">Same DB host, database <code>test</code> — <code>NODE_ENV=test</code> skips live TrakCare calls</span><span class="lang-th">ใช้ DB host เดิม ฐานข้อมูล <code>test</code> — เมื่อ <code>NODE_ENV=test</code> จะข้ามการเรียก TrakCare จริง</span></td></tr>
+                <tr><td><span class="lang-en">Production</span><span class="lang-th">Production</span></td><td><code>.env.production</code> · <code>npm run build-legacy</code> → PM2</td><td>DB <code>db-host:5432/dental_db</code> · app host <code>app-host</code> · HTTPS <code>:8000</code> + WSS <code>:8443</code></td></tr>
+                <tr><td><span class="lang-en">Fallback / local</span><span class="lang-th">สำรอง / เครื่องท้องถิ่น</span></td><td><code>.env</code></td><td><span class="lang-en">Default file used when no environment-specific file matches</span><span class="lang-th">ไฟล์ค่าเริ่มต้นที่ใช้เมื่อไม่มีไฟล์เฉพาะสภาพแวดล้อมตรงกัน</span></td></tr>
+              </tbody>
+            </table></div></div>
+          </section>
+
+          <!-- STRUCTURE -->
+          <section id="structure" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Solution &amp; Program Structure</span><span class="lang-th">โครงสร้างโซลูชันและโปรแกรม</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">Two source roots: <code>server/</code> holds the three Node.js processes and their business-logic modules, <code>src/</code> holds the React SPA. Webpack emits one bundle per backend entry point into <code>dist/</code>. The <code>server/modules.old/</code> tree is retained but never loaded at runtime.</span><span class="lang-th">มีรากซอร์ส 2 ส่วน: <code>server/</code> เก็บโปรเซส Node.js ทั้งสามและโมดูล business logic ส่วน <code>src/</code> เก็บ React SPA — Webpack สร้างบันเดิลหนึ่งชุดต่อหนึ่ง entry point ไว้ใน <code>dist/</code> และไดเรกทอรี <code>server/modules.old/</code> ยังคงอยู่แต่ไม่ถูกโหลดตอนรันไทม์</span></p>
+            <pre class="tree-pre"><span class="d">dental-dashboard/</span>
+├── <span class="d">server/</span>                          <span class="c"># Backend — Node.js / Express</span>
+│   ├── <span class="f">app.js</span>                     <span class="c"># App Service entry · REST API :8081 · PM2 cluster</span>
+│   ├── <span class="f">event-bridge.js</span>            <span class="c"># Event Bridge entry · Socket.IO :8080 · ~310 LOC</span>
+│   ├── <span class="f">scheduler.js</span>               <span class="c"># Scheduler entry · node-schedule cron</span>
+│   ├── <span class="f">logger.js</span>                  <span class="c"># Rolling file logger · 90-day purge</span>
+│   ├── <span class="f">swagger.json</span>               <span class="c"># Swagger 2.0 spec served at /api-docs</span>
+│   ├── <span class="f">test.js</span>                    <span class="c"># Ad-hoc test utilities</span>
+│   ├── <span class="d">configs/</span>
+│   │   └── <span class="f">schedule-config.js</span>     <span class="c"># Cron timing constants</span>
+│   ├── <span class="d">middlewares/</span>
+│   │   └── <span class="f">index.js</span>               <span class="c"># CORS + allowed headers (origin: "*")</span>
+│   ├── <span class="d">modules/</span>                    <span class="c"># Active business logic — 15 modules</span>
+│   │   ├── <span class="d">db/</span><span class="f">index.js</span>            <span class="c"># PostgreSQL pool factory · max 20</span>
+│   │   ├── <span class="f">pgpool.js</span>              <span class="c"># execute() · 3 retries · exponential backoff</span>
+│   │   ├── <span class="f">accessToken.js</span>         <span class="c"># TrakCare OAuth2 token cache</span>
+│   │   ├── <span class="f">patientAppointment.js</span>  <span class="c"># ~450 LOC · highest complexity</span>
+│   │   ├── <span class="f">roomDetail.js</span>          <span class="c"># Room occupancy · login / logout state</span>
+│   │   ├── <span class="f">careProvider.js</span>        <span class="c"># Doctor master data</span>
+│   │   ├── <span class="f">careProviderService.js</span> <span class="c"># Doctor ↔ service mapping</span>
+│   │   ├── <span class="f">doctorSchedule.js</span>      <span class="c"># Shifts + slot sums · temp-table diff</span>
+│   │   ├── <span class="f">service.js</span>             <span class="c"># Dental service catalogue</span>
+│   │   ├── <span class="f">assistanceDentist.js</span>   <span class="c"># Dental assistant master data</span>
+│   │   ├── <span class="f">booking.js</span>             <span class="c"># Room booking CRUD</span>
+│   │   ├── <span class="f">signonTrakcare.js</span>      <span class="c"># TrakCare credential login</span>
+│   │   ├── <span class="f">upload.js</span>              <span class="c"># express-fileupload handler</span>
+│   │   ├── <span class="f">healthCheck.js</span>         <span class="c"># Health flag 0 / 1</span>
+│   │   └── <span class="f">jobsh.js</span>               <span class="c"># Task orchestration · ~230 LOC</span>
+│   ├── <span class="d">modules.old/</span>                <span class="c"># DEAD CODE — 16 files, ~2,500 LOC, unused</span>
+│   └── <span class="d">routes/</span><span class="f">index.js</span>            <span class="c"># 19 Express routes</span>
+├── <span class="d">src/</span>                             <span class="c"># Frontend — React 16 SPA</span>
+│   ├── <span class="f">index.js</span>                   <span class="c"># ReactDOM render entry</span>
+│   ├── <span class="f">App.js</span> · <span class="f">AppAssis.js</span>       <span class="c"># Shell + navbar / assistant variant</span>
+│   ├── <span class="f">setupProxy.js</span>              <span class="c"># Dev proxy to :8081</span>
+│   ├── <span class="f">serviceWorker.js</span>           <span class="c"># PWA registration</span>
+│   ├── <span class="d">Home/</span><span class="f">index.js</span>
+│   ├── <span class="d">routes/</span>
+│   │   ├── <span class="f">index.js</span>               <span class="c"># GOD COMPONENT — all state, fetch, Socket.IO, alarms</span>
+│   │   └── <span class="f">LinearIndeterminate.js</span> <span class="c"># Loading bar</span>
+│   └── <span class="d">pages/</span>
+│       ├── <span class="d">Dashboard/</span>              <span class="c"># 30-room grid · index, table, tableSearch,</span>
+│       │                            <span class="c">#   searchResource, styles</span>
+│       ├── <span class="d">Schedule/</span>               <span class="c"># index, table, searchResource,</span>
+│       │                            <span class="c">#   searchService, selectTime</span>
+│       ├── <span class="d">Calendar/</span>               <span class="c"># index, FormDialog, SimpleTable,</span>
+│       │                            <span class="c">#   AlertDialogSlide, index.test.js</span>
+│       ├── <span class="d">Login/</span><span class="f">index.js</span>          <span class="c"># TrakCare sign-on · sessionStorage</span>
+│       ├── <span class="d">Logout/</span><span class="f">index.js</span>
+│       └── <span class="d">About/</span><span class="f">index.js</span>
+├── <span class="d">dist/</span>                            <span class="c"># Webpack output — app, event-bridge, scheduler</span>
+├── <span class="d">build/</span>                           <span class="c"># react-scripts static build</span>
+├── <span class="d">logs/</span>                            <span class="c"># Rotating logs · dentaldb-&lt;DATE&gt;.log</span>
+├── <span class="f">webpack.config.js</span>                <span class="c"># Server bundling · 3 entry points</span>
+├── <span class="f">ecosystem.config.js</span>              <span class="c"># PM2 · cluster + 2 fork processes</span>
+├── <span class="f">package.json</span>                     <span class="c"># 32 prod deps · 18 dev deps</span>
+├── <span class="f">dental-db-20241224.sql</span>           <span class="c"># PostgreSQL 14.2 schema + data dump</span>
+├── <span class="f">CreateIndexKey-1.sql</span>             <span class="c"># Single-column + composite indexes</span>
+├── <span class="f">sonar-project.properties</span>
+└── <span class="f">.env</span> · <span class="f">.env.development</span> · <span class="f">.env.production</span> · <span class="f">.env.test</span></pre>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">
+              <div class="card p-4 text-center"><div class="text-2xl font-black text-slate-900">25</div><div class="text-xs text-slate-500"><span class="lang-en">Backend files (server/)</span><span class="lang-th">ไฟล์แบ็กเอนด์ (server/)</span></div></div>
+              <div class="card p-4 text-center"><div class="text-2xl font-black text-slate-900">28</div><div class="text-xs text-slate-500"><span class="lang-en">Frontend files (src/)</span><span class="lang-th">ไฟล์ฟรอนต์เอนด์ (src/)</span></div></div>
+              <div class="card p-4 text-center"><div class="text-2xl font-black text-slate-900">~7,800</div><div class="text-xs text-slate-500"><span class="lang-en">Active source LOC</span><span class="lang-th">บรรทัดโค้ดที่ใช้งาน</span></div></div>
+              <div class="card p-4 text-center"><div class="text-2xl font-black text-slate-900">16</div><div class="text-xs text-slate-500"><span class="lang-en">Legacy files (modules.old/)</span><span class="lang-th">ไฟล์เก่า (modules.old/)</span></div></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-3"><span class="lang-en">Dead-code retention: <code>server/modules.old/</code> keeps 16 superseded module copies (~2,500 LOC) that are never required at runtime, alongside <code>.old</code> file duplicates. Counting SQL dumps and legacy files the repository totals ~85,399 LOC against ~7,800 active.</span><span class="lang-th">โค้ดที่ตายแล้ว: <code>server/modules.old/</code> เก็บสำเนาโมดูลเก่า 16 ไฟล์ (~2,500 บรรทัด) ที่ไม่เคยถูก require ตอนรันไทม์ รวมถึงไฟล์ที่ลงท้ายด้วย <code>.old</code> — เมื่อรวม SQL dump และไฟล์เก่าทั้งหมด repository มีประมาณ 85,399 บรรทัด เทียบกับโค้ดที่ใช้งานจริงราว 7,800 บรรทัด</span></p>
+          </section>
+
+          <!-- CONFIG -->
+          <section id="config" class="scroll-mt-24 cfg">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Runtime Configuration Reference</span><span class="lang-th">คู่มืออ้างอิงการตั้งค่ารันไทม์</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">All runtime settings come from dotenv files selected by <code>NODE_ENV</code> — <code>.env</code>, <code>.env.development</code>, <code>.env.production</code> and <code>.env.test</code> share an identical key set with different values. There is no secrets manager and no encryption at rest.</span><span class="lang-th">ค่าตั้งรันไทม์ทั้งหมดมาจากไฟล์ dotenv ที่เลือกด้วย <code>NODE_ENV</code> — <code>.env</code>, <code>.env.development</code>, <code>.env.production</code> และ <code>.env.test</code> ใช้ชุดคีย์เดียวกันแต่ค่าต่างกัน ไม่มีระบบจัดการความลับและไม่มีการเข้ารหัสข้อมูลที่จัดเก็บ</span></p>
+
+            <div class="rounded-xl bg-rose-50 border border-rose-200 p-4 mb-6 flex gap-3">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#d70015" stroke-width="2" class="shrink-0 mt-0.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg>
+              <p class="text-sm text-rose-800"><span class="lang-en"><strong>Security findings in configuration.</strong> <code>.env.production</code> is present in the working tree and carries the database password, the shared API key and TrakCare service credentials. The Event Bridge sets <code>NODE_TLS_REJECT_UNAUTHORIZED = "0"</code>, disabling TLS certificate validation for every outbound HTTPS call, and <code>app.set("trust proxy", () =&gt; true)</code> trusts all proxies so <code>X-Forwarded-For</code> can be spoofed to bypass rate limiting. CORS is <code>origin: "*"</code> and <code>ENABLE_API_KEY</code> is <code>false</code> in all four env files.</span><span class="lang-th"><strong>ประเด็นความปลอดภัยในไฟล์ตั้งค่า</strong> ไฟล์ <code>.env.production</code> อยู่ใน working tree และมีรหัสผ่านฐานข้อมูล API key ที่ใช้ร่วมกัน และบัญชีบริการของ TrakCare — Event Bridge ตั้งค่า <code>NODE_TLS_REJECT_UNAUTHORIZED = "0"</code> ซึ่งปิดการตรวจใบรับรอง TLS ของทุกการเรียก HTTPS ออกภายนอก และ <code>app.set("trust proxy", () =&gt; true)</code> เชื่อถือ proxy ทุกตัวจนสามารถปลอม <code>X-Forwarded-For</code> เพื่อเลี่ยง rate limit ได้ นอกจากนี้ CORS ตั้งเป็น <code>origin: "*"</code> และ <code>ENABLE_API_KEY</code> เป็น <code>false</code> ในไฟล์ env ทั้งสี่ไฟล์</span></p>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Connection Strings (1 databases)</span><span class="lang-th">Connection String (1 ฐานข้อมูล)</span></h3>
+            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 mb-2">
+              <div class="text-xs text-slate-500 mb-3"><span class="lang-en">Single PostgreSQL pool created in <code>server/modules/db/index.js</code> from these environment variables — production values shown.</span><span class="lang-th">Pool ของ PostgreSQL หนึ่งชุดที่สร้างใน <code>server/modules/db/index.js</code> จากตัวแปรสภาพแวดล้อมต่อไปนี้ — แสดงค่าของ production</span></div>
+              <div class="grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+                <div class="flex justify-between gap-3 border-b border-slate-200 pb-1"><span class="text-slate-500">APP_URL_DB</span><code class="text-slate-800">db-host</code></div>
+                <div class="flex justify-between gap-3 border-b border-slate-200 pb-1"><span class="text-slate-500">PORT</span><code class="text-slate-800">5432</code></div>
+                <div class="flex justify-between gap-3 border-b border-slate-200 pb-1"><span class="text-slate-500">DATABASE</span><code class="text-slate-800">dental_db</code></div>
+                <div class="flex justify-between gap-3 border-b border-slate-200 pb-1"><span class="text-slate-500">USER_DB</span><code class="text-slate-800">DB_USER</code></div>
+                <div class="flex justify-between gap-3 border-b border-slate-200 pb-1"><span class="text-slate-500">PASSWORD_DB</span><code class="text-rose-500">[REDACTED]</code></div>
+                <div class="flex justify-between gap-3 border-b border-slate-200 pb-1"><span class="text-slate-500">PG_POOL_MAX</span><code class="text-slate-800">20</code></div>
+                <div class="flex justify-between gap-3 border-b border-slate-200 pb-1"><span class="text-slate-500">IDLE_TIMEOUT_MILLIS</span><code class="text-slate-800">10000</code></div>
+                <div class="flex justify-between gap-3 border-b border-slate-200 pb-1"><span class="text-slate-500">CONNECTION_TIMEOUT_MILLIS</span><code class="text-slate-800">180000</code></div>
+              </div>
+              <div class="text-xs text-slate-400 mt-3"><span class="lang-en">Values are read straight from <code>process.env</code> with no vault or encryption; the same key names are reused verbatim across all four <code>.env*</code> files.</span><span class="lang-th">ค่าทั้งหมดอ่านตรงจาก <code>process.env</code> โดยไม่มี vault หรือการเข้ารหัส และใช้ชื่อคีย์ชุดเดียวกันในไฟล์ <code>.env*</code> ทั้งสี่ไฟล์</span></div>
+            </div>
+            <p class="text-xs text-slate-500 mb-6"><span class="lang-en">One logical database — <code>dental_db</code> — with 13 tables. Every module routes its SQL through <code>server/modules/pgpool.js</code>, which wraps <code>pool.query</code> with 3 retries and exponential backoff at 1000 / 2000 / 4000 ms, logs query duration and warns when connection checkout exceeds 5 seconds.</span><span class="lang-th">มีฐานข้อมูลเชิงตรรกะเพียงหนึ่งชุด — <code>dental_db</code> — จำนวน 13 ตาราง ทุกโมดูลส่ง SQL ผ่าน <code>server/modules/pgpool.js</code> ซึ่งครอบ <code>pool.query</code> ด้วยการ retry 3 ครั้งแบบ exponential backoff ที่ 1000 / 2000 / 4000 ms บันทึกเวลาที่ใช้ในการคิวรี และเตือนเมื่อการยืม connection นานเกิน 5 วินาที</span></p>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">appSettings Keys</span><span class="lang-th">คีย์ appSettings</span></h3>
+            <div class="card overflow-hidden mb-6"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>Key</th><th>Value</th><th><span class="lang-en">Purpose</span><span class="lang-th">วัตถุประสงค์</span></th></tr></thead>
+              <tbody>
+                <tr><td><code>NODE_ENV</code></td><td><code>production</code></td><td><span class="lang-en">Selects the dotenv file and gates live TrakCare calls — <code>test</code> skips them.</span><span class="lang-th">เลือกไฟล์ dotenv และคุมการเรียก TrakCare จริง — ค่า <code>test</code> จะข้ามการเรียก</span></td></tr>
+                <tr><td><code>APP_PORT</code></td><td><code>8081</code></td><td><span class="lang-en">App Service REST listener.</span><span class="lang-th">พอร์ต REST ของ App Service</span></td></tr>
+                <tr><td><code>EVENT_BRIDGE_PORT</code></td><td><code>8080</code></td><td><span class="lang-en">Event Bridge HTTP + Socket.IO listener.</span><span class="lang-th">พอร์ต HTTP และ Socket.IO ของ Event Bridge</span></td></tr>
+                <tr><td><code>HOST</code></td><td><code>app-host</code></td><td><span class="lang-en">Bind address of the App Service host.</span><span class="lang-th">ที่อยู่ที่ App Service ผูกไว้</span></td></tr>
+                <tr><td><code>ENABLE_API_KEY</code></td><td><code>false</code></td><td><span class="lang-en">Toggles <code>x-api-key</code> enforcement — currently disabled everywhere.</span><span class="lang-th">เปิด/ปิดการบังคับใช้ <code>x-api-key</code> — ปัจจุบันปิดในทุกสภาพแวดล้อม</span></td></tr>
+                <tr><td><code>API_KEY</code></td><td><code class="text-rose-500">[REDACTED]</code></td><td><span class="lang-en">Single shared key compared against the <code>x-api-key</code> header.</span><span class="lang-th">คีย์เดียวที่ใช้ร่วมกัน เทียบกับ header <code>x-api-key</code></span></td></tr>
+                <tr><td><code>ALLOWED_IPS</code></td><td><code>any</code></td><td><span class="lang-en">IP whitelist filter in <code>server/app.js</code> — set to allow all in production.</span><span class="lang-th">ตัวกรอง IP whitelist ใน <code>server/app.js</code> — ตั้งให้อนุญาตทั้งหมดใน production</span></td></tr>
+                <tr><td><code>TRAKCARE_URL_API</code></td><td><code class="text-rose-500">[REDACTED]</code></td><td><span class="lang-en">Base URL of the TrakCare REST API used by <code>accessToken.js</code> and every sync module.</span><span class="lang-th">Base URL ของ TrakCare REST API ที่ <code>accessToken.js</code> และทุกโมดูลซิงก์เรียกใช้</span></td></tr>
+                <tr><td><code>TRAKCARE_API_USERNAME</code></td><td><code class="text-rose-500">[REDACTED]</code></td><td><span class="lang-en">Service account for the OAuth2 token flow.</span><span class="lang-th">บัญชีบริการสำหรับ OAuth2 token flow</span></td></tr>
+                <tr><td><code>TRAKCARE_API_PASSWORD</code></td><td><code class="text-rose-500">[REDACTED]</code></td><td><span class="lang-en">Service account password, stored in plain text.</span><span class="lang-th">รหัสผ่านบัญชีบริการ เก็บเป็นข้อความธรรมดา</span></td></tr>
+                <tr><td><code>REACT_APP_API_URL</code></td><td><code>https://app-host.CUSTOMER_DOMAIN:8000</code></td><td><span class="lang-en">Base URL the SPA calls for all REST data.</span><span class="lang-th">Base URL ที่ SPA เรียกเพื่อดึงข้อมูล REST ทั้งหมด</span></td></tr>
+                <tr><td><code>REACT_APP_EVENT_BRIDGE_ENDPOINT</code></td><td><code>wss://app-host.CUSTOMER_DOMAIN:8443</code></td><td><span class="lang-en">Socket.IO endpoint the browser subscribes to.</span><span class="lang-th">Socket.IO endpoint ที่เบราว์เซอร์เชื่อมต่อเพื่อรับอีเวนต์</span></td></tr>
+                <tr><td><code>APP_INTERFACE_EVENT_BRIDGE_HTTP_ENDPOINT</code></td><td><code>http://app-host:8080</code></td><td><span class="lang-en">Internal endpoint the App Service uses as a Socket.IO client.</span><span class="lang-th">Endpoint ภายในที่ App Service ใช้ต่อเป็น Socket.IO client</span></td></tr>
+                <tr><td><code>LOG_DIRECTORY</code></td><td><code>./logs</code></td><td><span class="lang-en">Rolling log destination — pattern <code>dentaldb-&lt;DATE&gt;.log</code>.</span><span class="lang-th">ที่เก็บไฟล์ล็อกแบบหมุนเวียน — รูปแบบ <code>dentaldb-&lt;DATE&gt;.log</code></span></td></tr>
+                <tr><td><code>LOG_RETENTION_DAYS</code></td><td><code>90</code></td><td><span class="lang-en">Scheduler purges log files older than this.</span><span class="lang-th">Scheduler จะลบไฟล์ล็อกที่เก่ากว่าค่านี้</span></td></tr>
+                <tr><td><code>GENERATE_SOURCEMAP</code></td><td><code>false</code></td><td><span class="lang-en">Disables CRA source maps in the shipped bundle.</span><span class="lang-th">ปิด source map ของ CRA ในบันเดิลที่ส่งมอบ</span></td></tr>
+                <tr><td><code>ANALYZE</code></td><td><code>true</code></td><td><span class="lang-en">Enables webpack-bundle-analyzer output during the build.</span><span class="lang-th">เปิดผลลัพธ์ของ webpack-bundle-analyzer ขณะบิลด์</span></td></tr>
+                <tr><td><code>DEV_ENV</code> · <code>TEST_ENV</code> · <code>PROD_ENV</code></td><td><code>development</code> · <code>test</code> · <code>production</code></td><td><span class="lang-en">String constants the code compares <code>NODE_ENV</code> against.</span><span class="lang-th">ค่าคงที่ที่โค้ดใช้เทียบกับ <code>NODE_ENV</code></span></td></tr>
+              </tbody>
+            </table></div></div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Runtime Settings &amp; Notable Flags</span><span class="lang-th">การตั้งค่ารันไทม์และแฟล็กที่ควรทราบ</span></h3>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-slate-800">NODE_TLS_REJECT_UNAUTHORIZED</strong> <code>"0"</code><p class="text-slate-500 mt-1"><span class="lang-en">Set at the top of <code>server/event-bridge.js</code>. Disables TLS certificate validation for every outbound HTTPS call from that process — likely a workaround for a self-signed certificate on the internal TrakCare server. Rated <strong>high risk</strong>.</span><span class="lang-th">ตั้งไว้ที่ต้นไฟล์ <code>server/event-bridge.js</code> ปิดการตรวจใบรับรอง TLS ของทุกการเรียก HTTPS ออกจากโปรเซสนี้ — น่าจะเป็นวิธีเลี่ยงปัญหาใบรับรอง self-signed ของเซิร์ฟเวอร์ TrakCare ภายใน จัดเป็น<strong>ความเสี่ยงสูง</strong></span></p></div>
+              <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-slate-800">trust proxy</strong> <code>(ip) =&gt; true</code><p class="text-slate-500 mt-1"><span class="lang-en">Event Bridge trusts every proxy, so a spoofed <code>X-Forwarded-For</code> header can bypass the per-IP rate limiter. The body parser also has no size limit, leaving large-payload DoS open.</span><span class="lang-th">Event Bridge เชื่อถือ proxy ทุกตัว จึงสามารถปลอม header <code>X-Forwarded-For</code> เพื่อเลี่ยง rate limit ต่อ IP ได้ และ body parser ยังไม่จำกัดขนาด payload ทำให้เสี่ยง DoS จาก payload ขนาดใหญ่</span></p></div>
+              <div class="card p-4 text-sm border-l-4 border-amber-400"><strong class="text-slate-800">CORS origin</strong> <code>"*"</code><p class="text-slate-500 mt-1"><span class="lang-en">Set in <code>server/middlewares/index.js</code> for the App Service; the Event Bridge falls back to <code>"*"</code> when <code>ALLOWED_ORIGINS</code> is unset. Any domain can call the API.</span><span class="lang-th">ตั้งใน <code>server/middlewares/index.js</code> สำหรับ App Service และ Event Bridge จะกลับไปใช้ <code>"*"</code> เมื่อไม่ได้ตั้ง <code>ALLOWED_ORIGINS</code> ทำให้โดเมนใดก็เรียก API ได้</span></p></div>
+              <div class="card p-4 text-sm border-l-4 border-amber-400"><strong class="text-slate-800">ENABLE_API_KEY</strong> <code>false</code><p class="text-slate-500 mt-1"><span class="lang-en">The <code>x-api-key</code> middleware and IP filter both exist in <code>server/app.js</code>, but the key check is switched off in all four env files — the API is effectively open on the internal network.</span><span class="lang-th">มี middleware ตรวจ <code>x-api-key</code> และตัวกรอง IP อยู่ใน <code>server/app.js</code> แต่การตรวจคีย์ถูกปิดในไฟล์ env ทั้งสี่ไฟล์ — API จึงเปิดโล่งในเครือข่ายภายใน</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800">Rate limiting</strong> <code>1000 req/s per IP</code><p class="text-slate-500 mt-1"><span class="lang-en">Event Bridge limit via <code>express-rate-limit</code> with a custom key generator that normalises IPv6 loopback. The App Service applies its own limiter plus Helmet security headers.</span><span class="lang-th">Event Bridge จำกัดผ่าน <code>express-rate-limit</code> พร้อม key generator ที่แปลง loopback แบบ IPv6 ให้เป็นรูปแบบเดียวกัน ส่วน App Service มี limiter ของตัวเองและ header ความปลอดภัยจาก Helmet</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800">PM2 exec_mode</strong> <code>cluster / fork</code><p class="text-slate-500 mt-1"><span class="lang-en"><code>app-service</code> runs in cluster mode with <code>instances: 'max'</code>; <code>event-bridge-service</code> and <code>scheduler-service</code> are single-instance fork mode. All three restart automatically after 5000 ms.</span><span class="lang-th"><code>app-service</code> รันโหมด cluster ด้วย <code>instances: 'max'</code> ส่วน <code>event-bridge-service</code> และ <code>scheduler-service</code> รันโหมด fork แบบอินสแตนซ์เดียว ทั้งสามตัวรีสตาร์ตเองหลัง 5000 ms</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800">Log rotation</strong> <code>10M · retain 30</code><p class="text-slate-500 mt-1"><span class="lang-en">PM2 logrotate compresses and rotates daily at midnight, keeping 30 days; the scheduler separately purges files older than <code>LOG_RETENTION_DAYS = 90</code>.</span><span class="lang-th">PM2 logrotate บีบอัดและหมุนไฟล์ทุกเที่ยงคืน เก็บย้อนหลัง 30 วัน ขณะที่ scheduler ลบไฟล์ที่เก่ากว่า <code>LOG_RETENTION_DAYS = 90</code> แยกอีกชั้น</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800">Sync window</strong> <code>06:00–22:00 · every 60 s</code><p class="text-slate-500 mt-1"><span class="lang-en">Appointment sync is guarded by an hour check in <code>jobsh.taskIntervalGetDataFromTrakcare</code> and skipped outside clinic hours. Master data refreshes daily at 00:01; doctor schedules at 07:30, 11:30 and 16:30.</span><span class="lang-th">การซิงก์นัดหมายมีการตรวจชั่วโมงใน <code>jobsh.taskIntervalGetDataFromTrakcare</code> และจะข้ามเมื่ออยู่นอกเวลาทำการ — master data รีเฟรชทุกวันเวลา 00:01 และตารางแพทย์รีเฟรชที่ 07:30, 11:30 และ 16:30</span></p></div>
+            </div>
+          </section>
+
+          <!-- PAGES -->
+          <section id="pages" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Page &amp; Endpoint Inventory</span><span class="lang-th">รายการหน้าและ Endpoint</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">The SPA is a HashRouter application with five routed views behind one central state hub. The backend exposes <strong>19</strong> REST routes on the App Service (port 8081) plus <strong>2</strong> event-ingest routes on the Event Bridge (port 8080).</span><span class="lang-th">ฝั่ง SPA เป็นแอป HashRouter ที่มี 5 มุมมองหลักภายใต้ศูนย์จัดการสถานะเดียว ส่วนแบ็กเอนด์เปิด REST route <strong>19</strong> เส้นทางบน App Service (พอร์ต 8081) และอีก <strong>2</strong> เส้นทางสำหรับรับอีเวนต์บน Event Bridge (พอร์ต 8080)</span></p>
+            <div class="card overflow-hidden mb-6"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th><span class="lang-en">Domain</span><span class="lang-th">โดเมน</span></th><th class="text-right"><span class="lang-en">Pages</span><span class="lang-th">หน้า</span></th><th><span class="lang-en">Representative pages</span><span class="lang-th">หน้าตัวแทน</span></th></tr></thead>
+              <tbody>
+                <tr><td><span class="lang-en">Dashboard — 30-room realtime grid</span><span class="lang-th">Dashboard — ตารางห้องเรียลไทม์ 30 ห้อง</span></td><td class="text-right font-semibold">5</td><td class="text-xs"><code>Dashboard/index.js</code> · <code>table.js</code> · <code>tableSearch.js</code> · <code>searchResource.js</code> · <code>styles.js</code></td></tr>
+                <tr><td><span class="lang-en">Schedule — doctor shifts &amp; slots</span><span class="lang-th">Schedule — เวรและช่วงเวลาของแพทย์</span></td><td class="text-right font-semibold">5</td><td class="text-xs"><code>Schedule/index.js</code> · <code>table.js</code> · <code>searchResource.js</code> · <code>searchService.js</code> · <code>selectTime.js</code></td></tr>
+                <tr><td><span class="lang-en">Calendar — room booking</span><span class="lang-th">Calendar — การจองห้อง</span></td><td class="text-right font-semibold">5</td><td class="text-xs"><code>Calendar/index.js</code> · <code>FormDialog.js</code> · <code>SimpleTable.js</code> · <code>AlertDialogSlide.js</code> · <code>index.test.js</code></td></tr>
+                <tr><td><span class="lang-en">Authentication</span><span class="lang-th">การเข้าสู่ระบบ</span></td><td class="text-right font-semibold">2</td><td class="text-xs"><code>Login/index.js</code> · <code>Logout/index.js</code></td></tr>
+                <tr><td><span class="lang-en">Shell &amp; routing</span><span class="lang-th">โครงหลักและการกำหนดเส้นทาง</span></td><td class="text-right font-semibold">6</td><td class="text-xs"><code>src/index.js</code> · <code>App.js</code> · <code>AppAssis.js</code> · <code>routes/index.js</code> · <code>LinearIndeterminate.js</code> · <code>Home/index.js</code></td></tr>
+                <tr><td><span class="lang-en">Support &amp; static</span><span class="lang-th">ส่วนสนับสนุนและหน้าคงที่</span></td><td class="text-right font-semibold">4</td><td class="text-xs"><code>setupProxy.js</code> · <code>serviceWorker.js</code> · <code>setupTests.js</code> · <code>About/index.js</code></td></tr>
+              </tbody>
+            </table></div></div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Data Endpoints (JSON / Binary)</span><span class="lang-th">Data Endpoint (JSON / ไบนารี)</span></h3>
+            <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>Page</th><th><span class="lang-en">Response</span><span class="lang-th">ผลลัพธ์</span></th><th><span class="lang-en">Purpose</span><span class="lang-th">วัตถุประสงค์</span></th></tr></thead>
+              <tbody>
+                <tr><td><code>GET /careProvider</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">All care providers from the in-memory cache — <code>{resource: [...]}</code>.</span><span class="lang-th">รายชื่อแพทย์ทั้งหมดจากแคชในหน่วยความจำ — <code>{resource: [...]}</code></span></td></tr>
+                <tr><td><code>GET /assistDentist</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Dental assistants — <code>{assistant: [...]}</code>.</span><span class="lang-th">รายชื่อผู้ช่วยทันตแพทย์ — <code>{assistant: [...]}</code></span></td></tr>
+                <tr><td><code>GET /service</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Dental service catalogue with duration in minutes.</span><span class="lang-th">รายการบริการทันตกรรมพร้อมระยะเวลาเป็นนาที</span></td></tr>
+                <tr><td><code>GET /patientAppointment</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Today's appointments grouped by care provider.</span><span class="lang-th">นัดหมายของวันนี้ จัดกลุ่มตามแพทย์ผู้ให้บริการ</span></td></tr>
+                <tr><td><code>GET /patientAppointmentFilter</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Same shape, excluding providers with only canceled appointments and no schedule.</span><span class="lang-th">โครงสร้างเดียวกัน แต่ตัดแพทย์ที่มีเฉพาะนัดที่ถูกยกเลิกและไม่มีตารางเวรออก</span></td></tr>
+                <tr><td><code>GET /patientAppointmentHistory/:date</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Historical appointments for a <code>YYYY-MM-DD</code> path parameter.</span><span class="lang-th">นัดหมายย้อนหลังตามพารามิเตอร์ <code>YYYY-MM-DD</code> ใน path</span></td></tr>
+                <tr><td><code>GET /patientStatus</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Current patient status rows for today, keyed by room.</span><span class="lang-th">สถานะผู้ป่วยของวันนี้ อ้างอิงตามห้อง</span></td></tr>
+                <tr><td><code>DELETE /patientAppointment</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Truncates all appointment rows — returns <code>{Code, Message, Status}</code>.</span><span class="lang-th">ลบข้อมูลนัดหมายทั้งหมด — คืนค่า <code>{Code, Message, Status}</code></span></td></tr>
+                <tr><td><code>GET /roomDetail</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Current room occupancy from cache — doctor, assistant, schedule time.</span><span class="lang-th">สถานะการใช้ห้องปัจจุบันจากแคช — แพทย์ ผู้ช่วย และช่วงเวลา</span></td></tr>
+                <tr><td><code>DELETE /roomDetail</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Truncates all room detail rows.</span><span class="lang-th">ลบข้อมูลรายละเอียดห้องทั้งหมด</span></td></tr>
+                <tr><td><code>GET /doctorScheduleOnDate</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Doctor schedules for a <code>date</code> query parameter.</span><span class="lang-th">ตารางเวรแพทย์ตาม query parameter <code>date</code></span></td></tr>
+                <tr><td><code>GET /careProviderWorkload</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Per-doctor slot sums (<code>SUMSLOT</code>) used for workload display.</span><span class="lang-th">ผลรวมช่วงเวลาต่อแพทย์ (<code>SUMSLOT</code>) สำหรับแสดงภาระงาน</span></td></tr>
+                <tr><td><code>GET /careProviderServiceOnDate</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Services each doctor offers on the requested date.</span><span class="lang-th">บริการที่แพทย์แต่ละคนให้บริการในวันที่ระบุ</span></td></tr>
+                <tr><td><code>POST /logonTrakcare</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Authenticates <code>{username, password}</code> against TrakCare and returns a token or error.</span><span class="lang-th">ยืนยันตัวตน <code>{username, password}</code> กับ TrakCare แล้วคืน token หรือข้อผิดพลาด</span></td></tr>
+                <tr><td><code>GET /healthCheck</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en"><code>{status: 0|1}</code> — 0 when TrakCare is unreachable.</span><span class="lang-th"><code>{status: 0|1}</code> — ค่า 0 เมื่อไม่สามารถติดต่อ TrakCare ได้</span></td></tr>
+                <tr><td><code>GET /ping</code></td><td><span class="badge badge-violet">Text</span></td><td><span class="lang-en">Returns <code>"PONG"</code>; used by <code>wait-on</code> before the dev client starts.</span><span class="lang-th">คืนค่า <code>"PONG"</code> ใช้โดย <code>wait-on</code> ก่อนเริ่ม dev client</span></td></tr>
+                <tr><td><code>POST /upload</code></td><td><span class="badge badge-violet">Multipart</span></td><td><span class="lang-en">File upload via <code>express-fileupload</code> — Excel doctor-slot import.</span><span class="lang-th">อัปโหลดไฟล์ผ่าน <code>express-fileupload</code> — นำเข้าตารางเวรแพทย์จาก Excel</span></td></tr>
+                <tr><td><code>GET /booking</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Room booking rows from the in-memory cache.</span><span class="lang-th">รายการจองห้องจากแคชในหน่วยความจำ</span></td></tr>
+                <tr><td><code>POST /booking</code></td><td><span class="badge badge-blue">JSON</span></td><td><span class="lang-en">Creates a booking — doctor, up to two assistants, room, date range, times, work case.</span><span class="lang-th">สร้างการจอง — แพทย์ ผู้ช่วยได้ถึงสองคน ห้อง ช่วงวันที่ เวลา และประเภทงาน</span></td></tr>
+                <tr><td><code>POST /roomDetail</code> <span class="badge badge-slate">:8080</span></td><td><span class="badge badge-violet">Event</span></td><td><span class="lang-en">Event Bridge ingest — doctor room login / logout from the OPD Queue; writes to PostgreSQL then emits <code>roomDetailUpdate</code>. Responds 201.</span><span class="lang-th">จุดรับอีเวนต์ของ Event Bridge — การเข้า/ออกห้องของแพทย์จากระบบคิว OPD บันทึกลง PostgreSQL แล้วส่ง <code>roomDetailUpdate</code> ตอบกลับ 201</span></td></tr>
+                <tr><td><code>POST /patientStatus</code> <span class="badge badge-slate">:8080</span></td><td><span class="badge badge-violet">Event</span></td><td><span class="lang-en">Event Bridge ingest — patient lifecycle status; maps Call/Hold/End Service/Booked/Arrived/Cancel to <code>P/H/E/B/A/C</code> then emits <code>patientStatusUpdate</code>.</span><span class="lang-th">จุดรับอีเวนต์ของ Event Bridge — สถานะผู้ป่วย แปลง Call/Hold/End Service/Booked/Arrived/Cancel เป็น <code>P/H/E/B/A/C</code> แล้วส่ง <code>patientStatusUpdate</code></span></td></tr>
+              </tbody>
+            </table></div></div>
+          </section>
+
+          <!-- SERVICES -->
+          <section id="services" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Service &amp; Utility Classes</span><span class="lang-th">คลาสบริการและยูทิลิตี้</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">There are no classes — every unit is a CommonJS module exporting async functions. Each one doubles as a repository, holding its own module-level cache alongside SQL and, where relevant, TrakCare HTTP calls.</span><span class="lang-th">โค้ดไม่ได้ใช้คลาส แต่ละหน่วยคือโมดูล CommonJS ที่ export ฟังก์ชัน async — และแต่ละโมดูลทำหน้าที่เป็น repository ในตัว เก็บแคชระดับโมดูลของตนเองพร้อมกับ SQL และการเรียก TrakCare ผ่าน HTTP เมื่อจำเป็น</span></p>
+            <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>Class</th><th><span class="lang-en">Responsibility</span><span class="lang-th">หน้าที่</span></th><th><span class="lang-en">Used by</span><span class="lang-th">ใช้โดย</span></th></tr></thead>
+              <tbody>
+                <tr><td><code>db/index.js</code></td><td><span class="lang-en">PostgreSQL pool factory — max 20 connections, idle 10 s, connection timeout 180 s, pool stats monitoring.</span><span class="lang-th">ตัวสร้าง pool ของ PostgreSQL — สูงสุด 20 connection, idle 10 วินาที, connection timeout 180 วินาที และเฝ้าดูสถิติของ pool</span></td><td><code>pgpool.js</code></td></tr>
+                <tr><td><code>pgpool.execute</code></td><td><span class="lang-en">Single SQL gateway: <code>execute(text, values)</code> with 3 retries, exponential backoff, query timing logs and a checkout warning past 5 s.</span><span class="lang-th">ประตูเดียวสำหรับ SQL: <code>execute(text, values)</code> พร้อม retry 3 ครั้ง, exponential backoff, บันทึกเวลาคิวรี และเตือนเมื่อยืม connection เกิน 5 วินาที</span></td><td><span class="lang-en">Every data module</span><span class="lang-th">ทุกโมดูลข้อมูล</span></td></tr>
+                <tr><td><code>accessToken</code></td><td><span class="lang-en">TrakCare OAuth2 flow — POSTs to <code>/api/iam/login</code>, caches the bearer token until expiry, re-authenticates on failure.</span><span class="lang-th">OAuth2 ของ TrakCare — POST ไปที่ <code>/api/iam/login</code> แคช bearer token จนหมดอายุ และยืนยันตัวตนใหม่เมื่อเกิดข้อผิดพลาด</span></td><td><code>patientAppointment</code> · <code>careProvider</code> · <code>service</code> · <code>assistanceDentist</code> · <code>doctorSchedule</code> · <code>careProviderService</code></td></tr>
+                <tr><td><code>jobsh</code></td><td><span class="lang-en">Task orchestration — master-data sync, 60 s interval sync, memory reload, change detection, history archive, plus targeted refresh on room and patient events.</span><span class="lang-th">ตัวประสานงาน — ซิงก์ master data, ซิงก์ทุก 60 วินาที, โหลดข้อมูลเข้าหน่วยความจำ, ตรวจจับการเปลี่ยนแปลง, archive ประวัติ และรีเฟรชเฉพาะจุดเมื่อมีอีเวนต์ห้องหรือผู้ป่วย</span></td><td><code>scheduler.js</code> · <code>app.js</code> · <code>routes/index.js</code></td></tr>
+                <tr><td><code>patientAppointment</code></td><td><span class="lang-en">Largest module (~450 LOC): appointment cache, TrakCare fetch and staging, temp-table change validation, status mapping, history duplication.</span><span class="lang-th">โมดูลใหญ่ที่สุด (~450 บรรทัด): แคชนัดหมาย, ดึงและ stage ข้อมูลจาก TrakCare, ตรวจสอบการเปลี่ยนแปลงผ่าน temp table, แม็ปสถานะ และคัดลอกลงตารางประวัติ</span></td><td><code>jobsh</code> · <code>routes/index.js</code></td></tr>
+                <tr><td><code>roomDetail</code></td><td><span class="lang-en">Room occupancy — direct query with assistant join, cache refresh, and full-table delete.</span><span class="lang-th">การใช้ห้อง — คิวรีตรงพร้อม join ผู้ช่วย, รีเฟรชแคช และลบข้อมูลทั้งตาราง</span></td><td><code>jobsh</code> · <code>event-bridge.js</code> · <code>routes/index.js</code></td></tr>
+                <tr><td><code>doctorSchedule</code></td><td><span class="lang-en">Shift management (~200 LOC) with temp-table validation and a CTE that sums shift minutes into <code>SUMSLOT</code>.</span><span class="lang-th">จัดการเวรแพทย์ (~200 บรรทัด) พร้อมตรวจสอบผ่าน temp table และ CTE ที่รวมนาทีของเวรเป็น <code>SUMSLOT</code></span></td><td><code>jobsh</code> · <code>routes/index.js</code></td></tr>
+                <tr><td><code>signonTrakcare.Authorization</code></td><td><span class="lang-en">Credential login used by the SPA login page — the only authentication path in the product.</span><span class="lang-th">การเข้าสู่ระบบด้วยรหัสผู้ใช้ที่หน้า login ของ SPA เรียกใช้ — เป็นเส้นทางยืนยันตัวตนเดียวของระบบ</span></td><td><code>POST /logonTrakcare</code></td></tr>
+                <tr><td><code>healthCheck</code></td><td><span class="lang-en">Health flag get/set — driven to 0 by <code>jobsh</code> when a TrakCare call fails, back to 1 on success.</span><span class="lang-th">อ่าน/ตั้งค่าธงสถานะระบบ — <code>jobsh</code> ตั้งเป็น 0 เมื่อเรียก TrakCare ไม่สำเร็จ และกลับเป็น 1 เมื่อสำเร็จ</span></td><td><code>jobsh</code> · <code>GET /healthCheck</code></td></tr>
+                <tr><td><code>upload.uploadFile</code></td><td><span class="lang-en">Multipart handler backing the Excel doctor-slot import.</span><span class="lang-th">ตัวจัดการ multipart สำหรับนำเข้าตารางเวรแพทย์จาก Excel</span></td><td><code>POST /upload</code></td></tr>
+                <tr><td><code>logger</code></td><td><span class="lang-en">Rolling file logger writing <code>dentaldb-&lt;DATE&gt;.log</code>, with a 90-day purge routine.</span><span class="lang-th">ตัวบันทึกล็อกแบบหมุนเวียนไฟล์ <code>dentaldb-&lt;DATE&gt;.log</code> พร้อมรูทีนล้างไฟล์อายุเกิน 90 วัน</span></td><td><span class="lang-en">All backend processes</span><span class="lang-th">ทุกโปรเซสฝั่งแบ็กเอนด์</span></td></tr>
+                <tr><td><code>middlewares/index.js</code></td><td><span class="lang-en">CORS and allowed-header configuration — currently <code>origin: "*"</code>.</span><span class="lang-th">ตั้งค่า CORS และ header ที่อนุญาต — ปัจจุบันเป็น <code>origin: "*"</code></span></td><td><code>app.js</code></td></tr>
+                <tr><td><code>configs/schedule-config.js</code></td><td><span class="lang-en">Cron timing constants for the scheduler — daily, interval and doctor-schedule refresh times.</span><span class="lang-th">ค่าคงที่ของเวลา cron สำหรับ scheduler — งานรายวัน งานตามช่วงเวลา และเวลารีเฟรชตารางแพทย์</span></td><td><code>scheduler.js</code></td></tr>
+              </tbody>
+            </table></div></div>
+          </section>
+
+          <!-- DATA ACCESS -->
+          <section id="data-access" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Data Access Layer</span><span class="lang-th">ชั้นการเข้าถึงข้อมูล</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">No ORM and no migration tooling. Each module owns raw SQL against <code>dental_db</code> and its own cache; every statement is parameterized with <code>$1, $2 …</code> and executed through the single <code>pgpool.execute</code> wrapper over one shared pool.</span><span class="lang-th">ไม่มี ORM และไม่มีเครื่องมือ migration แต่ละโมดูลถือ SQL ดิบที่ยิงไปยัง <code>dental_db</code> พร้อมแคชของตัวเอง ทุกคำสั่งใช้พารามิเตอร์ <code>$1, $2 …</code> และรันผ่าน <code>pgpool.execute</code> ตัวเดียวบน pool ที่ใช้ร่วมกัน</span></p>
+            <div class="card overflow-hidden mb-4"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>DataContext</th><th><span class="lang-en">Database</span><span class="lang-th">ฐานข้อมูล</span></th><th>Server</th><th class="text-right"><span class="lang-en">Tables</span><span class="lang-th">ตาราง</span></th><th><span class="lang-en">Primary domain</span><span class="lang-th">โดเมนหลัก</span></th></tr></thead>
+              <tbody>
+                <tr><td><code>patientAppointment.js</code></td><td><code>dental_db</code></td><td><code>db-host:5432</code></td><td class="text-right font-semibold">4</td><td><span class="lang-en">Appointments, staging, history, status lookup</span><span class="lang-th">นัดหมาย ตาราง staging ประวัติ และตารางสถานะ</span></td></tr>
+                <tr><td><code>doctorSchedule.js</code></td><td><code>dental_db</code></td><td><code>db-host:5432</code></td><td class="text-right font-semibold">2</td><td><span class="lang-en">Doctor shifts + temp staging, slot sums</span><span class="lang-th">เวรแพทย์และตาราง staging รวมถึงผลรวมช่วงเวลา</span></td></tr>
+                <tr><td><code>booking.js</code></td><td><code>dental_db</code></td><td><code>db-host:5432</code></td><td class="text-right font-semibold">2</td><td><span class="lang-en">Room bookings and work-case types</span><span class="lang-th">การจองห้องและประเภทงาน</span></td></tr>
+                <tr><td><code>roomDetail.js</code></td><td><code>dental_db</code></td><td><code>db-host:5432</code></td><td class="text-right font-semibold">1</td><td><span class="lang-en">Room occupancy, login / logout times</span><span class="lang-th">การใช้ห้องและเวลาเข้า/ออก</span></td></tr>
+                <tr><td><code>careProvider.js</code></td><td><code>dental_db</code></td><td><code>db-host:5432</code></td><td class="text-right font-semibold">1</td><td><span class="lang-en">Doctor master data</span><span class="lang-th">ข้อมูลหลักของแพทย์</span></td></tr>
+                <tr><td><code>service.js</code></td><td><code>dental_db</code></td><td><code>db-host:5432</code></td><td class="text-right font-semibold">1</td><td><span class="lang-en">Dental service catalogue</span><span class="lang-th">รายการบริการทันตกรรม</span></td></tr>
+                <tr><td><code>assistanceDentist.js</code></td><td><code>dental_db</code></td><td><code>db-host:5432</code></td><td class="text-right font-semibold">1</td><td><span class="lang-en">Dental assistant master data</span><span class="lang-th">ข้อมูลหลักของผู้ช่วยทันตแพทย์</span></td></tr>
+                <tr><td><code>careProviderService.js</code></td><td><code>dental_db</code></td><td><code>db-host:5432</code></td><td class="text-right font-semibold">1</td><td><span class="lang-en">Doctor ↔ service mapping by date</span><span class="lang-th">การจับคู่แพทย์กับบริการตามวันที่</span></td></tr>
+                <tr><td><code>event-bridge.js</code></td><td><code>dental_db</code></td><td><code>db-host:5432</code></td><td class="text-right font-semibold">2</td><td><span class="lang-en">Writes room and patient state directly, bypassing the modules</span><span class="lang-th">เขียนสถานะห้องและผู้ป่วยลงฐานข้อมูลโดยตรง ไม่ผ่านโมดูล</span></td></tr>
+              </tbody>
+            </table></div></div>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Common query pattern</span><span class="lang-th">รูปแบบคิวรีทั่วไป</span></strong><p class="text-slate-500 mt-1"><code>await execute(text, values)</code> <span class="lang-en">— TrakCare data lands in a <code>*Temp</code> table, is diffed against the live table with SQL <code>EXCEPT</code>, then new rows are inserted and changed rows updated by <code>APPT_RowId</code>. Reads use CTEs, notably the <code>DoctorSlot</code> CTE that sums shift minutes per doctor.</span><span class="lang-th">— ข้อมูลจาก TrakCare ลงตาราง <code>*Temp</code> ก่อน แล้วเทียบกับตารางจริงด้วย SQL <code>EXCEPT</code> จากนั้นแทรกแถวใหม่และอัปเดตแถวที่เปลี่ยนโดยอ้าง <code>APPT_RowId</code> ส่วนการอ่านใช้ CTE โดยเฉพาะ <code>DoctorSlot</code> ที่รวมนาทีของเวรแต่ละแพทย์</span></p></div>
+              <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-slate-800"><span class="lang-en">Anti-pattern</span><span class="lang-th">Anti-pattern</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">Route handlers, business rules, SQL and TrakCare HTTP calls all sit in the same file — <code>patientAppointment.js</code> is ~450 LOC of mixed concerns. Each module also keeps mutable state in a module-level <code>let dataInMem = []</code>, so background tasks and request handlers silently share one reference and cache coherency breaks under PM2 cluster mode.</span><span class="lang-th">ตัวจัดการ route กฎธุรกิจ SQL และการเรียก HTTP ไปยัง TrakCare อยู่ในไฟล์เดียวกัน — <code>patientAppointment.js</code> มีราว 450 บรรทัดที่ปนหลายหน้าที่ นอกจากนี้แต่ละโมดูลยังเก็บสถานะที่แก้ไขได้ไว้ใน <code>let dataInMem = []</code> ระดับโมดูล ทำให้งานเบื้องหลังและตัวจัดการ request แชร์ reference เดียวกันโดยไม่รู้ตัว และความสอดคล้องของแคชจะเสียเมื่อรันแบบ PM2 cluster</span></p></div>
+            </div>
+          </section>
+
+          <!-- DATA MODELS -->
+          <section id="data-models" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Data Models &amp; Contracts</span><span class="lang-th">โมเดลข้อมูลและ Contract</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">13 PostgreSQL tables, all columns declared <code>TEXT</code> apart from <code>SERIAL</code> keys and <code>TIMESTAMP</code> event times — dates and times are stored as strings. On the code side nothing is formally typed: contracts exist only inside SQL strings, request bodies and React state.</span><span class="lang-th">มี 13 ตารางใน PostgreSQL โดยคอลัมน์เกือบทั้งหมดประกาศเป็น <code>TEXT</code> ยกเว้นคีย์แบบ <code>SERIAL</code> และเวลาอีเวนต์แบบ <code>TIMESTAMP</code> — วันและเวลาถูกเก็บเป็นสตริง ส่วนฝั่งโค้ดไม่มีการกำหนดชนิดข้อมูลอย่างเป็นทางการเลย contract อยู่แค่ในสตริง SQL, body ของ request และ state ของ React</span></p>
+            <div class="grid md:grid-cols-2 gap-4 mb-5">
+              <div class="card p-5">
+                <div class="text-xs font-bold uppercase tracking-wide text-indigo-500 mb-2"><span class="lang-en">Key code-defined models</span><span class="lang-th">โมเดลที่นิยามในโค้ด</span></div>
+                <ul class="text-sm text-slate-600 space-y-1.5">
+                  <li><code>dataInMem</code> — <span class="lang-en">per-module cache array; the de facto read model behind every GET endpoint.</span><span class="lang-th">อาร์เรย์แคชของแต่ละโมดูล เป็น read model จริงที่อยู่หลัง GET endpoint ทุกตัว</span></li>
+                  <li><code>Frontend state</code> — <span class="lang-en"><code>src/routes/index.js</code>: <code>resource</code>, <code>data</code>, <code>roomDetail</code>, <code>statusPatients</code>, <code>CareProviderWorkload</code>, <code>DoctorSlot</code>, <code>alarmTime[30]</code>, <code>showBlinkPatient</code>, <code>problemFlags</code>.</span><span class="lang-th"><code>src/routes/index.js</code>: <code>resource</code>, <code>data</code>, <code>roomDetail</code>, <code>statusPatients</code>, <code>CareProviderWorkload</code>, <code>DoctorSlot</code>, <code>alarmTime[30]</code>, <code>showBlinkPatient</code>, <code>problemFlags</code></span></li>
+                  <li><code>POST /roomDetail</code> body — <span class="lang-en"><code>TransactionId</code>, <code>ResourceId</code>, <code>Resource</code>, <code>Room</code>, <code>AssistantId</code>, <code>Assistant</code>, <code>ScheduleTime</code>, <code>Location</code>.</span><span class="lang-th"><code>TransactionId</code>, <code>ResourceId</code>, <code>Resource</code>, <code>Room</code>, <code>AssistantId</code>, <code>Assistant</code>, <code>ScheduleTime</code>, <code>Location</code></span></li>
+                  <li><code>POST /patientStatus</code> body — <span class="lang-en"><code>TransactionId</code>, <code>PatientId</code>, <code>EpisodeNumber</code>, <code>Room</code>, <code>PatientStatus</code>, <code>Location</code>.</span><span class="lang-th"><code>TransactionId</code>, <code>PatientId</code>, <code>EpisodeNumber</code>, <code>Room</code>, <code>PatientStatus</code>, <code>Location</code></span></li>
+                  <li><code>roomDetailUpdate</code> — <span class="lang-en">Socket.IO payload: <code>resource_id</code>, <code>resource</code>, <code>room</code>, <code>schedule_time</code>, <code>assistant</code>, <code>status</code>.</span><span class="lang-th">payload ของ Socket.IO: <code>resource_id</code>, <code>resource</code>, <code>room</code>, <code>schedule_time</code>, <code>assistant</code>, <code>status</code></span></li>
+                  <li><code>patientStatusUpdate</code> — <span class="lang-en">Socket.IO payload: <code>room</code>, <code>status</code>, <code>patientId</code>, <code>episodeNumber</code>.</span><span class="lang-th">payload ของ Socket.IO: <code>room</code>, <code>status</code>, <code>patientId</code>, <code>episodeNumber</code></span></li>
+                  <li><code>statusMap</code> — <span class="lang-en">Booked→B, Arrived→A, Call→P, Hold→H, End Service→E, Cancel→C.</span><span class="lang-th">Booked→B, Arrived→A, Call→P, Hold→H, End Service→E, Cancel→C</span></li>
+                  <li><code>TrakCare appointment DTO</code> — <span class="lang-en"><code>PAADM_RowID</code>, <code>HN</code>, <code>EN</code>, <code>CarpCode</code>, <code>ServiceCode</code>, <code>AS_Date</code>, <code>APPT_RowId</code> as the sync key.</span><span class="lang-th"><code>PAADM_RowID</code>, <code>HN</code>, <code>EN</code>, <code>CarpCode</code>, <code>ServiceCode</code>, <code>AS_Date</code> และ <code>APPT_RowId</code> ที่ใช้เป็นคีย์ซิงก์</span></li>
+                  <li><code>{Code, Message, Status}</code> — <span class="lang-en">the informal response envelope returned by write and delete routes.</span><span class="lang-th">รูปแบบผลลัพธ์อย่างไม่เป็นทางการที่ route สำหรับเขียนและลบข้อมูลคืนกลับ</span></li>
+                </ul>
+              </div>
+              <div class="card p-5">
+                <div class="text-xs font-bold uppercase tracking-wide text-emerald-600 mb-2"><span class="lang-en">Recommended interfaces (for migration)</span><span class="lang-th">อินเทอร์เฟซที่แนะนำ (เพื่อย้ายระบบ)</span></div>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="chip font-mono text-[0.7rem]">IPatientAppointment</span>
+                  <span class="chip font-mono text-[0.7rem]">ICareProvider</span>
+                  <span class="chip font-mono text-[0.7rem]">IRoomDetail</span>
+                  <span class="chip font-mono text-[0.7rem]">IDoctorSchedule</span>
+                  <span class="chip font-mono text-[0.7rem]">IService</span>
+                  <span class="chip font-mono text-[0.7rem]">IAssistanceDentist</span>
+                  <span class="chip font-mono text-[0.7rem]">IBookingRoom</span>
+                  <span class="chip font-mono text-[0.7rem]">ICareProviderService</span>
+                  <span class="chip font-mono text-[0.7rem]">IPatientStatus</span>
+                  <span class="chip font-mono text-[0.7rem]">IWorkcase</span>
+                  <span class="chip font-mono text-[0.7rem]">IRoomDetailEvent</span>
+                  <span class="chip font-mono text-[0.7rem]">IPatientStatusEvent</span>
+                  <span class="chip font-mono text-[0.7rem]">ITrakCareToken</span>
+                  <span class="chip font-mono text-[0.7rem]">IHealthStatus</span>
+                  <span class="chip font-mono text-[0.7rem]">IApiEnvelope</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-3"><span class="lang-en">Suggested contract names for the migration — one per table, one per Socket.IO event payload, plus the TrakCare token and the <code>{Code, Message, Status}</code> envelope. None of these exist today; adding them is the first step toward a type-safe port.</span><span class="lang-th">ชื่อ contract ที่แนะนำสำหรับการย้ายระบบ — หนึ่งชื่อต่อหนึ่งตาราง หนึ่งชื่อต่อหนึ่ง payload ของ Socket.IO พร้อม token ของ TrakCare และรูปแบบผลลัพธ์ <code>{Code, Message, Status}</code> ปัจจุบันยังไม่มีสิ่งเหล่านี้เลย การสร้างขึ้นมาคือก้าวแรกไปสู่การย้ายระบบที่ปลอดภัยด้านชนิดข้อมูล</span></p>
+              </div>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Entity Relationships — dental_db, 13 tables</span><span class="lang-th">ความสัมพันธ์ของเอนทิตี — dental_db จำนวน 13 ตาราง</span></h3>
+            <div class="mermaid-wrap">
+              <pre class="mermaid">
+erDiagram
+    CareProvider {
+        text CarpCode PK
+        text CarpDesc
+        text NameTH
+        text NameEN
+        text CarpRowID
+        text CarProType
+    }
+    Service {
+        text SvcItemCode PK
+        text SvcItemDesc
+        text SvcTimeInMinute
+    }
+    AssistanceDentist {
+        serial ID PK
+        text AssistCode
+        text NameTH
+        text NameEN
+        text CareProRowID
+    }
+    PatientAppointment {
+        serial ID PK
+        text APPT_RowId UK
+        text HN
+        text EN
+        text CarpCode FK
+        text ServiceCode FK
+        text AS_Date
+        text PT_Status
+        text Room
+        timestamp EVTCall_Time
+        timestamp EVTEndService_Time
+    }
+    PatientAppointmentTemp {
+        text APPT_RowId UK
+        text HN
+        text CarpCode
+        text AS_Date
+    }
+    PatientAppointmentHistory {
+        text APPT_RowId
+        text HN
+        text CarpCode
+        text AS_Date
+    }
+    RoomDetail {
+        serial ID PK
+        text CarpCode FK
+        text AssistCode FK
+        text Room
+        text CarpStatus
+        timestamp LoginTime
+        timestamp LogoutTime
+    }
+    DoctorSchedule {
+        text DoctorCode FK
+        text Day
+        text TimeStart
+        text TimeEnd
+        text StartDate
+        text EndDate
+    }
+    DoctorScheduleTemp {
+        text DoctorCode
+        text Day
+        text TimeStart
+        text TimeEnd
+    }
+    CareProviderService {
+        text CarpCode FK
+        text SvcItemCode FK
+        text Date
+    }
+    BookingRoom {
+        serial ID PK
+        text CarpCode FK
+        text AssistCode1 FK
+        text AssistCode2 FK
+        text Room
+        text Workcase FK
+    }
+    PatientStatus {
+        text StatusSymbol PK
+        text StatusDesc
+    }
+    Workcase {
+        serial ID PK
+        text CaseSymbol
+    }
+    CareProvider ||--o{ PatientAppointment : treats
+    CareProvider ||--o{ DoctorSchedule : "works shift"
+    CareProvider ||--o{ RoomDetail : "logs into"
+    CareProvider ||--o{ CareProviderService : offers
+    CareProvider ||--o{ BookingRoom : books
+    Service ||--o{ PatientAppointment : "booked as"
+    Service ||--o{ CareProviderService : "listed in"
+    AssistanceDentist ||--o{ RoomDetail : "assists in"
+    AssistanceDentist ||--o{ BookingRoom : "assigned to"
+    PatientStatus ||--o{ PatientAppointment : classifies
+    Workcase ||--o{ BookingRoom : categorises
+    PatientAppointmentTemp |o..|| PatientAppointment : "staged into"
+    PatientAppointment ||..o| PatientAppointmentHistory : "archived to"
+    DoctorScheduleTemp |o..|| DoctorSchedule : "staged into"
+              </pre>
+            </div>
+          </section>
+
+          <!-- WORKFLOWS -->
+          <section id="workflows" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Core Workflows</span><span class="lang-th">เวิร์กโฟลว์หลัก</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">Six documented flows drive the system: startup master-data load, real-time patient status, room login/logout, the 60-second appointment sync, frontend refresh, and the 00:01 daily maintenance job. The three below are the ones a migration must reproduce exactly.</span><span class="lang-th">ระบบขับเคลื่อนด้วยกระแสงาน 6 ชุดตามเอกสาร: โหลด master data ตอนสตาร์ต, สถานะผู้ป่วยแบบเรียลไทม์, การเข้า/ออกห้องของแพทย์, การซิงก์นัดหมายทุก 60 วินาที, การรีเฟรชฝั่งหน้าเว็บ และงานบำรุงรักษารายวันเวลา 00:01 — สามกระแสงานด้านล่างคือชุดที่การย้ายระบบต้องทำซ้ำให้ตรงทุกขั้น</span></p>
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">1 · Real-time patient status update — POST /patientStatus on the Event Bridge</span><span class="lang-th">1 · อัปเดตสถานะผู้ป่วยแบบเรียลไทม์ — POST /patientStatus บน Event Bridge</span></h3>
+            <div class="mermaid-wrap mb-6">
+              <pre class="mermaid">
+flowchart TB
+    A["OPD Queue system POSTs to :8080 /patientStatus"] --> B["Validate TransactionId, PatientId, EpisodeNumber, Room, PatientStatus, Location"]
+    B -->|invalid| BX["Respond 400 · Bad Request"]
+    B -->|valid| C["Map status string: Call to P, Hold to H, End Service to E, Booked to B, Arrived to A, Cancel to C"]
+    C --> D["Hash payload with object-hash"]
+    D -->|"same as previous hash"| DX["Silently ignore duplicate event"]
+    D -->|new hash| E["Acquire PostgreSQL connection from pool"]
+    E --> F{"Mapped status?"}
+    F -->|"P — Call"| G["Set EVTCall_Time = CURRENT_TIMESTAMP<br/>only when PT_Status NOT IN P, H, E"]
+    F -->|"E — End Service"| H["Set EVTEndService_Time = CURRENT_TIMESTAMP"]
+    F -->|"B, A, H or C"| I["No event timestamp written"]
+    G --> J["UPDATE PatientAppointment SET Room, PT_Status<br/>via RoomDetailTemp CTE: HN and EN match, not canceled, doctor is In that room"]
+    H --> J
+    I --> J
+    J --> K["Release DB connection"]
+    K --> L["Emit patientStatusUpdate and StatusPatient over Socket.IO"]
+    L --> M["App Service :8081 refreshes appointment and patient-status cache"]
+    L --> N["React SPA refetches 5 endpoints and re-renders the room grid"]
+    N --> O["Recalculate alarmTime and blink classes for all 30 rooms"]
+    J --> P["Respond 200 · Code 200, Message OK, Status true"]
+              </pre>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">2 · Room login / logout</span><span class="lang-th">2 · การเข้า/ออกห้องของแพทย์</span></h3>
+                <div class="mermaid-wrap">
+                  <pre class="mermaid">
+flowchart TB
+    A["OPD Queue POSTs to :8080 /roomDetail"] --> B["Validate ResourceId, Resource, Room, AssistantId, Assistant, Location"]
+    B --> C{"Room equals 'Out'?"}
+    C -->|yes| D["UPDATE RoomDetail SET CarpStatus = 'Out', LogoutTime = CURRENT_TIMESTAMP<br/>WHERE CarpCode = ResourceId"]
+    C -->|no| E["Set every existing 'In' row to 'Out' for the same Room OR the same CarpCode"]
+    E --> F["INSERT RoomDetail: CarpCode, AssistCode, ScheduleTime, Location, CarpStatus 'In', Room, LoginTime"]
+    D --> G["Emit roomDetailUpdate with status 'Out'"]
+    F --> H["Emit roomDetailUpdate with status 'In'"]
+    G --> I["Respond 201"]
+    H --> I
+    G --> J["App Service refreshes roomDetail and patientStatus in memory"]
+    H --> J
+    J --> K["SPA refetches and re-renders the 30-room grid"]
+    E -.->|"business rule"| L["One doctor per room · one room per doctor"]
+                  </pre>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">3 · 60-second appointment sync from TrakCare</span><span class="lang-th">3 · ซิงก์นัดหมายจาก TrakCare ทุก 60 วินาที</span></h3>
+                <div class="mermaid-wrap">
+                  <pre class="mermaid">
+flowchart TB
+    A["setInterval fires taskIntervalGetDataFromTrakcare every 60 s"] --> B{"Hour between 6 and 22?"}
+    B -->|no| BX["Skip · clinic closed"]
+    B -->|yes| C{"NODE_ENV is test?"}
+    C -->|"yes — skip the API call"| G["validateAppointmentChangeEvent"]
+    C -->|no| D["Get OAuth2 bearer token via accessToken.js"]
+    D --> E["GET /api/PTINF/GetAppointmentNoGroupBy for location 01DEN and today"]
+    E -->|error| EX["healthCheck.setStatus 0 · log · keep serving stale cache"]
+    E -->|ok| F["DELETE FROM PatientAppointmentTemp and RESTART sequence, then INSERT every row"]
+    F --> G
+    G --> H["INSERT rows present in Temp but missing from PatientAppointment"]
+    H --> I["SQL EXCEPT between Temp and main across all 23 fields"]
+    I --> J["UPDATE each changed row by APPT_RowId"]
+    J --> K{"ch_evt true?"}
+    K -->|yes| L["Refresh in-memory appointment cache"]
+    K -->|no| M["Leave cache untouched"]
+    L --> N["healthCheck.setStatus 1"]
+    M --> N
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- RULES -->
+          <section id="rules" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Business Rules Highlights</span><span class="lang-th">สรุปกฎทางธุรกิจสำคัญ</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">Concrete rules a developer must preserve when refactoring or migrating.</span><span class="lang-th">กฎรูปธรรมที่นักพัฒนาต้องรักษาไว้เมื่อ refactor หรือย้ายระบบ</span></p>
+            <div class="grid md:grid-cols-2 gap-3">
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Status priority ordering</span><span class="lang-th">ลำดับความสำคัญของสถานะ</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">A single SQL <code>CASE</code> decides the displayed status in this exact order: <code>PT_Status</code> P → Processing, H → Hold, E → End Service, then <code>PAADM_VisitStatus = 'C'</code> → Canceled, then no arrival and no cancel → Booked, then arrival present → Arrived, then cancel present → Canceled. Event-driven statuses always win over TrakCare arrival data.</span><span class="lang-th">คำสั่ง SQL <code>CASE</code> ชุดเดียวกำหนดสถานะที่แสดงตามลำดับนี้เท่านั้น: <code>PT_Status</code> P → Processing, H → Hold, E → End Service จากนั้น <code>PAADM_VisitStatus = 'C'</code> → Canceled ถัดมาไม่มีเวลามาถึงและไม่มีการยกเลิก → Booked แล้วมีเวลามาถึง → Arrived และมีการยกเลิก → Canceled โดยสถานะที่มาจากอีเวนต์จะชนะข้อมูลการมาถึงจาก TrakCare เสมอ</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">One doctor per room, one room per doctor</span><span class="lang-th">หนึ่งแพทย์ต่อหนึ่งห้อง และหนึ่งห้องต่อหนึ่งแพทย์</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">On login the Event Bridge first flips every <code>'In'</code> row matching the target <code>Room</code> <em>or</em> the same <code>CarpCode</code> to <code>'Out'</code> with a <code>LogoutTime</code>, then inserts the new row. The invariant is enforced by that double update, not by a database constraint.</span><span class="lang-th">เมื่อแพทย์เข้าห้อง Event Bridge จะเปลี่ยนทุกแถวที่มีสถานะ <code>'In'</code> ซึ่งตรงกับ <code>Room</code> เป้าหมาย <em>หรือ</em> <code>CarpCode</code> เดียวกันให้เป็น <code>'Out'</code> พร้อมบันทึก <code>LogoutTime</code> ก่อน แล้วจึงแทรกแถวใหม่ — เงื่อนไขนี้บังคับด้วยการอัปเดตสองชั้น ไม่ใช่ด้วย constraint ของฐานข้อมูล</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Patient call guard</span><span class="lang-th">เงื่อนไขป้องกันการเรียกซ้ำ</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">A patient may only move to Processing when <code>PT_Status NOT IN ('P','H','E')</code> <strong>and</strong> <code>APPT_CancelDate IS NULL</code> <strong>and</strong> <code>PAADM_VisitStatus != 'C'</code> <strong>and</strong> the <code>CarpCode</code> matches the doctor currently in that room. This prevents re-calling a patient already being served.</span><span class="lang-th">ผู้ป่วยจะเปลี่ยนเป็น Processing ได้เมื่อ <code>PT_Status NOT IN ('P','H','E')</code> <strong>และ</strong> <code>APPT_CancelDate IS NULL</code> <strong>และ</strong> <code>PAADM_VisitStatus != 'C'</code> <strong>และ</strong> <code>CarpCode</code> ตรงกับแพทย์ที่อยู่ในห้องนั้นขณะนั้น เพื่อไม่ให้เรียกผู้ป่วยที่กำลังรับบริการอยู่แล้วซ้ำ</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">10-minute waiting alert</span><span class="lang-th">การแจ้งเตือนรอเกิน 10 นาที</span></strong><p class="text-slate-500 mt-1"><span class="lang-en"><code>returnBlinkPatient</code> takes each <em>Arrived</em> patient, adds 10 minutes to the appointment time, and once the clock passes that threshold scans the same doctor's later appointments. If none is <em>Processing</em>, the room gets a blink CSS class.</span><span class="lang-th"><code>returnBlinkPatient</code> จะนำผู้ป่วยที่สถานะ <em>Arrived</em> แต่ละราย บวกเวลานัด 10 นาที และเมื่อเลยเวลานั้นแล้วจะไล่ดูนัดถัดไปของแพทย์คนเดียวกัน หากไม่พบนัดที่เป็น <em>Processing</em> ห้องนั้นจะได้คลาส CSS ให้กะพริบ</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Walk-in minute filter</span><span class="lang-th">ตัวกรองนาทีของผู้ป่วย walk-in</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">Appointments whose minute component is <code>"04"</code>, <code>"07"</code> or <code>"09"</code> are excluded from the alarm scan — those minute values are used as walk-in markers rather than real appointment times.</span><span class="lang-th">นัดที่ส่วนนาทีเป็น <code>"04"</code>, <code>"07"</code> หรือ <code>"09"</code> จะถูกตัดออกจากการตรวจแจ้งเตือน เพราะค่านาทีเหล่านี้ใช้เป็นเครื่องหมายของผู้ป่วย walk-in ไม่ใช่เวลานัดจริง</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Care provider display filter</span><span class="lang-th">ตัวกรองการแสดงแพทย์บนหน้าจอ</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">A doctor appears on the dashboard when <code>SUMSLOT != null</code> <strong>or</strong> there are no canceled appointments <strong>or</strong> there are both canceled and non-canceled ones — and always requires at least one appointment. A doctor holding only canceled appointments with no schedule slot is hidden.</span><span class="lang-th">แพทย์จะปรากฏบนแดชบอร์ดเมื่อ <code>SUMSLOT != null</code> <strong>หรือ</strong> ไม่มีนัดที่ถูกยกเลิก <strong>หรือ</strong> มีทั้งนัดที่ยกเลิกและไม่ยกเลิก และต้องมีนัดอย่างน้อยหนึ่งรายการเสมอ — แพทย์ที่มีเฉพาะนัดที่ถูกยกเลิกและไม่มีช่วงเวรจะถูกซ่อน</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Clinic-hours sync window</span><span class="lang-th">ช่วงเวลาซิงก์ตามเวลาทำการ</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">Appointment sync runs every 60 seconds but only when the current hour is between 6 and 22 inclusive. Outside that window the task returns immediately and the cache keeps its last value.</span><span class="lang-th">การซิงก์นัดหมายทำงานทุก 60 วินาที แต่เฉพาะเมื่อชั่วโมงปัจจุบันอยู่ระหว่าง 6 ถึง 22 เท่านั้น หากอยู่นอกช่วงนี้งานจะคืนค่าทันทีและแคชยังคงค่าล่าสุดไว้</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Daily archive at 00:01</span><span class="lang-th">การเก็บประวัติรายวันเวลา 00:01</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">Current appointments are copied to <code>PatientAppointmentHistory</code>, <code>PatientAppointment</code> is emptied, master data and doctor schedules are re-fetched for the current and next month, memory is reloaded, and log files older than 90 days are purged.</span><span class="lang-th">คัดลอกนัดหมายปัจจุบันไปยัง <code>PatientAppointmentHistory</code> ล้าง <code>PatientAppointment</code> ดึง master data และตารางเวรแพทย์ของเดือนนี้กับเดือนถัดไปใหม่ โหลดข้อมูลเข้าหน่วยความจำอีกครั้ง และลบไฟล์ล็อกที่เก่ากว่า 90 วัน</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Initial status mapping on import</span><span class="lang-th">การกำหนดสถานะเริ่มต้นตอนนำเข้า</span></strong><p class="text-slate-500 mt-1"><span class="lang-en"><code>getAppointment</code> assigns C when <code>PAADM_VisitStatus == "C"</code>, else A when <code>APPT_ArrivalDate != ""</code>, else C when <code>APPT_CancelDate != ""</code>, else B. Note the empty-string comparisons rather than null checks — a behaviour the migration must copy verbatim.</span><span class="lang-th"><code>getAppointment</code> กำหนดค่า C เมื่อ <code>PAADM_VisitStatus == "C"</code> ถัดมาเป็น A เมื่อ <code>APPT_ArrivalDate != ""</code> ถัดมาเป็น C เมื่อ <code>APPT_CancelDate != ""</code> และค่าอื่นเป็น B — สังเกตว่าเป็นการเทียบกับสตริงว่าง ไม่ใช่การตรวจ null ซึ่งเป็นพฤติกรรมที่การย้ายระบบต้องคัดลอกให้ตรงทุกตัวอักษร</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Event deduplication</span><span class="lang-th">การกันอีเวนต์ซ้ำ</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">The Event Bridge hashes each incoming object with <code>object-hash</code> and compares against <code>previousRoomDetailHash</code> / <code>previousPatientStatusHash</code>. Identical payloads are silently dropped, so duplicate OPD posts never trigger a broadcast.</span><span class="lang-th">Event Bridge จะแฮชอ็อบเจกต์ที่เข้ามาด้วย <code>object-hash</code> แล้วเทียบกับ <code>previousRoomDetailHash</code> / <code>previousPatientStatusHash</code> — payload ที่เหมือนกันจะถูกทิ้งเงียบ ๆ ทำให้การ POST ซ้ำจาก OPD ไม่กระจายอีเวนต์</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Room booking shape</span><span class="lang-th">โครงสร้างการจองห้อง</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">A booking carries one doctor, up to two assistants (<code>AssistCode1</code>, <code>AssistCode2</code>), a room, a day of week, a start/end date range, a start/end time range and a work case.</span><span class="lang-th">การจองหนึ่งรายการประกอบด้วยแพทย์หนึ่งคน ผู้ช่วยได้ถึงสองคน (<code>AssistCode1</code>, <code>AssistCode2</code>) ห้องหนึ่งห้อง วันในสัปดาห์ ช่วงวันที่เริ่ม/สิ้นสุด ช่วงเวลาเริ่ม/สิ้นสุด และประเภทงาน</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Render-skip optimisation</span><span class="lang-th">การข้ามการเรนเดอร์</span></strong><p class="text-slate-500 mt-1"><span class="lang-en"><code>shouldComponentUpdate</code> re-renders on <code>#/</code> and any <code>#/dashboard*</code> route but deliberately blocks re-renders on <code>#/schedule</code> and <code>#/calendar</code>, so 6-second polling does not disturb those views.</span><span class="lang-th"><code>shouldComponentUpdate</code> จะเรนเดอร์ใหม่เมื่ออยู่ที่ <code>#/</code> และเส้นทาง <code>#/dashboard*</code> แต่ตั้งใจบล็อกการเรนเดอร์ซ้ำที่ <code>#/schedule</code> และ <code>#/calendar</code> เพื่อไม่ให้การ poll ทุก 6 วินาทีรบกวนสองมุมมองนั้น</span></p></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-4"><span class="lang-en">Rules are drawn from <code>server/modules/patientAppointment.js</code>, <code>server/event-bridge.js</code>, <code>server/modules/jobsh.js</code> and <code>src/routes/index.js</code>. Behaviour documentation in the ATX report is marked early access — validate each rule against the source before relying on it for a rewrite.</span><span class="lang-th">กฎเหล่านี้สกัดจาก <code>server/modules/patientAppointment.js</code>, <code>server/event-bridge.js</code>, <code>server/modules/jobsh.js</code> และ <code>src/routes/index.js</code> — เอกสารส่วนพฤติกรรมในรายงาน ATX ระบุว่าเป็น early access จึงควรตรวจสอบแต่ละกฎกับซอร์สโค้ดก่อนนำไปใช้เขียนระบบใหม่</span></p>
+          </section>
+
+          <!-- INTEGRATIONS -->
+          <section id="integrations" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">External Integrations &amp; Dependencies</span><span class="lang-th">การเชื่อมต่อภายนอกและ Dependency</span></h2>
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+              <div class="card p-5"><div class="flex items-center gap-2 mb-2"><span class="w-9 h-9 rounded-lg bg-sky-100 text-sky-600 grid place-items-center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span><strong class="text-slate-800 text-sm">TrakCare HIS (InterSystems)</strong></div><p class="text-xs text-slate-500"><span class="lang-en">System of record for patients, appointments, care providers, services and doctor schedules. OAuth2 bearer token from <code>POST /api/iam/login</code>, then seven <code>GET /api/PTINF/*</code> endpoints scoped to location <code>01DEN</code>. Also the only authentication authority — <code>POST /logonTrakcare</code> delegates user login. No request timeout is configured on the axios calls and there is no circuit breaker.</span><span class="lang-th">เป็นแหล่งข้อมูลหลักของผู้ป่วย นัดหมาย แพทย์ผู้ให้บริการ บริการ และตารางเวรแพทย์ ขอ bearer token แบบ OAuth2 จาก <code>POST /api/iam/login</code> แล้วเรียก <code>GET /api/PTINF/*</code> เจ็ดเส้นทางโดยจำกัดที่หน่วยงาน <code>01DEN</code> และยังเป็นผู้ยืนยันตัวตนรายเดียว — <code>POST /logonTrakcare</code> ส่งการเข้าสู่ระบบของผู้ใช้ต่อไปให้ TrakCare โดยการเรียกผ่าน axios ไม่ได้ตั้ง timeout และไม่มี circuit breaker</span></p></div>
+              <div class="card p-5"><div class="flex items-center gap-2 mb-2"><span class="w-9 h-9 rounded-lg bg-rose-100 text-rose-600 grid place-items-center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span><strong class="text-slate-800 text-sm">OPD Queue · Patient Flow</strong></div><p class="text-xs text-slate-500"><span class="lang-en">Pushes room login/logout and patient lifecycle events into the Event Bridge with two unauthenticated <code>POST</code> calls on port 8080. The bridge writes state to PostgreSQL and fans the change out over Socket.IO to the App Service and every browser. Six event names in total, deduplicated with <code>object-hash</code>.</span><span class="lang-th">ส่งอีเวนต์การเข้า/ออกห้องของแพทย์และสถานะผู้ป่วยเข้ามาที่ Event Bridge ผ่าน <code>POST</code> สองเส้นทางบนพอร์ต 8080 ที่ไม่มีการยืนยันตัวตน — Event Bridge จะเขียนสถานะลง PostgreSQL แล้วกระจายผ่าน Socket.IO ไปยัง App Service และเบราว์เซอร์ทุกเครื่อง รวมทั้งหมด 6 ชื่ออีเวนต์ พร้อมกันซ้ำด้วย <code>object-hash</code></span></p></div>
+              <div class="card p-5"><div class="flex items-center gap-2 mb-2"><span class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 grid place-items-center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></span><strong class="text-slate-800 text-sm">PostgreSQL 14.2 · dental_db</strong></div><p class="text-xs text-slate-500"><span class="lang-en">Single database on <code>db-host:5432</code>, reached through one <code>pg 8.7.3</code> pool capped at 20 connections. 13 tables, no ORM, no migration tool — schema history lives in <code>dental-db-20241224.sql</code> and <code>CreateIndexKey-1.sql</code>.</span><span class="lang-th">ฐานข้อมูลชุดเดียวที่ <code>db-host:5432</code> เข้าถึงผ่าน pool ของ <code>pg 8.7.3</code> ที่จำกัด 20 connection มี 13 ตาราง ไม่มี ORM และไม่มีเครื่องมือ migration — ประวัติสคีมาอยู่ในไฟล์ <code>dental-db-20241224.sql</code> และ <code>CreateIndexKey-1.sql</code></span></p></div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="card p-5">
+                <div class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2"><span class="lang-en">Other external</span><span class="lang-th">ภายนอกอื่น ๆ</span></div>
+                <ul class="text-sm text-slate-600 space-y-1">
+                  <li><strong>PM2</strong> — <span class="lang-en">runs all three backend processes from <code>ecosystem.config.js</code>, with <code>pm2-server-monit</code> and logrotate enabled.</span><span class="lang-th">รันโปรเซสแบ็กเอนด์ทั้งสามตัวจาก <code>ecosystem.config.js</code> พร้อมเปิดใช้ <code>pm2-server-monit</code> และ logrotate</span></li>
+                  <li><strong>Local filesystem</strong> — <span class="lang-en">Excel uploads via <code>express-fileupload</code> and rotating logs written to <code>./logs</code> as <code>dentaldb-&lt;DATE&gt;.log</code>.</span><span class="lang-th">รับไฟล์ Excel ผ่าน <code>express-fileupload</code> และเขียนล็อกแบบหมุนเวียนไว้ที่ <code>./logs</code> ในชื่อ <code>dentaldb-&lt;DATE&gt;.log</code></span></li>
+                  <li><strong>Swagger UI</strong> — <span class="lang-en"><code>swagger-ui-express</code> serves <code>server/swagger.json</code> (Swagger 2.0) at <code>/api-docs</code> on port 8081.</span><span class="lang-th"><code>swagger-ui-express</code> เสิร์ฟไฟล์ <code>server/swagger.json</code> (Swagger 2.0) ที่ <code>/api-docs</code> บนพอร์ต 8081</span></li>
+                  <li><strong>Browser sessionStorage</strong> — <span class="lang-en">the only client-side session store; login state clears when the tab closes and there is no CSRF token on any POST.</span><span class="lang-th">เป็นที่เก็บ session ฝั่งไคลเอนต์เพียงอย่างเดียว สถานะการเข้าสู่ระบบจะหายเมื่อปิดแท็บ และไม่มี CSRF token ในการ POST ใด ๆ</span></li>
+                  <li><strong>SonarQube</strong> — <span class="lang-en">static analysis wired up through <code>sonar-project.properties</code>; no CI pipeline was detected in the repository.</span><span class="lang-th">การวิเคราะห์โค้ดแบบสถิตที่ตั้งค่าไว้ใน <code>sonar-project.properties</code> — ไม่พบ CI pipeline ใน repository</span></li>
+                </ul>
+              </div>
+              <div class="card p-5">
+                <div class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2"><span class="lang-en">Key npm libraries (32 total)</span><span class="lang-th">ไลบรารี npm หลัก (รวม 32)</span></div>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="chip text-[0.72rem]">express 4.21.0</span>
+                  <span class="chip text-[0.72rem]">socket.io 4.8.0</span>
+                  <span class="chip text-[0.72rem]">socket.io-client 4.8.0</span>
+                  <span class="chip text-[0.72rem]">pg 8.7.3</span>
+                  <span class="chip text-[0.72rem]">react 16.13.1</span>
+                  <span class="chip text-[0.72rem]">react-dom 16.13.1</span>
+                  <span class="chip text-[0.72rem]">react-router-dom 5.1.2</span>
+                  <span class="chip text-[0.72rem]">react-scripts 3.4.1</span>
+                  <span class="chip text-[0.72rem]">@material-ui/core 4.9.9</span>
+                  <span class="chip text-[0.72rem]">antd 4.1.1</span>
+                  <span class="chip text-[0.72rem]">bulma 0.8.1</span>
+                  <span class="chip text-[0.72rem]">axios 0.19.2</span>
+                  <span class="chip text-[0.72rem]">node-schedule 1.3.2</span>
+                  <span class="chip text-[0.72rem]">node-fetch 2.7.0</span>
+                  <span class="chip text-[0.72rem]">exceljs 3.8.2</span>
+                  <span class="chip text-[0.72rem]">express-fileupload 1.1.7-alpha.2</span>
+                  <span class="chip text-[0.72rem]">swagger-ui-express 4.6.3</span>
+                  <span class="chip text-[0.72rem]">simple-node-logger 18.12.24</span>
+                  <span class="chip text-[0.72rem]">cors 2.8.5</span>
+                  <span class="chip text-[0.72rem]">react-calendar 2.19.2</span>
+                  <span class="chip text-[0.72rem]">react-autosuggest 10.0.0</span>
+                  <span class="chip text-[0.72rem]">helmet 7.1.0 (dev)</span>
+                  <span class="chip text-[0.72rem]">express-rate-limit 7.4.0 (dev)</span>
+                  <span class="chip text-[0.72rem]">object-hash 3.0.0 (dev)</span>
+                  <span class="chip text-[0.72rem]">webpack 4.42.0 (dev)</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SCHEMA -->
+          <section id="schema" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Database Schema Overview</span><span class="lang-th">ภาพรวมสคีมาฐานข้อมูล</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">One database, <code>dental_db</code> on PostgreSQL 14.2, holding 13 tables across five functional groups. Every foreign-key and frequently filtered column carries a single-column index, with composite indexes added for the multi-column <code>WHERE</code> clauses used by the dashboard queries.</span><span class="lang-th">มีฐานข้อมูลเดียวคือ <code>dental_db</code> บน PostgreSQL 14.2 ประกอบด้วย 13 ตารางแบ่งเป็น 5 กลุ่มตามหน้าที่ ทุกคอลัมน์ที่เป็น foreign key และคอลัมน์ที่ถูกกรองบ่อยมี index แบบคอลัมน์เดียว และเพิ่ม composite index สำหรับเงื่อนไข <code>WHERE</code> หลายคอลัมน์ที่คิวรีของแดชบอร์ดใช้</span></p>
+            <div class="grid sm:grid-cols-2 gap-3 mb-5">
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="font-semibold text-slate-700">Master data</span><span class="font-bold text-slate-900">4</span></div>
+                <div class="bar"><span data-w="100%" style="background:linear-gradient(90deg,#0071e3,#9ac9ff)"></span></div>
+                <div class="flex justify-between text-sm mb-1.5 mt-3"><span class="font-semibold text-slate-700">Appointments</span><span class="font-bold text-slate-900">3</span></div>
+                <div class="bar"><span data-w="75%" style="background:linear-gradient(90deg,#0071e3,#9ac9ff)"></span></div>
+                <div class="flex justify-between text-sm mb-1.5 mt-3"><span class="font-semibold text-slate-700">Doctor schedule</span><span class="font-bold text-slate-900">2</span></div>
+                <div class="bar"><span data-w="50%" style="background:linear-gradient(90deg,#0071e3,#9ac9ff)"></span></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="font-semibold text-slate-700">Room &amp; booking</span><span class="font-bold text-slate-900">2</span></div>
+                <div class="bar"><span data-w="50%" style="background:linear-gradient(90deg,#0ea5e9,#38bdf8)"></span></div>
+                <div class="flex justify-between text-sm mb-1.5 mt-3"><span class="font-semibold text-slate-700">Reference lookups</span><span class="font-bold text-slate-900">2</span></div>
+                <div class="bar"><span data-w="50%" style="background:linear-gradient(90deg,#0ea5e9,#38bdf8)"></span></div>
+                <div class="mt-6 rounded-xl bg-slate-50 border border-slate-200 p-3 text-xs text-slate-500"><span class="lang-en">No stored procedures, functions or triggers were found. All logic — including the temp-table diff, the <code>DoctorSlot</code> CTE and the status <code>CASE</code> — is embedded as SQL strings inside the Node.js modules, so the database carries no business behaviour of its own.</span><span class="lang-th">ไม่พบ stored procedure, function หรือ trigger เลย ตรรกะทั้งหมด — รวมถึงการเทียบข้อมูลผ่าน temp table, CTE ชื่อ <code>DoctorSlot</code> และ <code>CASE</code> ที่กำหนดสถานะ — ฝังอยู่ในรูปสตริง SQL ภายในโมดูล Node.js ทำให้ฐานข้อมูลไม่มีตรรกะทางธุรกิจของตัวเอง</span></div>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <a href="reference.html#doc=bre/database-documentation/00-global-schema.sql" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-4 py-2.5 rounded-xl transition"><span class="lang-en">View full schema (DDL)</span><span class="lang-th">ดูสคีมาฉบับเต็ม (DDL)</span><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></a>
+              <a href="knowledge-graph.html" class="inline-flex items-center gap-2 border border-slate-200 text-slate-600 hover:border-indigo-300 hover:text-indigo-600 text-sm font-semibold px-4 py-2.5 rounded-xl transition"><span class="lang-en">Explore Knowledge Graph</span><span class="lang-th">สำรวจ Knowledge Graph</span></a>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- On-page TOC -->
+        <aside class="hidden lg:block">
+          <div class="sticky top-24" data-toc>
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-3"><span class="lang-en">On this page</span><span class="lang-th">ในหน้านี้</span></div>
+            <nav class="toc space-y-0.5">
+              <a href="#identity"><span class="lang-en">Identity &amp; Entry Points</span><span class="lang-th">ระบุแอป &amp; จุดเริ่มต้น</span></a>
+              <a href="#structure"><span class="lang-en">Program Structure</span><span class="lang-th">โครงสร้างโปรแกรม</span></a>
+              <a href="#config"><span class="lang-en">Configuration</span><span class="lang-th">การตั้งค่า</span></a>
+              <a href="#pages"><span class="lang-en">Pages &amp; Endpoints</span><span class="lang-th">หน้า &amp; Endpoint</span></a>
+              <a href="#services"><span class="lang-en">Service Classes</span><span class="lang-th">คลาสบริการ</span></a>
+              <a href="#data-access"><span class="lang-en">Data Access</span><span class="lang-th">การเข้าถึงข้อมูล</span></a>
+              <a href="#data-models"><span class="lang-en">Data Models</span><span class="lang-th">โมเดลข้อมูล</span></a>
+              <a href="#workflows"><span class="lang-en">Core Workflows</span><span class="lang-th">เวิร์กโฟลว์หลัก</span></a>
+              <a href="#rules"><span class="lang-en">Business Rules</span><span class="lang-th">กฎทางธุรกิจ</span></a>
+              <a href="#integrations"><span class="lang-en">Integrations</span><span class="lang-th">การเชื่อมต่อ</span></a>
+              <a href="#schema"><span class="lang-en">Database Schema</span><span class="lang-th">สคีมาฐานข้อมูล</span></a>
+            </nav>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 text-center text-xs text-slate-400">© <span data-year></span> VENDOR_REDACTED · <span class="lang-en">Application reference — assembled from AWS Transform (ATX) reports &amp; analyzed source</span><span class="lang-th">คู่มืออ้างอิงแอป — รวบรวมจากรายงาน AWS Transform (ATX) และซอร์สที่วิเคราะห์แล้ว</span></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+</body>
+</html>

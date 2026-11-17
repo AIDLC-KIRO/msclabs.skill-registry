@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modernization Roadmap · {{APP_NAME}} ATX Assessment</title>
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3E{{BRAND_INITIAL}}%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <section class="bg-aurora text-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12">
+          <span class="badge glass text-slate-100 border-white/20 mb-4"><span class="dot bg-emerald-400"></span> <span class="lang-en">Remediation &amp; Migration</span><span class="lang-th">การแก้ไข & การย้ายระบบ</span></span>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight"><span class="lang-en">Modernization Roadmap</span><span class="lang-th">แผนการปรับปรุงให้ทันสมัย</span></h1>
+          <p class="mt-3 max-w-2xl text-slate-300"><span class="lang-en">{{ROADMAP_HERO_SUBTITLE_EN}}</span><span class="lang-th">{{ROADMAP_HERO_SUBTITLE_TH}}</span></p>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-10 space-y-14">
+
+        <!-- RECOMMENDATION -->
+        <section class="card p-7 border-l-4 border-indigo-500">
+          <div class="flex items-center gap-2 mb-3">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0071e3" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>
+            <h2 class="text-xl font-bold text-slate-900"><span class="lang-en">AWS Transformation Recommendation</span><span class="lang-th">คำแนะนำการปรับเปลี่ยนบน AWS</span></h2>
+          </div>
+          <p class="text-slate-600 leading-relaxed"><span class="lang-en">{{ROADMAP_RECOMMENDATION_EN}}</span><span class="lang-th">{{ROADMAP_RECOMMENDATION_TH}}</span></p>
+        </section>
+
+        <!-- REMEDIATION TIMELINE -->
+        <section id="remediation">
+          <h2 class="text-2xl font-bold text-slate-900 mb-6"><span class="lang-en">Prioritized Remediation Plan</span><span class="lang-th">แผนการแก้ไขตามลำดับความสำคัญ</span></h2>
+          <div class="timeline">
+            <!-- P1 -->
+            <div class="timeline-item">
+              <div class="card p-6">
+                <div class="flex items-center gap-3 flex-wrap mb-3">
+                  <span class="badge badge-red">Priority 1</span>
+                  <h3 class="font-bold text-slate-900"><span class="lang-en">{{ROADMAP_P1_TITLE_EN}}</span><span class="lang-th">{{ROADMAP_P1_TITLE_TH}}</span></h3>
+                  <span class="chip ml-auto"><span class="lang-en">Quick Wins</span><span class="lang-th">ทำได้เร็ว</span></span>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-lg bg-rose-50 border border-rose-100 p-3"><strong class="text-slate-800">1.1</strong> <span class="lang-en">{{ROADMAP_P1_ITEM1_EN}}</span><span class="lang-th">{{ROADMAP_P1_ITEM1_TH}}</span></div>
+                  <div class="rounded-lg bg-rose-50 border border-rose-100 p-3"><strong class="text-slate-800">1.2</strong> <span class="lang-en">{{ROADMAP_P1_ITEM2_EN}}</span><span class="lang-th">{{ROADMAP_P1_ITEM2_TH}}</span></div>
+                  <div class="rounded-lg bg-rose-50 border border-rose-100 p-3"><strong class="text-slate-800">1.3</strong> <span class="lang-en">{{ROADMAP_P1_ITEM3_EN}}</span><span class="lang-th">{{ROADMAP_P1_ITEM3_TH}}</span></div>
+                  <div class="rounded-lg bg-rose-50 border border-rose-100 p-3"><strong class="text-slate-800">1.4</strong> <span class="lang-en">{{ROADMAP_P1_ITEM4_EN}}</span><span class="lang-th">{{ROADMAP_P1_ITEM4_TH}}</span></div>
+                </div>
+              </div>
+            </div>
+            <!-- P2 -->
+            <div class="timeline-item">
+              <div class="card p-6">
+                <div class="flex items-center gap-3 flex-wrap mb-3">
+                  <span class="badge badge-amber">Priority 2</span>
+                  <h3 class="font-bold text-slate-900"><span class="lang-en">{{ROADMAP_P2_TITLE_EN}}</span><span class="lang-th">{{ROADMAP_P2_TITLE_TH}}</span></h3>
+                  <span class="chip ml-auto"><span class="lang-en">Sprint</span><span class="lang-th">Sprint</span></span>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-lg bg-amber-50 border border-amber-100 p-3"><strong class="text-slate-800">2.1</strong> <span class="lang-en">{{ROADMAP_P2_ITEM1_EN}}</span><span class="lang-th">{{ROADMAP_P2_ITEM1_TH}}</span></div>
+                  <div class="rounded-lg bg-amber-50 border border-amber-100 p-3"><strong class="text-slate-800">2.2</strong> <span class="lang-en">{{ROADMAP_P2_ITEM2_EN}}</span><span class="lang-th">{{ROADMAP_P2_ITEM2_TH}}</span></div>
+                </div>
+              </div>
+            </div>
+            <!-- P3 -->
+            <div class="timeline-item">
+              <div class="card p-6">
+                <div class="flex items-center gap-3 flex-wrap mb-3">
+                  <span class="badge badge-blue">Priority 3</span>
+                  <h3 class="font-bold text-slate-900"><span class="lang-en">{{ROADMAP_P3_TITLE_EN}}</span><span class="lang-th">{{ROADMAP_P3_TITLE_TH}}</span></h3>
+                  <span class="chip ml-auto"><span class="lang-en">Sprint → Epic</span><span class="lang-th">Sprint → Epic</span></span>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-lg bg-blue-50 border border-blue-100 p-3"><strong class="text-slate-800">3.1</strong> <span class="lang-en">{{ROADMAP_P3_ITEM1_EN}}</span><span class="lang-th">{{ROADMAP_P3_ITEM1_TH}}</span></div>
+                  <div class="rounded-lg bg-blue-50 border border-blue-100 p-3"><strong class="text-slate-800">3.2</strong> <span class="lang-en">{{ROADMAP_P3_ITEM2_EN}}</span><span class="lang-th">{{ROADMAP_P3_ITEM2_TH}}</span></div>
+                  <div class="rounded-lg bg-blue-50 border border-blue-100 p-3"><strong class="text-slate-800">3.3</strong> <span class="lang-en">{{ROADMAP_P3_ITEM3_EN}}</span><span class="lang-th">{{ROADMAP_P3_ITEM3_TH}}</span></div>
+                  <div class="rounded-lg bg-blue-50 border border-blue-100 p-3"><strong class="text-slate-800">3.4</strong> <span class="lang-en">{{ROADMAP_P3_ITEM4_EN}}</span><span class="lang-th">{{ROADMAP_P3_ITEM4_TH}}</span></div>
+                </div>
+              </div>
+            </div>
+            <!-- P4 -->
+            <div class="timeline-item">
+              <div class="card p-6">
+                <div class="flex items-center gap-3 flex-wrap mb-3">
+                  <span class="badge badge-violet">Priority 4</span>
+                  <h3 class="font-bold text-slate-900"><span class="lang-en">{{ROADMAP_P4_TITLE_EN}}</span><span class="lang-th">{{ROADMAP_P4_TITLE_TH}}</span></h3>
+                  <span class="chip ml-auto"><span class="lang-en">Program</span><span class="lang-th">Program</span></span>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-lg bg-violet-50 border border-violet-100 p-3"><strong class="text-slate-800">4.1</strong> <span class="lang-en">{{ROADMAP_P4_ITEM1_EN}}</span><span class="lang-th">{{ROADMAP_P4_ITEM1_TH}}</span></div>
+                  <div class="rounded-lg bg-violet-50 border border-violet-100 p-3"><strong class="text-slate-800">4.2</strong> <span class="lang-en">{{ROADMAP_P4_ITEM2_EN}}</span><span class="lang-th">{{ROADMAP_P4_ITEM2_TH}}</span></div>
+                  <div class="rounded-lg bg-violet-50 border border-violet-100 p-3"><strong class="text-slate-800">4.3</strong> <span class="lang-en">{{ROADMAP_P4_ITEM3_EN}}</span><span class="lang-th">{{ROADMAP_P4_ITEM3_TH}}</span></div>
+                  <div class="rounded-lg bg-violet-50 border border-violet-100 p-3"><strong class="text-slate-800">4.4</strong> <span class="lang-en">{{ROADMAP_P4_ITEM4_EN}}</span><span class="lang-th">{{ROADMAP_P4_ITEM4_TH}}</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PHASED SEQUENCE (GANTT) -->
+        <section id="sequence">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Phased Sequence</span><span class="lang-th">ลำดับการดำเนินงานเป็นระยะ</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">Indicative sequencing of the four remediation phases. Timelines are relative and should be calibrated to team capacity.</span><span class="lang-th">ลำดับเวลาโดยประมาณของทั้งสี่เฟส เป็นค่าสัมพัทธ์และควรปรับตามกำลังของทีม</span></p>
+          <div class="mermaid-wrap">
+            <pre class="mermaid">
+graph TB
+    PLACEHOLDER["{{ROADMAP_GANTT_MERMAID}}"]
+            </pre>
+          </div>
+        </section>
+
+        <!-- TECH DEBT REGISTER -->
+        <section id="debt-register">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Technical Debt Register</span><span class="lang-th">ทะเบียนหนี้ทางเทคนิค</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">{{ROADMAP_DEBT_COUNT_EN}}</span><span class="lang-th">{{ROADMAP_DEBT_COUNT_TH}}</span></p>
+          <div class="card overflow-hidden">
+            <div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>#</th><th><span class="lang-en">Severity</span><span class="lang-th">ความรุนแรง</span></th><th><span class="lang-en">Finding</span><span class="lang-th">ประเด็น</span></th><th><span class="lang-en">Location</span><span class="lang-th">ตำแหน่ง</span></th></tr></thead>
+              <tbody id="debtRows"></tbody>
+            </table></div>
+          </div>
+        </section>
+
+        <!-- LEARNING -->
+        <section id="learning">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Learning Resources</span><span class="lang-th">แหล่งเรียนรู้</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">AWS learning plans aligned to the triggered modernization pathways.</span><span class="lang-th">แผนการเรียนรู้ของ AWS ที่สอดคล้องกับเส้นทางการปรับปรุงที่ถูกกระตุ้น</span></p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <a href="https://skillbuilder.aws/learning-plan/CMK2J48MVN" target="_blank" rel="noopener" class="card card-hover p-5 flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 grid place-items-center shrink-0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5Z"/><path d="M12 14v7"/></svg></span>
+              <div><div class="font-semibold text-slate-800 text-sm">Move to Cloud Native Serverless</div><div class="text-xs text-slate-400">skillbuilder.aws · Cloud Design Patterns</div></div>
+            </a>
+            <a href="https://skillbuilder.aws/learning-plan/CDA8Y4JRRR" target="_blank" rel="noopener" class="card card-hover p-5 flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-sky-100 text-sky-600 grid place-items-center shrink-0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
+              <div><div class="font-semibold text-slate-800 text-sm">Move to Containers with Amazon ECS</div><div class="text-xs text-slate-400">skillbuilder.aws · EKS Workshop</div></div>
+            </a>
+            <a href="https://skillbuilder.aws/learning-plan/VNJ8FZ3ZRC" target="_blank" rel="noopener" class="card card-hover p-5 flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 grid place-items-center shrink-0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/></svg></span>
+              <div><div class="font-semibold text-slate-800 text-sm">Move to Managed Databases</div><div class="text-xs text-slate-400">skillbuilder.aws · AWS DMS Getting Started</div></div>
+            </a>
+            <a href="https://skillbuilder.aws/learning-plan/1FGEQKGPQD" target="_blank" rel="noopener" class="card card-hover p-5 flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-violet-100 text-violet-600 grid place-items-center shrink-0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M3 20h.01M12 4v16M6 8l6-4 6 4"/></svg></span>
+              <div><div class="font-semibold text-slate-800 text-sm">Move to Modern DevOps</div><div class="text-xs text-slate-400">skillbuilder.aws · DevOps on AWS</div></div>
+            </a>
+          </div>
+          <p class="text-xs text-slate-400 mt-4"><span class="lang-en">Links open AWS Skill Builder. Content sourced from the AWS Transform (ATX) modernization-readiness report.</span><span class="lang-th">ลิงก์เปิดไปยัง AWS Skill Builder เนื้อหาอ้างอิงจากรายงาน modernization-readiness ของ AWS Transform (ATX)</span></p>
+        </section>
+
+        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+          <a href="index.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+            <div><div class="text-xs text-slate-400"><span class="lang-en">Back to</span><span class="lang-th">กลับไปที่</span></div><div class="font-bold text-slate-800"><span class="lang-en">Executive Dashboard</span><span class="lang-th">แดชบอร์ดผู้บริหาร</span></div></div>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 text-center text-xs text-slate-400">© <span data-year></span> {{COMPANY_NAME}} · <span class="lang-en">Generated from AWS Transform (ATX) reports</span><span class="lang-th">สร้างจากรายงาน AWS Transform (ATX)</span></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+  (function () {
+    // Shape: [{ s:"High|Medium|Low", en:"finding (EN)", th:"finding (TH)", loc:"source location" }, ...]
+    const debt = /*{{ROADMAP_TECHDEBT_JSON}}*/ [];
+    const b = { High:"badge-red", Medium:"badge-amber", Low:"badge-green" };
+    const th = { High:"สูง", Medium:"กลาง", Low:"ต่ำ" };
+    document.getElementById("debtRows").innerHTML = debt.map((d,i)=>`
+      <tr><td class="text-slate-400">${i+1}</td>
+        <td><span class="badge ${b[d.s]}"><span class="lang-en">${d.s}</span><span class="lang-th">${th[d.s]}</span></span></td>
+        <td class="text-slate-700"><span class="lang-en">${d.en}</span><span class="lang-th">${d.th}</span></td>
+        <td><code>${d.loc}</code></td></tr>`).join("");
+    document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+  })();
+  </script>
+</body>
+</html>

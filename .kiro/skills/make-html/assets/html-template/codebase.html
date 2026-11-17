@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codebase Analysis · {{APP_NAME}} ATX Assessment</title>
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3E{{BRAND_INITIAL}}%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <!-- Page header -->
+      <section class="bg-aurora text-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12">
+          <span class="badge glass text-slate-100 border-white/20 mb-4"><span class="dot bg-indigo-400"></span> AWS/comprehensive-codebase-analysis</span>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight"><span class="lang-en">Comprehensive Codebase Analysis</span><span class="lang-th">การวิเคราะห์โค้ดแบบครอบคลุม</span></h1>
+          <p class="mt-3 max-w-2xl text-slate-300"><span class="lang-en">{{CODEBASE_HEADER_INTRO_EN}}</span><span class="lang-th">{{CODEBASE_HEADER_INTRO_TH}}</span></p>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-10 grid lg:grid-cols-[1fr_220px] gap-10">
+        <!-- Content -->
+        <div class="doc space-y-14 min-w-0">
+
+          <!-- ARCHITECTURE -->
+          <section id="architecture" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">System Overview &amp; Architecture</span><span class="lang-th">ภาพรวมระบบและสถาปัตยกรรม</span></h2>
+            <p class="text-slate-600 leading-relaxed mb-6"><span class="lang-en">{{CODEBASE_ARCH_INTRO_EN}}</span><span class="lang-th">{{CODEBASE_ARCH_INTRO_TH}}</span></p>
+
+            <div class="grid sm:grid-cols-3 gap-4 mb-8">
+              <div class="card p-5"><div class="text-xs text-slate-500 mb-1"><span class="lang-en">Presentation Tier</span><span class="lang-th">ชั้นนำเสนอ</span></div><div class="font-bold text-slate-800">{{CODEBASE_ARCH_TIER1_TECH}}</div><div class="text-xs text-slate-400 mt-1">{{CODEBASE_ARCH_TIER1_DETAIL}}</div></div>
+              <div class="card p-5"><div class="text-xs text-slate-500 mb-1"><span class="lang-en">Data Tier</span><span class="lang-th">ชั้นข้อมูล</span></div><div class="font-bold text-slate-800">{{CODEBASE_ARCH_TIER2_TECH}}</div><div class="text-xs text-slate-400 mt-1">{{CODEBASE_ARCH_TIER2_DETAIL}}</div></div>
+              <div class="card p-5"><div class="text-xs text-slate-500 mb-1"><span class="lang-en">Missing Layer</span><span class="lang-th">ชั้นที่ขาดหาย</span></div><div class="font-bold text-rose-600"><span class="lang-en">{{CODEBASE_ARCH_TIER3_VALUE_EN}}</span><span class="lang-th">{{CODEBASE_ARCH_TIER3_VALUE_TH}}</span></div><div class="text-xs text-slate-400 mt-1"><span class="lang-en">{{CODEBASE_ARCH_TIER3_DETAIL_EN}}</span><span class="lang-th">{{CODEBASE_ARCH_TIER3_DETAIL_TH}}</span></div></div>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Deployment Model</span><span class="lang-th">รูปแบบการติดตั้ง</span></h3>
+            <div class="mermaid-wrap mb-4">
+              <pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_DEPLOYMENT_MERMAID}}"]</pre>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3 mt-8"><span class="lang-en">Key Architectural Decisions</span><span class="lang-th">การตัดสินใจเชิงสถาปัตยกรรมที่สำคัญ</span></h3>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div class="card p-4 text-sm"><strong class="text-slate-800">{{CODEBASE_ARCH_DECISION_1_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_ARCH_DECISION_1_DESC_EN}}</span><span class="lang-th">{{CODEBASE_ARCH_DECISION_1_DESC_TH}}</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800">{{CODEBASE_ARCH_DECISION_2_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_ARCH_DECISION_2_DESC_EN}}</span><span class="lang-th">{{CODEBASE_ARCH_DECISION_2_DESC_TH}}</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800">{{CODEBASE_ARCH_DECISION_3_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_ARCH_DECISION_3_DESC_EN}}</span><span class="lang-th">{{CODEBASE_ARCH_DECISION_3_DESC_TH}}</span></p></div>
+              <div class="card p-4 text-sm"><strong class="text-slate-800">{{CODEBASE_ARCH_DECISION_4_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_ARCH_DECISION_4_DESC_EN}}</span><span class="lang-th">{{CODEBASE_ARCH_DECISION_4_DESC_TH}}</span></p></div>
+            </div>
+          </section>
+
+          <!-- 3-TIER ARCHITECTURE -->
+          <section id="tiers" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">3-Tier Architecture View</span><span class="lang-th">มุมมองสถาปัตยกรรม 3 ชั้น (3-Tier)</span></h2>
+            <p class="text-slate-600 leading-relaxed mb-6"><span class="lang-en">{{CODEBASE_TIERS_INTRO_EN}}</span><span class="lang-th">{{CODEBASE_TIERS_INTRO_TH}}</span></p>
+            <div class="mermaid-wrap mb-4">
+              <pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_TIERS_MERMAID}}"]</pre>
+            </div>
+            <div class="rounded-xl bg-amber-50 border border-amber-200 p-4 flex gap-3">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#946200" stroke-width="2" class="shrink-0 mt-0.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg>
+              <p class="text-sm text-amber-800"><span class="lang-en">{{CODEBASE_TIERS_NOTE_EN}} <a href="roadmap.html" class="font-semibold underline">{{CODEBASE_TIERS_NOTE_LINK_EN}}</a>{{CODEBASE_TIERS_NOTE_SUFFIX_EN}}</span><span class="lang-th">{{CODEBASE_TIERS_NOTE_TH}} <a href="roadmap.html" class="font-semibold underline">{{CODEBASE_TIERS_NOTE_LINK_TH}}</a>{{CODEBASE_TIERS_NOTE_SUFFIX_TH}}</span></p>
+            </div>
+          </section>
+
+          <!-- SYSTEM ARCHITECTURE BY SUBSYSTEM -->
+          <section id="subsystems" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">System Architecture by Subsystem</span><span class="lang-th">สถาปัตยกรรมแยกตามระบบ (รายซับซิสเต็ม)</span></h2>
+            <p class="text-slate-600 leading-relaxed mb-6"><span class="lang-en">{{CODEBASE_SUBSYS_INTRO_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_INTRO_TH}}</span></p>
+            <div class="mermaid-wrap mb-8">
+              <pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_MERMAID}}"]</pre>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Per-Subsystem Layer Breakdown</span><span class="lang-th">รายละเอียดแต่ละซับซิสเต็มตามชั้นสถาปัตยกรรม</span></h3>
+            <div class="card overflow-hidden">
+              <div class="overflow-x-auto"><table class="tbl">
+                <thead><tr>
+                  <th><span class="lang-en">Subsystem</span><span class="lang-th">ซับซิสเต็ม</span></th>
+                  <th><span class="lang-en">Presentation (pages)</span><span class="lang-th">Presentation (หน้า)</span></th>
+                  <th><span class="lang-en">Business Logic (classes)</span><span class="lang-th">Business Logic (คลาส)</span></th>
+                  <th><span class="lang-en">Data (databases)</span><span class="lang-th">Data (ฐานข้อมูล)</span></th>
+                  <th><span class="lang-en">External</span><span class="lang-th">ภายนอก</span></th>
+                </tr></thead>
+                <tbody>
+                  <!-- {{CODEBASE_SUBSYS_TABLE_ROWS}}: repeated <tr> rows. Each row shape: subsystem name + type (Content/Transactional), presentation pages, business-logic classes, data databases, external systems -->
+                  {{CODEBASE_SUBSYS_TABLE_ROWS}}
+                </tbody>
+              </table></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-3"><span class="lang-en">{{CODEBASE_SUBSYS_FOOTNOTE_EN}} <a href="domains.html#server-connections" class="font-semibold text-indigo-600 hover:text-indigo-800">{{CODEBASE_SUBSYS_FOOTNOTE_LINK_EN}}</a>{{CODEBASE_SUBSYS_FOOTNOTE_SUFFIX_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_FOOTNOTE_TH}} <a href="domains.html#server-connections" class="font-semibold text-indigo-600 hover:text-indigo-800">{{CODEBASE_SUBSYS_FOOTNOTE_LINK_TH}}</a>{{CODEBASE_SUBSYS_FOOTNOTE_SUFFIX_TH}}</span></p>
+            <!-- PER-SYSTEM ARCHITECTURE DIAGRAMS -->
+            <h3 id="per-system" class="text-lg font-bold text-slate-800 mb-2 mt-10 scroll-mt-24"><span class="lang-en">Per-System Architecture Diagrams</span><span class="lang-th">ไดอะแกรมสถาปัตยกรรมรายระบบ (แยกทีละระบบ)</span></h3>
+            <p class="text-slate-600 mb-4"><span class="lang-en">{{CODEBASE_PERSYS_INTRO_EN}}</span><span class="lang-th">{{CODEBASE_PERSYS_INTRO_TH}}</span></p>
+            <div class="flex flex-wrap gap-1.5 mb-6">
+              <a href="#arch-dr" class="chip hover:border-indigo-300 hover:text-indigo-600 transition">{{CODEBASE_SUBSYS_1_NAME}}</a>
+              <a href="#arch-cs" class="chip hover:border-indigo-300 hover:text-indigo-600 transition">{{CODEBASE_SUBSYS_2_NAME}}</a>
+              <a href="#arch-ir" class="chip hover:border-indigo-300 hover:text-indigo-600 transition">{{CODEBASE_SUBSYS_3_NAME}}</a>
+              <a href="#arch-np" class="chip hover:border-indigo-300 hover:text-indigo-600 transition">{{CODEBASE_SUBSYS_4_NAME}}</a>
+              <a href="#arch-wb" class="chip hover:border-indigo-300 hover:text-indigo-600 transition">{{CODEBASE_SUBSYS_5_NAME}}</a>
+              <a href="#arch-hr" class="chip hover:border-indigo-300 hover:text-indigo-600 transition">{{CODEBASE_SUBSYS_6_NAME}}</a>
+              <a href="#arch-cc" class="chip hover:border-indigo-300 hover:text-indigo-600 transition">{{CODEBASE_SUBSYS_7_NAME}}</a>
+              <a href="#arch-cn" class="chip hover:border-indigo-300 hover:text-indigo-600 transition">{{CODEBASE_SUBSYS_8_NAME}}</a>
+              <a href="#arch-esg" class="chip hover:border-indigo-300 hover:text-indigo-600 transition">{{CODEBASE_SUBSYS_9_NAME}}</a>
+            </div>
+
+            <div class="space-y-6">
+              <!-- Subsystem 1 -->
+              <div id="arch-dr" class="card p-6 scroll-mt-24">
+                <div class="flex items-center gap-2 mb-3"><span class="w-9 h-9 rounded-lg bg-rose-100 text-rose-600 grid place-items-center font-black">{{CODEBASE_SUBSYS_1_INITIAL}}</span><div><div class="font-bold text-slate-900">{{CODEBASE_SUBSYS_1_NAME}} <span class="lang-th text-sm font-normal text-slate-500">{{CODEBASE_SUBSYS_1_NAME_TH}}</span></div><div class="text-xs text-slate-400"><span class="lang-en">{{CODEBASE_SUBSYS_1_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_1_DESC_TH}}</span></div></div></div>
+                <div class="mermaid-wrap"><pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_1_MERMAID}}"]</pre></div>
+              </div>
+
+              <!-- Subsystem 2 -->
+              <div id="arch-cs" class="card p-6 scroll-mt-24">
+                <div class="flex items-center gap-2 mb-3"><span class="w-9 h-9 rounded-lg bg-sky-100 text-sky-600 grid place-items-center font-black">{{CODEBASE_SUBSYS_2_INITIAL}}</span><div><div class="font-bold text-slate-900">{{CODEBASE_SUBSYS_2_NAME}} <span class="lang-th text-sm font-normal text-slate-500">{{CODEBASE_SUBSYS_2_NAME_TH}}</span></div><div class="text-xs text-slate-400"><span class="lang-en">{{CODEBASE_SUBSYS_2_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_2_DESC_TH}}</span></div></div></div>
+                <div class="mermaid-wrap"><pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_2_MERMAID}}"]</pre></div>
+              </div>
+
+              <!-- Subsystem 3 -->
+              <div id="arch-ir" class="card p-6 scroll-mt-24">
+                <div class="flex items-center gap-2 mb-3"><span class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 grid place-items-center font-black">{{CODEBASE_SUBSYS_3_INITIAL}}</span><div><div class="font-bold text-slate-900">{{CODEBASE_SUBSYS_3_NAME}} <span class="lang-th text-sm font-normal text-slate-500">{{CODEBASE_SUBSYS_3_NAME_TH}}</span></div><div class="text-xs text-slate-400"><span class="lang-en">{{CODEBASE_SUBSYS_3_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_3_DESC_TH}}</span></div></div></div>
+                <div class="mermaid-wrap"><pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_3_MERMAID}}"]</pre></div>
+              </div>
+
+              <!-- Subsystem 4 -->
+              <div id="arch-np" class="card p-6 scroll-mt-24">
+                <div class="flex items-center gap-2 mb-3"><span class="w-9 h-9 rounded-lg bg-red-100 text-red-600 grid place-items-center font-black">{{CODEBASE_SUBSYS_4_INITIAL}}</span><div><div class="font-bold text-slate-900">{{CODEBASE_SUBSYS_4_NAME}} <span class="lang-th text-sm font-normal text-slate-500">{{CODEBASE_SUBSYS_4_NAME_TH}}</span></div><div class="text-xs text-slate-400"><span class="lang-en">{{CODEBASE_SUBSYS_4_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_4_DESC_TH}}</span></div></div></div>
+                <div class="mermaid-wrap"><pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_4_MERMAID}}"]</pre></div>
+              </div>
+
+              <!-- Subsystem 5 -->
+              <div id="arch-wb" class="card p-6 scroll-mt-24">
+                <div class="flex items-center gap-2 mb-3"><span class="w-9 h-9 rounded-lg bg-slate-200 text-slate-600 grid place-items-center font-black">{{CODEBASE_SUBSYS_5_INITIAL}}</span><div><div class="font-bold text-slate-900">{{CODEBASE_SUBSYS_5_NAME}} <span class="lang-th text-sm font-normal text-slate-500">{{CODEBASE_SUBSYS_5_NAME_TH}}</span></div><div class="text-xs text-slate-400"><span class="lang-en">{{CODEBASE_SUBSYS_5_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_5_DESC_TH}}</span></div></div></div>
+                <div class="mermaid-wrap"><pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_5_MERMAID}}"]</pre></div>
+              </div>
+
+              <!-- Subsystem 6 -->
+              <div id="arch-hr" class="card p-6 scroll-mt-24">
+                <div class="flex items-center gap-2 mb-3"><span class="w-9 h-9 rounded-lg bg-violet-100 text-violet-600 grid place-items-center font-black">{{CODEBASE_SUBSYS_6_INITIAL}}</span><div><div class="font-bold text-slate-900">{{CODEBASE_SUBSYS_6_NAME}} <span class="lang-th text-sm font-normal text-slate-500">{{CODEBASE_SUBSYS_6_NAME_TH}}</span></div><div class="text-xs text-slate-400"><span class="lang-en">{{CODEBASE_SUBSYS_6_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_6_DESC_TH}}</span></div></div></div>
+                <div class="mermaid-wrap"><pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_6_MERMAID}}"]</pre></div>
+              </div>
+
+              <!-- Subsystem 7 -->
+              <div id="arch-cc" class="card p-6 scroll-mt-24">
+                <div class="flex items-center gap-2 mb-3"><span class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-600 grid place-items-center font-black">{{CODEBASE_SUBSYS_7_INITIAL}}</span><div><div class="font-bold text-slate-900">{{CODEBASE_SUBSYS_7_NAME}} <span class="lang-th text-sm font-normal text-slate-500">{{CODEBASE_SUBSYS_7_NAME_TH}}</span></div><div class="text-xs text-slate-400"><span class="lang-en">{{CODEBASE_SUBSYS_7_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_7_DESC_TH}}</span></div></div></div>
+                <div class="mermaid-wrap"><pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_7_MERMAID}}"]</pre></div>
+              </div>
+
+              <!-- Subsystem 8 -->
+              <div id="arch-cn" class="card p-6 scroll-mt-24">
+                <div class="flex items-center gap-2 mb-3"><span class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 grid place-items-center font-black">{{CODEBASE_SUBSYS_8_INITIAL}}</span><div><div class="font-bold text-slate-900">{{CODEBASE_SUBSYS_8_NAME}} <span class="lang-th text-sm font-normal text-slate-500">{{CODEBASE_SUBSYS_8_NAME_TH}}</span></div><div class="text-xs text-slate-400"><span class="lang-en">{{CODEBASE_SUBSYS_8_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_8_DESC_TH}}</span></div></div></div>
+                <div class="mermaid-wrap"><pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_8_MERMAID}}"]</pre></div>
+              </div>
+
+              <!-- Subsystem 9 -->
+              <div id="arch-esg" class="card p-6 scroll-mt-24">
+                <div class="flex items-center gap-2 mb-3"><span class="w-9 h-9 rounded-lg bg-teal-100 text-teal-600 grid place-items-center font-black">{{CODEBASE_SUBSYS_9_INITIAL}}</span><div><div class="font-bold text-slate-900">{{CODEBASE_SUBSYS_9_NAME}} <span class="lang-th text-sm font-normal text-slate-500">{{CODEBASE_SUBSYS_9_NAME_TH}}</span></div><div class="text-xs text-slate-400"><span class="lang-en">{{CODEBASE_SUBSYS_9_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SUBSYS_9_DESC_TH}}</span></div></div></div>
+                <div class="mermaid-wrap"><pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SUBSYS_9_MERMAID}}"]</pre></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ARCHITECTURE BY SERVER INSTANCE -->
+          <section id="server-instances" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Architecture by Database Server Instance</span><span class="lang-th">สถาปัตยกรรมแยกตาม Database Server Instance</span></h2>
+            <p class="text-slate-600 leading-relaxed mb-6"><span class="lang-en">{{CODEBASE_SERVERINST_INTRO_EN}}</span><span class="lang-th">{{CODEBASE_SERVERINST_INTRO_TH}}</span></p>
+            <div class="mermaid-wrap mb-4">
+              <pre class="mermaid">graph TB
+    PLACEHOLDER["{{CODEBASE_SERVER_INSTANCES_MERMAID}}"]</pre>
+            </div>
+            <div class="rounded-xl bg-rose-50 border border-rose-200 p-4 flex gap-3 mb-8">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#d70015" stroke-width="2" class="shrink-0 mt-0.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg>
+              <p class="text-sm text-rose-800"><span class="lang-en">{{CODEBASE_SERVERINST_NOTE_EN}} <a href="modernization.html#findings" class="font-semibold underline">{{CODEBASE_SERVERINST_NOTE_LINK_EN}}</a>{{CODEBASE_SERVERINST_NOTE_SUFFIX_EN}}</span><span class="lang-th">{{CODEBASE_SERVERINST_NOTE_TH}} <a href="modernization.html#findings" class="font-semibold underline">{{CODEBASE_SERVERINST_NOTE_LINK_TH}}</a>{{CODEBASE_SERVERINST_NOTE_SUFFIX_TH}}</span></p>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Databases per Instance</span><span class="lang-th">ฐานข้อมูลในแต่ละ Instance</span></h3>
+            <div class="card overflow-hidden">
+              <div class="overflow-x-auto"><table class="tbl">
+                <thead><tr>
+                  <th><span class="lang-en">Server Instance</span><span class="lang-th">Server Instance</span></th>
+                  <th><span class="lang-en">Database</span><span class="lang-th">ฐานข้อมูล</span></th>
+                  <th>DataContext</th>
+                  <th class="text-right"><span class="lang-en">Tables</span><span class="lang-th">ตาราง</span></th>
+                  <th><span class="lang-en">Primary domain(s)</span><span class="lang-th">โดเมนหลัก</span></th>
+                </tr></thead>
+                <tbody>
+                  <!-- {{CODEBASE_DB_INSTANCE_TABLE_ROWS}}: repeated <tr> rows. Each row shape: server instance (with SPOF badge), database name, DataContext class, table count, primary domain(s) -->
+                  {{CODEBASE_DB_INSTANCE_TABLE_ROWS}}
+                </tbody>
+              </table></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-3"><span class="lang-en">{{CODEBASE_SERVERINST_FOOTNOTE_EN}}</span><span class="lang-th">{{CODEBASE_SERVERINST_FOOTNOTE_TH}}</span></p>
+          </section>
+
+          <!-- TECH STACK -->
+          <section id="tech-stack" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Technology Stack</span><span class="lang-th">เทคโนโลยีที่ใช้</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">{{CODEBASE_TECH_INTRO_EN}}</span><span class="lang-th">{{CODEBASE_TECH_INTRO_TH}}</span></p>
+            <div class="card overflow-hidden">
+              <div class="overflow-x-auto">
+                <table class="tbl">
+                  <thead><tr><th><span class="lang-en">Layer</span><span class="lang-th">ชั้น</span></th><th><span class="lang-en">Technology</span><span class="lang-th">เทคโนโลยี</span></th><th><span class="lang-en">Version</span><span class="lang-th">เวอร์ชัน</span></th></tr></thead>
+                  <tbody>
+                    <!-- {{CODEBASE_TECH_STACK_TABLE_ROWS}}: repeated <tr> rows. Each row shape: layer (Runtime, Web Framework, Language, ORM, Database, ...), technology name, version -->
+                    {{CODEBASE_TECH_STACK_TABLE_ROWS}}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- COMPONENTS -->
+          <section id="components" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Major System Components</span><span class="lang-th">องค์ประกอบหลักของระบบ</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">{{CODEBASE_COMPONENTS_INTRO_EN}}</span><span class="lang-th">{{CODEBASE_COMPONENTS_INTRO_TH}}</span></p>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Business Logic Classes</span><span class="lang-th">คลาสตรรกะทางธุรกิจ</span></h3>
+            <div class="card overflow-hidden mb-8">
+              <div class="overflow-x-auto"><table class="tbl">
+                <thead><tr><th>Class</th><th><span class="lang-en">Responsibility</span><span class="lang-th">หน้าที่รับผิดชอบ</span></th></tr></thead>
+                <tbody>
+                  <!-- {{CODEBASE_BIZ_CLASSES_TABLE_ROWS}}: repeated <tr> rows. Each row shape: class name, bilingual responsibility (lang-en / lang-th spans) -->
+                  {{CODEBASE_BIZ_CLASSES_TABLE_ROWS}}
+                </tbody>
+              </table></div>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Data Access Layer — {{CODEBASE_DB_COUNT}} Databases</span><span class="lang-th">ชั้นการเข้าถึงข้อมูล — {{CODEBASE_DB_COUNT}} ฐานข้อมูล</span></h3>
+            <div class="card overflow-hidden">
+              <div class="overflow-x-auto"><table class="tbl">
+                <thead><tr><th>DataContext</th><th><span class="lang-en">Database</span><span class="lang-th">ฐานข้อมูล</span></th><th><span class="lang-en">Primary Domain</span><span class="lang-th">โดเมนหลัก</span></th></tr></thead>
+                <tbody>
+                  <!-- {{CODEBASE_DATA_ACCESS_TABLE_ROWS}}: repeated <tr> rows. Each row shape: DataContext class, database name, primary domain -->
+                  {{CODEBASE_DATA_ACCESS_TABLE_ROWS}}
+                </tbody>
+              </table></div>
+            </div>
+          </section>
+
+          <!-- PATTERNS -->
+          <section id="patterns" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Patterns &amp; Anti-Patterns</span><span class="lang-th">รูปแบบและ Anti-Patterns</span></h2>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 class="text-lg font-bold text-emerald-700 mb-3 flex items-center gap-2"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg><span class="lang-en">Design Patterns</span><span class="lang-th">รูปแบบการออกแบบ</span></h3>
+                <div class="space-y-3">
+                  <div class="card p-4 text-sm"><strong class="text-slate-800">{{CODEBASE_PATTERN_1_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_PATTERN_1_DESC_EN}}</span><span class="lang-th">{{CODEBASE_PATTERN_1_DESC_TH}}</span></p></div>
+                  <div class="card p-4 text-sm"><strong class="text-slate-800">{{CODEBASE_PATTERN_2_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_PATTERN_2_DESC_EN}}</span><span class="lang-th">{{CODEBASE_PATTERN_2_DESC_TH}}</span></p></div>
+                  <div class="card p-4 text-sm"><strong class="text-slate-800">{{CODEBASE_PATTERN_3_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_PATTERN_3_DESC_EN}}</span><span class="lang-th">{{CODEBASE_PATTERN_3_DESC_TH}}</span></p></div>
+                  <div class="card p-4 text-sm"><strong class="text-slate-800">{{CODEBASE_PATTERN_4_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_PATTERN_4_DESC_EN}}</span><span class="lang-th">{{CODEBASE_PATTERN_4_DESC_TH}}</span></p></div>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-rose-700 mb-3 flex items-center gap-2"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg><span class="lang-en">Anti-Patterns</span><span class="lang-th">Anti-Patterns</span></h3>
+                <div class="space-y-3">
+                  <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-slate-800">{{CODEBASE_ANTIPATTERN_1_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_ANTIPATTERN_1_DESC_EN}}</span><span class="lang-th">{{CODEBASE_ANTIPATTERN_1_DESC_TH}}</span></p></div>
+                  <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-slate-800">{{CODEBASE_ANTIPATTERN_2_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_ANTIPATTERN_2_DESC_EN}}</span><span class="lang-th">{{CODEBASE_ANTIPATTERN_2_DESC_TH}}</span></p></div>
+                  <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-slate-800">{{CODEBASE_ANTIPATTERN_3_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_ANTIPATTERN_3_DESC_EN}}</span><span class="lang-th">{{CODEBASE_ANTIPATTERN_3_DESC_TH}}</span></p></div>
+                  <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-slate-800">{{CODEBASE_ANTIPATTERN_4_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_ANTIPATTERN_4_DESC_EN}}</span><span class="lang-th">{{CODEBASE_ANTIPATTERN_4_DESC_TH}}</span></p></div>
+                  <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-slate-800">{{CODEBASE_ANTIPATTERN_5_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_ANTIPATTERN_5_DESC_EN}}</span><span class="lang-th">{{CODEBASE_ANTIPATTERN_5_DESC_TH}}</span></p></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- METRICS -->
+          <section id="metrics" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Code Metrics</span><span class="lang-th">เมตริกโค้ด</span></h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <div class="card p-5 text-center"><div class="text-3xl font-black text-slate-900 kpi"><span data-count="{{CODEBASE_METRIC_1_VALUE}}">0</span></div><div class="text-xs text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_METRIC_1_LABEL_EN}}</span><span class="lang-th">{{CODEBASE_METRIC_1_LABEL_TH}}</span></div></div>
+              <div class="card p-5 text-center"><div class="text-3xl font-black text-slate-900 kpi"><span data-count="{{CODEBASE_METRIC_2_VALUE}}">0</span></div><div class="text-xs text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_METRIC_2_LABEL_EN}}</span><span class="lang-th">{{CODEBASE_METRIC_2_LABEL_TH}}</span></div></div>
+              <div class="card p-5 text-center"><div class="text-3xl font-black text-slate-900 kpi"><span data-count="{{CODEBASE_METRIC_3_VALUE}}">0</span></div><div class="text-xs text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_METRIC_3_LABEL_EN}}</span><span class="lang-th">{{CODEBASE_METRIC_3_LABEL_TH}}</span></div></div>
+              <div class="card p-5 text-center"><div class="text-3xl font-black text-rose-600 kpi"><span data-count="{{CODEBASE_METRIC_4_VALUE}}">0</span></div><div class="text-xs text-slate-500 mt-1"><span class="lang-en">{{CODEBASE_METRIC_4_LABEL_EN}}</span><span class="lang-th">{{CODEBASE_METRIC_4_LABEL_TH}}</span></div></div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="card p-6">
+                <h3 class="font-bold text-slate-800 mb-4"><span class="lang-en">Complexity Hotspots</span><span class="lang-th">จุดที่มีความซับซ้อนสูง</span></h3>
+                <div class="space-y-4 text-sm">
+                  <div><div class="flex justify-between mb-1"><code>{{CODEBASE_HOTSPOT_1_FILE}}</code><span class="badge badge-red">{{CODEBASE_HOTSPOT_1_SEVERITY}}</span></div><div class="text-xs text-slate-400">{{CODEBASE_HOTSPOT_1_LINES}} <span class="lang-en">{{CODEBASE_HOTSPOT_1_DESC_EN}}</span><span class="lang-th">{{CODEBASE_HOTSPOT_1_DESC_TH}}</span></div></div>
+                  <div><div class="flex justify-between mb-1"><code>{{CODEBASE_HOTSPOT_2_FILE}}</code><span class="badge badge-amber">{{CODEBASE_HOTSPOT_2_SEVERITY}}</span></div><div class="text-xs text-slate-400">{{CODEBASE_HOTSPOT_2_LINES}} <span class="lang-en">{{CODEBASE_HOTSPOT_2_DESC_EN}}</span><span class="lang-th">{{CODEBASE_HOTSPOT_2_DESC_TH}}</span></div></div>
+                  <div><div class="flex justify-between mb-1"><code>{{CODEBASE_HOTSPOT_3_FILE}}</code><span class="badge badge-amber">{{CODEBASE_HOTSPOT_3_SEVERITY}}</span></div><div class="text-xs text-slate-400">{{CODEBASE_HOTSPOT_3_LINES}} <span class="lang-en">{{CODEBASE_HOTSPOT_3_DESC_EN}}</span><span class="lang-th">{{CODEBASE_HOTSPOT_3_DESC_TH}}</span></div></div>
+                  <div><div class="flex justify-between mb-1"><code>{{CODEBASE_HOTSPOT_4_FILE}}</code><span class="badge badge-amber">{{CODEBASE_HOTSPOT_4_SEVERITY}}</span></div><div class="text-xs text-slate-400">{{CODEBASE_HOTSPOT_4_LINES}} <span class="lang-en">{{CODEBASE_HOTSPOT_4_DESC_EN}}</span><span class="lang-th">{{CODEBASE_HOTSPOT_4_DESC_TH}}</span></div></div>
+                </div>
+              </div>
+              <div class="card p-6">
+                <h3 class="font-bold text-slate-800 mb-4"><span class="lang-en">Technology Debt Score</span><span class="lang-th">คะแนนหนี้เทคโนโลยี</span></h3>
+                <div class="space-y-3 text-sm">
+                  <div><div class="flex justify-between mb-1"><span class="text-slate-600"><span class="lang-en">Framework Currency</span><span class="lang-th">ความทันสมัยของเฟรมเวิร์ก</span></span><span class="font-bold">{{CODEBASE_DEBT_1_SCORE}}</span></div><div class="bar"><span data-w="{{CODEBASE_DEBT_1_WIDTH}}" style="background:#ff3b30"></span></div></div>
+                  <div><div class="flex justify-between mb-1"><span class="text-slate-600"><span class="lang-en">Dependency Health</span><span class="lang-th">สุขภาพของ dependency</span></span><span class="font-bold">{{CODEBASE_DEBT_2_SCORE}}</span></div><div class="bar"><span data-w="{{CODEBASE_DEBT_2_WIDTH}}" style="background:#ff9500"></span></div></div>
+                  <div><div class="flex justify-between mb-1"><span class="text-slate-600"><span class="lang-en">Code Organization</span><span class="lang-th">การจัดระเบียบโค้ด</span></span><span class="font-bold">{{CODEBASE_DEBT_3_SCORE}}</span></div><div class="bar"><span data-w="{{CODEBASE_DEBT_3_WIDTH}}" style="background:#ff9500"></span></div></div>
+                  <div><div class="flex justify-between mb-1"><span class="text-slate-600"><span class="lang-en">Test Coverage</span><span class="lang-th">ความครอบคลุมการทดสอบ</span></span><span class="font-bold">{{CODEBASE_DEBT_4_SCORE}}</span></div><div class="bar"><span data-w="{{CODEBASE_DEBT_4_WIDTH}}" style="background:#ff3b30"></span></div></div>
+                  <div><div class="flex justify-between mb-1"><span class="text-slate-600"><span class="lang-en">Security Posture</span><span class="lang-th">สถานะความปลอดภัย</span></span><span class="font-bold">{{CODEBASE_DEBT_5_SCORE}}</span></div><div class="bar"><span data-w="{{CODEBASE_DEBT_5_WIDTH}}" style="background:#ff3b30"></span></div></div>
+                  <div><div class="flex justify-between mb-1"><span class="text-slate-600"><span class="lang-en">Operational Maturity</span><span class="lang-th">ความพร้อมด้านปฏิบัติการ</span></span><span class="font-bold">{{CODEBASE_DEBT_6_SCORE}}</span></div><div class="bar"><span data-w="{{CODEBASE_DEBT_6_WIDTH}}" style="background:#ff3b30"></span></div></div>
+                  <div class="pt-2 border-t border-slate-200 flex justify-between font-bold text-slate-800"><span><span class="lang-en">Overall</span><span class="lang-th">รวม</span></span><span class="text-rose-600">{{CODEBASE_DEBT_OVERALL}}</span></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECURITY -->
+          <section id="security" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Security Analysis</span><span class="lang-th">การวิเคราะห์ความปลอดภัย</span></h2>
+            <div class="rounded-xl bg-rose-50 border border-rose-200 p-4 mb-6 flex gap-3">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#d70015" stroke-width="2" class="shrink-0 mt-0.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg>
+              <p class="text-sm text-rose-800"><span class="lang-en">{{CODEBASE_SEC_INTRO_EN}}</span><span class="lang-th">{{CODEBASE_SEC_INTRO_TH}}</span></p>
+            </div>
+
+            <div class="space-y-3 mb-8">
+              <div class="card p-5"><div class="flex items-center gap-3 mb-1"><span class="badge badge-red">CRITICAL</span><strong class="text-slate-800 text-sm"><span class="lang-en">{{CODEBASE_SEC_FINDING_1_TITLE_EN}}</span><span class="lang-th">{{CODEBASE_SEC_FINDING_1_TITLE_TH}}</span></strong></div><p class="text-sm text-slate-500"><code>{{CODEBASE_SEC_FINDING_1_FILE}}</code> — <span class="lang-en">{{CODEBASE_SEC_FINDING_1_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SEC_FINDING_1_DESC_TH}}</span></p></div>
+              <div class="card p-5"><div class="flex items-center gap-3 mb-1"><span class="badge badge-red">CRITICAL</span><strong class="text-slate-800 text-sm"><span class="lang-en">{{CODEBASE_SEC_FINDING_2_TITLE_EN}}</span><span class="lang-th">{{CODEBASE_SEC_FINDING_2_TITLE_TH}}</span></strong></div><p class="text-sm text-slate-500"><code>{{CODEBASE_SEC_FINDING_2_FILE}}</code> — <span class="lang-en">{{CODEBASE_SEC_FINDING_2_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SEC_FINDING_2_DESC_TH}}</span></p></div>
+              <div class="card p-5"><div class="flex items-center gap-3 mb-1"><span class="badge badge-amber">HIGH</span><strong class="text-slate-800 text-sm"><span class="lang-en">{{CODEBASE_SEC_FINDING_3_TITLE_EN}}</span><span class="lang-th">{{CODEBASE_SEC_FINDING_3_TITLE_TH}}</span></strong></div><p class="text-sm text-slate-500"><code>{{CODEBASE_SEC_FINDING_3_FILE}}</code> — <span class="lang-en">{{CODEBASE_SEC_FINDING_3_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SEC_FINDING_3_DESC_TH}}</span></p></div>
+              <div class="card p-5"><div class="flex items-center gap-3 mb-1"><span class="badge badge-amber">HIGH</span><strong class="text-slate-800 text-sm"><span class="lang-en">{{CODEBASE_SEC_FINDING_4_TITLE_EN}}</span><span class="lang-th">{{CODEBASE_SEC_FINDING_4_TITLE_TH}}</span></strong></div><p class="text-sm text-slate-500"><span class="lang-en">{{CODEBASE_SEC_FINDING_4_DESC_EN}}</span><span class="lang-th">{{CODEBASE_SEC_FINDING_4_DESC_TH}}</span></p></div>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">OWASP Top 10 Assessment</span><span class="lang-th">การประเมินตาม OWASP Top 10</span></h3>
+            <div class="card overflow-hidden">
+              <div class="overflow-x-auto"><table class="tbl">
+                <thead><tr><th>OWASP</th><th><span class="lang-en">Status</span><span class="lang-th">สถานะ</span></th><th><span class="lang-en">Evidence</span><span class="lang-th">หลักฐาน</span></th></tr></thead>
+                <tbody>
+                  <!-- {{CODEBASE_OWASP_TABLE_ROWS}}: repeated <tr> rows. Each row shape: OWASP category, status badge (Vulnerable/Moderate), bilingual evidence -->
+                  {{CODEBASE_OWASP_TABLE_ROWS}}
+                </tbody>
+              </table></div>
+            </div>
+
+            <div class="mt-6 rounded-xl bg-slate-50 border border-slate-200 p-5">
+              <div class="text-sm font-semibold text-slate-700 mb-2"><span class="lang-en">Security Controls Present</span><span class="lang-th">มาตรการควบคุมความปลอดภัยที่มีอยู่</span></div>
+              <div class="flex flex-wrap gap-2">
+                <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200">{{CODEBASE_SEC_CONTROL_1}}</span>
+                <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200"><span class="lang-en">{{CODEBASE_SEC_CONTROL_2_EN}}</span><span class="lang-th">{{CODEBASE_SEC_CONTROL_2_TH}}</span></span>
+                <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200"><span class="lang-en">{{CODEBASE_SEC_CONTROL_3_EN}}</span><span class="lang-th">{{CODEBASE_SEC_CONTROL_3_TH}}</span></span>
+                <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200"><span class="lang-en">{{CODEBASE_SEC_CONTROL_4_EN}}</span><span class="lang-th">{{CODEBASE_SEC_CONTROL_4_TH}}</span></span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Next -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-4">
+            <a href="domains.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+              <div><div class="text-xs text-slate-400"><span class="lang-en">Next</span><span class="lang-th">ถัดไป</span></div><div class="font-bold text-slate-800"><span class="lang-en">Business Rules Extraction</span><span class="lang-th">การสกัดกฎทางธุรกิจ</span></div></div>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+            <a href="modernization.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+              <div><div class="text-xs text-slate-400"><span class="lang-en">Related</span><span class="lang-th">ที่เกี่ยวข้อง</span></div><div class="font-bold text-slate-800"><span class="lang-en">Modernization Readiness</span><span class="lang-th">ความพร้อมสู่ความทันสมัย</span></div></div>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- On-page TOC -->
+        <aside class="hidden lg:block">
+          <div class="sticky top-24" data-toc>
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-3"><span class="lang-en">On this page</span><span class="lang-th">ในหน้านี้</span></div>
+            <nav class="toc space-y-0.5">
+              <a href="#architecture"><span class="lang-en">Architecture</span><span class="lang-th">สถาปัตยกรรม</span></a>
+              <a href="#tiers"><span class="lang-en">3-Tier View</span><span class="lang-th">มุมมอง 3 ชั้น</span></a>
+              <a href="#subsystems"><span class="lang-en">System Architecture</span><span class="lang-th">สถาปัตยกรรมแยกตามระบบ</span></a>
+              <a href="#server-instances"><span class="lang-en">By Server Instance</span><span class="lang-th">แยกตาม Server Instance</span></a>
+              <a href="#tech-stack"><span class="lang-en">Technology Stack</span><span class="lang-th">เทคโนโลยี</span></a>
+              <a href="#components"><span class="lang-en">Components</span><span class="lang-th">องค์ประกอบ</span></a>
+              <a href="#patterns"><span class="lang-en">Patterns</span><span class="lang-th">รูปแบบ</span></a>
+              <a href="#metrics"><span class="lang-en">Code Metrics</span><span class="lang-th">เมตริกโค้ด</span></a>
+              <a href="#security"><span class="lang-en">Security</span><span class="lang-th">ความปลอดภัย</span></a>
+            </nav>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 text-center text-xs text-slate-400">© <span data-year></span> {{COMPANY_NAME}} · <span class="lang-en">Generated from AWS Transform (ATX) reports</span><span class="lang-th">สร้างจากรายงาน AWS Transform (ATX)</span></div>
+      </footer>
+    </main>
+  </div>
+  <script src="assets/js/app.js?v=20"></script>
+</body>
+</html>

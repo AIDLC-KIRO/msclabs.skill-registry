@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dental Dashboard - Business Rules Extraction Analysis</title>
+<style>
+:root{--bg:#1a1a2e;--surface:#16213e;--card:#0f3460;--accent:#e94560;--text:#eee;--text-muted:#aaa;--border:#333;--green:#4caf50;--yellow:#ffc107;--orange:#ff9800;--red:#f44336;--blue:#2196f3;--purple:#9c27b0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:var(--surface);padding:1.5rem 2rem;border-bottom:1px solid var(--border)}
+.header h1{font-size:1.5rem;margin-bottom:.25rem}
+.header p{color:var(--text-muted);font-size:.9rem}
+.stats-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;padding:1rem 2rem;background:var(--surface);border-bottom:1px solid var(--border)}
+.stat-item{text-align:center;padding:.75rem}
+.stat-value{font-size:1.75rem;font-weight:700;color:var(--accent)}
+.stat-label{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;margin-top:.25rem}
+.stat-sub{font-size:.7rem;color:var(--text-muted)}
+.tabs{display:flex;gap:0;background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem}
+.tab-btn{padding:.75rem 1.5rem;border:none;background:transparent;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;font-size:.85rem}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-btn:hover{color:var(--text)}
+.tab-content{display:none;padding:2rem}
+.tab-content.active{display:block}
+.card{background:var(--card);border-radius:8px;padding:1.25rem;margin-bottom:1rem;border:1px solid var(--border)}
+.card h3{margin-bottom:.75rem;font-size:1rem}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:1rem}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th,td{padding:.5rem .75rem;text-align:left;border-bottom:1px solid var(--border)}
+th{color:var(--text-muted);font-weight:600;text-transform:uppercase;font-size:.7rem}
+.badge{display:inline-block;padding:.2rem .5rem;border-radius:4px;font-size:.7rem;font-weight:600}
+.badge-large{background:var(--red);color:#fff}
+.badge-medium{background:var(--orange);color:#fff}
+.badge-small{background:var(--green);color:#fff}
+.bar-container{display:flex;align-items:center;gap:.5rem;margin:.25rem 0}
+.bar{height:8px;border-radius:4px;background:var(--accent)}
+.bar-label{font-size:.75rem;color:var(--text-muted);min-width:40px}
+.domain-card{cursor:pointer;transition:transform .15s}
+.domain-card:hover{transform:translateY(-2px)}
+.drill-down{margin-top:1rem;padding:1rem;background:rgba(0,0,0,.2);border-radius:6px;display:none}
+.drill-down.open{display:block}
+.feature-item{padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.rule-item{padding:.25rem 0 .25rem 1rem;font-size:.8rem;color:var(--text-muted)}
+canvas{width:100%;height:300px;border-radius:8px;background:rgba(0,0,0,.2)}
+.exec-order{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;padding:.5rem 0}
+.exec-step{background:var(--card);padding:.4rem .8rem;border-radius:4px;font-size:.8rem;border:1px solid var(--border)}
+.exec-arrow{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Dental Dashboard - Business Rules Extraction</h1>
+<p>Comprehensive domain decomposition and business logic analysis</p>
+</div>
+<div class="stats-bar" id="statsBar"></div>
+<div class="tabs">
+<button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+<button class="tab-btn" onclick="showTab('bizlogic')">Business Logic</button>
+<button class="tab-btn" onclick="showTab('domains')">Domain Decomposition</button>
+<button class="tab-btn" onclick="showTab('shared')">Shared Kernel</button>
+<button class="tab-btn" onclick="showTab('schema')">Data Ownership</button>
+</div>
+
+<div class="tab-content active" id="overview">
+<div class="grid-2">
+<div class="card"><h3>Domain Complexity Distribution</h3><div id="complexityChart"></div></div>
+<div class="card"><h3>Top Domains by Feature Count</h3><div id="featureChart"></div></div>
+</div>
+<div class="grid-2">
+<div class="card"><h3>Top Domains by LOC</h3><div id="locChart"></div></div>
+<div class="card"><h3>Execution Order</h3><div class="exec-order" id="execOrder"></div></div>
+</div>
+<div class="card"><h3>What This Dashboard Tells You</h3>
+<ul style="list-style:none;padding:0" id="healthStatements"></ul>
+</div>
+</div>
+
+<div class="tab-content" id="bizlogic">
+<div class="grid-3" id="domainCards"></div>
+<div class="card"><h3>Cross-Domain Features</h3><table id="crossDomainTable"><thead><tr><th>Feature</th><th>Domains Involved</th></tr></thead><tbody></tbody></table></div>
+</div>
+
+<div class="tab-content" id="domains">
+<div class="card"><h3>Domain Dependency Graph</h3><canvas id="domainGraph"></canvas></div>
+<div class="grid-2" id="serviceCards"></div>
+</div>
+
+<div class="tab-content" id="shared">
+<div class="card"><h3>Shared Entities</h3><table id="sharedEntitiesTable"><thead><tr><th>Entity</th><th>Table</th><th>Owner</th><th>Used By</th></tr></thead><tbody></tbody></table></div>
+<div class="card"><h3>Cross-Cutting Concerns</h3><div class="grid-3" id="crossCuttingCards"></div></div>
+<div class="card"><h3>Shared Kernel Components</h3><table id="sharedKernelTable"><thead><tr><th>Component</th><th>Type</th><th>Used By</th></tr></thead><tbody></tbody></table></div>
+</div>
+
+<div class="tab-content" id="schema">
+<div class="card"><h3>Table Ownership Matrix</h3><table id="ownershipTable"><thead><tr><th>Table</th><th>Owning Domain</th><th>Columns</th></tr></thead><tbody></tbody></table></div>
+<div class="card"><h3>Database Statistics</h3><div id="dbStats"></div></div>
+</div>
+
+<script>
+var manifest = {"schema_version":"1.0.0","project":{"name":"dental-dashboard-app","root_path":".","primary_languages":["JavaScript"],"total_source_files":49,"total_loc":13030,"generated_at":"2026-08-27T02:45:00Z","atx_documentation_consumed":true,"additional_input_consumed":false},"domains":[{"slug":"patient-appointment","name":"Patient Appointment","description":"Manages the lifecycle of dental patient appointments from TrakCare sync through status transitions to history archival, including real-time dashboard display.","complexity":"large","source_files":[{"path":"server/modules/patientAppointment.js","loc":765,"role":"service","primary_entity":"PatientAppointment"},{"path":"src/pages/Dashboard/index.js","loc":555,"role":"controller"},{"path":"src/routes/index.js","loc":507,"role":"controller"},{"path":"src/pages/Schedule/table.js","loc":1388,"role":"helper"},{"path":"src/pages/Dashboard/tableSearch.js","loc":359,"role":"helper"},{"path":"src/pages/Schedule/index.js","loc":242,"role":"controller"}],"entities":[{"name":"PatientAppointment","table_name":"PatientAppointment","is_shared":false,"source_file":"server/modules/patientAppointment.js","columns_approx":29,"relationship_count":3},{"name":"PatientAppointmentHistory","table_name":"PatientAppointmentHistory","is_shared":false,"source_file":"server/modules/patientAppointment.js","columns_approx":27,"relationship_count":0},{"name":"PatientAppointmentTemp","table_name":"PatientAppointmentTemp","is_shared":false,"source_file":"server/modules/patientAppointment.js","columns_approx":26,"relationship_count":0},{"name":"PatientStatus","table_name":"PatientStatus","is_shared":false,"source_file":"server/modules/patientAppointment.js","columns_approx":3,"relationship_count":0}],"owned_tables":["PatientAppointment","PatientAppointmentHistory","PatientAppointmentTemp","PatientStatus"],"shared_tables_referenced":["CareProvider","Service","RoomDetail","DoctorSchedule"],"depends_on_domains":["care-provider","doctor-schedule","room-management"],"depended_on_by_domains":["doctor-schedule"],"shared_entities_used":["CareProvider","Service"],"cross_domain_features":["workload-dashboard","real-time-event-broadcasting"],"controller_count":3,"endpoint_count_approx":5,"service_count":1,"feature_count":10,"rule_count":11,"responsibility":"Manages patient appointment lifecycle including sync, status transitions, history, and real-time dashboard display.","bounded_context_summary":"Patient appointment aggregate with staging and archival tables, isolated transactional boundary for appointment CRUD and status management.","notes":""},{"slug":"care-provider","name":"Care Provider","description":"Manages master data for dental staff (dentists and assistants) and the service catalog, synchronized from TrakCare HIS.","complexity":"medium","source_files":[{"path":"server/modules/careProvider.js","loc":151,"role":"service","primary_entity":"CareProvider"},{"path":"server/modules/assistanceDentist.js","loc":147,"role":"service","primary_entity":"AssistanceDentist"},{"path":"server/modules/service.js","loc":122,"role":"service","primary_entity":"Service"},{"path":"server/modules/careProviderService.js","loc":226,"role":"service","primary_entity":"CareProviderService"},{"path":"src/pages/Dashboard/searchResource.js","loc":213,"role":"helper"},{"path":"src/pages/Schedule/searchResource.js","loc":205,"role":"helper"},{"path":"src/pages/Schedule/searchService.js","loc":202,"role":"helper"}],"entities":[{"name":"CareProvider","table_name":"CareProvider","is_shared":true,"source_file":"server/modules/careProvider.js","columns_approx":19,"relationship_count":5},{"name":"AssistanceDentist","table_name":"AssistanceDentist","is_shared":true,"source_file":"server/modules/assistanceDentist.js","columns_approx":19,"relationship_count":2},{"name":"Service","table_name":"Service","is_shared":true,"source_file":"server/modules/service.js","columns_approx":7,"relationship_count":2},{"name":"CareProviderService","table_name":"CareProviderService","is_shared":false,"source_file":"server/modules/careProviderService.js","columns_approx":7,"relationship_count":2}],"owned_tables":["CareProvider","AssistanceDentist","Service","CareProviderService"],"shared_tables_referenced":[],"depends_on_domains":[],"depended_on_by_domains":["patient-appointment","doctor-schedule","room-management","booking"],"shared_entities_used":[],"cross_domain_features":["trakcare-data-sync"],"controller_count":0,"endpoint_count_approx":4,"service_count":4,"feature_count":7,"rule_count":8,"responsibility":"Maintains dentist, assistant, and service master data synchronized from TrakCare HIS.","bounded_context_summary":"Master data aggregate for dental staff identity and capabilities, serving as the foundational reference for all other domains.","notes":""},{"slug":"doctor-schedule","name":"Doctor Schedule","description":"Manages doctor time slot scheduling synced from TrakCare and provides workload calculation metrics.","complexity":"medium","source_files":[{"path":"server/modules/doctorSchedule.js","loc":339,"role":"service","primary_entity":"DoctorSchedule"}],"entities":[{"name":"DoctorSchedule","table_name":"DoctorSchedule","is_shared":false,"source_file":"server/modules/doctorSchedule.js","columns_approx":17,"relationship_count":1},{"name":"DoctorScheduleTemp","table_name":"DoctorScheduleTemp","is_shared":false,"source_file":"server/modules/doctorSchedule.js","columns_approx":16,"relationship_count":0}],"owned_tables":["DoctorSchedule","DoctorScheduleTemp"],"shared_tables_referenced":["CareProvider","RoomDetail","PatientAppointment","Service"],"depends_on_domains":["care-provider","room-management","patient-appointment"],"depended_on_by_domains":["patient-appointment"],"shared_entities_used":["CareProvider","Service"],"cross_domain_features":["workload-dashboard"],"controller_count":0,"endpoint_count_approx":2,"service_count":1,"feature_count":5,"rule_count":6,"responsibility":"Synchronizes doctor time slots and computes workload utilization metrics.","bounded_context_summary":"Schedule management with independent change detection lifecycle, providing capacity metrics to the dashboard.","notes":""},{"slug":"room-management","name":"Room Management","description":"Handles real-time tracking of dental treatment room assignments via event-driven check-in/check-out processing.","complexity":"small","source_files":[{"path":"server/modules/roomDetail.js","loc":86,"role":"service","primary_entity":"RoomDetail"},{"path":"server/event-bridge.js","loc":444,"role":"controller"}],"entities":[{"name":"RoomDetail","table_name":"RoomDetail","is_shared":false,"source_file":"server/modules/roomDetail.js","columns_approx":9,"relationship_count":2}],"owned_tables":["RoomDetail"],"shared_tables_referenced":["CareProvider","AssistanceDentist"],"depends_on_domains":["care-provider"],"depended_on_by_domains":["patient-appointment","doctor-schedule"],"shared_entities_used":["CareProvider","AssistanceDentist"],"cross_domain_features":["real-time-event-broadcasting"],"controller_count":1,"endpoint_count_approx":3,"service_count":1,"feature_count":7,"rule_count":6,"responsibility":"Manages real-time room assignment state via event-driven processing and Socket.IO broadcasting.","bounded_context_summary":"Ephemeral real-time state management for physical room occupancy, separate from planned booking schedules.","notes":""},{"slug":"booking","name":"Booking","description":"Manages advance room scheduling via calendar UI and Excel bulk import, with permission-based access control.","complexity":"medium","source_files":[{"path":"server/modules/booking.js","loc":104,"role":"service","primary_entity":"BookingRoom"},{"path":"server/modules/upload.js","loc":93,"role":"service"},{"path":"src/pages/Calendar/index.js","loc":404,"role":"controller"},{"path":"src/pages/Calendar/SimpleTable.js","loc":601,"role":"helper"},{"path":"src/pages/Calendar/FormDialog.js","loc":718,"role":"helper"},{"path":"src/pages/Calendar/AlertDialogSlide.js","loc":56,"role":"helper"}],"entities":[{"name":"BookingRoom","table_name":"BookingRoom","is_shared":false,"source_file":"server/modules/booking.js","columns_approx":13,"relationship_count":3},{"name":"Workcase","table_name":"Workcase","is_shared":false,"source_file":"server/modules/booking.js","columns_approx":4,"relationship_count":1}],"owned_tables":["BookingRoom","Workcase"],"shared_tables_referenced":["CareProvider","AssistanceDentist"],"depends_on_domains":["care-provider"],"depended_on_by_domains":[],"shared_entities_used":["CareProvider","AssistanceDentist"],"cross_domain_features":["schedule-calendar-integration"],"controller_count":1,"endpoint_count_approx":3,"service_count":2,"feature_count":7,"rule_count":8,"responsibility":"Manages advance room schedule planning through calendar UI and Excel import.","bounded_context_summary":"Planning-horizon room scheduling, distinct from real-time room state, with its own permission model.","notes":""}],"shared_entities":[{"name":"CareProvider","table_name":"CareProvider","source_file":"server/modules/careProvider.js","used_by_domains":["care-provider","patient-appointment","doctor-schedule","room-management","booking"],"owning_domain":"care-provider","canonical_spec_path":"cross-cutting-documentation/shared-entities.md","canonical_spec_anchor":"#careprovider"},{"name":"Service","table_name":"Service","source_file":"server/modules/service.js","used_by_domains":["care-provider","patient-appointment","doctor-schedule","booking"],"owning_domain":"care-provider","canonical_spec_path":"cross-cutting-documentation/shared-entities.md","canonical_spec_anchor":"#service"},{"name":"AssistanceDentist","table_name":"AssistanceDentist","source_file":"server/modules/assistanceDentist.js","used_by_domains":["care-provider","room-management","booking"],"owning_domain":"care-provider","canonical_spec_path":"cross-cutting-documentation/shared-entities.md","canonical_spec_anchor":"#assistancedentist"}],"shared_kernel_components":[{"component_name":"PGPool","component_type":"utility","source_file":"server/modules/pgpool.js","used_by_domains":["patient-appointment","care-provider","doctor-schedule","room-management","booking"],"documented_in":"domain-decomposition-overview/shared-kernel.md"},{"component_name":"AccessToken","component_type":"utility","source_file":"server/modules/accessToken.js","used_by_domains":["patient-appointment","care-provider","doctor-schedule"],"documented_in":"domain-decomposition-overview/shared-kernel.md"},{"component_name":"JobScheduler","component_type":"framework","source_file":"server/modules/jobsh.js","used_by_domains":["patient-appointment","care-provider","doctor-schedule"],"documented_in":"domain-decomposition-overview/shared-kernel.md"},{"component_name":"Logger","component_type":"utility","source_file":"server/logger.js","used_by_domains":["patient-appointment","care-provider","doctor-schedule","room-management","booking"],"documented_in":"domain-decomposition-overview/shared-kernel.md"},{"component_name":"HealthCheck","component_type":"utility","source_file":"server/modules/healthCheck.js","used_by_domains":["patient-appointment","care-provider","doctor-schedule"],"documented_in":"domain-decomposition-overview/shared-kernel.md"}],"cross_cutting_concerns":[{"concern":"authentication","summary":"OAuth2 password grant for TrakCare API; session-based user auth via TrakCare login endpoint; optional API key middleware.","documented_in":"cross-cutting-documentation/authentication-authorization.md"},{"concern":"authorization","summary":"Two roles (admin/assistant) with route-level access control; hardcoded booking permission deny-list.","documented_in":"cross-cutting-documentation/authentication-authorization.md"},{"concern":"error_handling","summary":"Exponential backoff retry for DB queries; 3-attempt retry for API calls; global Express error handler returning 500.","documented_in":"cross-cutting-documentation/error-handling-patterns.md"},{"concern":"event_publishing","summary":"Socket.IO dual-server architecture for real-time event broadcasting between external systems, backend, and frontend.","documented_in":"cross-cutting-documentation/event-publishing-patterns.md"},{"concern":"caching","summary":"Process-local in-memory caching with 60-second refresh interval and event-driven invalidation.","documented_in":"cross-cutting-documentation/caching-patterns.md"},{"concern":"logging","summary":"Winston logger with daily rotation, 90-day retention. Morgan HTTP access logging on Event Bridge.","documented_in":"cross-cutting-documentation/error-handling-patterns.md"}],"execution_order":["care-provider","doctor-schedule","room-management","patient-appointment","booking"],"common_artifacts":{"global_schema_path":"database-documentation/00-global-schema.sql","global_seed_data_path":"database-documentation/00-seed-data.json","common_errors_path":"cross-cutting-documentation/common-error-codes.md","common_permissions_path":"cross-cutting-documentation/common-permissions.md","common_events_path":"cross-cutting-documentation/common-events.md","common_api_catalog_path":"reference-documentation/api-endpoint-catalog.md","common_integrations_path":"reference-documentation/external-integrations-map.md","architecture_diagrams_path":"diagrams/architecture-diagrams.md","sequence_diagrams_path":"diagrams/sequence-diagrams.md","class_er_diagrams_path":"diagrams/class-er-diagrams.md","shared_entities_path":"cross-cutting-documentation/shared-entities.md"}};
+
+var domainColors = ['#e94560','#4caf50','#2196f3','#ff9800','#9c27b0'];
+
+function getDomainLoc(d){return d.source_files.reduce(function(s,f){return s+(f.loc||0)},0)}
+function showTab(id){document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});document.getElementById(id).classList.add('active');event.target.classList.add('active')}
+
+function renderStats(){
+var bar=document.getElementById('statsBar');
+var totalFeatures=manifest.domains.reduce(function(s,d){return s+d.feature_count},0);
+var totalRules=manifest.domains.reduce(function(s,d){return s+d.rule_count},0);
+var totalTables=manifest.domains.reduce(function(s,d){return s+d.owned_tables.length},0);
+var largestDomain=manifest.domains.reduce(function(a,b){return getDomainLoc(a)>getDomainLoc(b)?a:b});
+var largestLoc=getDomainLoc(largestDomain);
+var stats=[
+{value:manifest.domains.length,label:'Domains Identified',sub:''},
+{value:totalFeatures,label:'Features Cataloged',sub:''},
+{value:totalRules,label:'Business Rules Documented',sub:''},
+{value:manifest.shared_entities.length,label:'Shared Entities',sub:''},
+{value:totalTables,label:'Owned Tables',sub:''},
+{value:largestDomain.name,label:'Largest Domain',sub:Math.round(largestLoc/1000)+'K LOC'}
+];
+bar.innerHTML=stats.map(function(s){return '<div class="stat-item"><div class="stat-value">'+s.value+'</div><div class="stat-label">'+s.label+'</div>'+(s.sub?'<div class="stat-sub">'+s.sub+'</div>':'')+'</div>'}).join('');
+}
+
+function renderOverview(){
+var complexityDiv=document.getElementById('complexityChart');
+var counts={small:0,medium:0,large:0};
+manifest.domains.forEach(function(d){counts[d.complexity]++});
+complexityDiv.innerHTML=Object.keys(counts).map(function(k){var pct=Math.round(counts[k]/manifest.domains.length*100);return '<div class="bar-container"><span class="bar-label">'+k+'</span><div class="bar" style="width:'+pct+'%;background:'+(k==='large'?'var(--red)':k==='medium'?'var(--orange)':'var(--green)')+'"></div><span class="bar-label">'+counts[k]+'</span></div>'}).join('');
+
+var featureDiv=document.getElementById('featureChart');
+var sorted=manifest.domains.slice().sort(function(a,b){return b.feature_count-a.feature_count});
+var maxF=sorted[0].feature_count;
+featureDiv.innerHTML=sorted.map(function(d,i){var pct=Math.round(d.feature_count/maxF*100);return '<div class="bar-container"><span class="bar-label" style="min-width:120px">'+d.name+'</span><div class="bar" style="width:'+pct+'%;background:'+domainColors[i%domainColors.length]+'"></div><span class="bar-label">'+d.feature_count+'</span></div>'}).join('');
+
+var locDiv=document.getElementById('locChart');
+var locSorted=manifest.domains.slice().sort(function(a,b){return getDomainLoc(b)-getDomainLoc(a)});
+var maxL=getDomainLoc(locSorted[0]);
+locDiv.innerHTML=locSorted.map(function(d,i){var loc=getDomainLoc(d);var pct=Math.round(loc/maxL*100);return '<div class="bar-container"><span class="bar-label" style="min-width:120px">'+d.name+'</span><div class="bar" style="width:'+pct+'%;background:'+domainColors[i%domainColors.length]+'"></div><span class="bar-label">'+loc+'</span></div>'}).join('');
+
+var execDiv=document.getElementById('execOrder');
+execDiv.innerHTML=manifest.execution_order.map(function(s,i){var d=manifest.domains.find(function(x){return x.slug===s});return '<span class="exec-step">'+( i+1)+'. '+(d?d.name:s)+'</span>'+(i<manifest.execution_order.length-1?'<span class="exec-arrow">→</span>':'')}).join('');
+
+var healthDiv=document.getElementById('healthStatements');
+healthDiv.innerHTML='<li style="padding:.5rem 0;color:var(--text-muted)">• The Patient Appointment domain is the largest and most complex, with dependencies on 3 other domains — extract last.</li><li style="padding:.5rem 0;color:var(--text-muted)">• Care Provider is the foundation domain with zero dependencies — extract first as all others depend on it.</li><li style="padding:.5rem 0;color:var(--text-muted)">• The system has strong coupling through the workload calculation which spans 4 domains via a single SQL CTE.</li>';
+}
+
+function renderBizLogic(){
+var cardsDiv=document.getElementById('domainCards');
+cardsDiv.innerHTML=manifest.domains.map(function(d,i){return '<div class="card domain-card" onclick="toggleDrill('+i+')"><h3 style="color:'+domainColors[i%domainColors.length]+'">'+d.name+'</h3><p style="font-size:.8rem;color:var(--text-muted)">'+d.description+'</p><div style="margin-top:.5rem;display:flex;gap:1rem"><span class="badge badge-'+d.complexity+'">'+d.complexity+'</span><span style="font-size:.75rem">'+d.feature_count+' features</span><span style="font-size:.75rem">'+d.rule_count+' rules</span></div><div class="drill-down" id="drill-'+i+'"><p style="font-size:.8rem;color:var(--text-muted)">Responsibility: '+d.responsibility+'</p><p style="font-size:.8rem;margin-top:.5rem">Tables: '+d.owned_tables.join(', ')+'</p><p style="font-size:.8rem;margin-top:.5rem">Dependencies: '+(d.depends_on_domains.length?d.depends_on_domains.join(', '):'None')+'</p></div></div>'}).join('');
+
+var crossTable=document.querySelector('#crossDomainTable tbody');
+var features=[{name:'Workload Dashboard',domains:'patient-appointment, doctor-schedule, room-management, care-provider'},{name:'Real-Time Event Broadcasting',domains:'room-management, patient-appointment'},{name:'TrakCare Data Synchronization',domains:'care-provider, doctor-schedule, patient-appointment'},{name:'Schedule/Calendar Integration',domains:'booking, doctor-schedule, care-provider'}];
+crossTable.innerHTML=features.map(function(f){return '<tr><td>'+f.name+'</td><td>'+f.domains+'</td></tr>'}).join('');
+}
+
+function toggleDrill(i){var el=document.getElementById('drill-'+i);el.classList.toggle('open')}
+
+function renderDomains(){
+var serviceDiv=document.getElementById('serviceCards');
+serviceDiv.innerHTML=manifest.domains.map(function(d,i){return '<div class="card"><h3 style="color:'+domainColors[i%domainColors.length]+'">'+d.name+'</h3><p style="font-size:.8rem;color:var(--text-muted);margin-bottom:.5rem">'+d.bounded_context_summary+'</p><table><tr><td style="font-size:.75rem">Endpoints</td><td style="font-size:.75rem">'+d.endpoint_count_approx+'</td></tr><tr><td style="font-size:.75rem">Services</td><td style="font-size:.75rem">'+d.service_count+'</td></tr><tr><td style="font-size:.75rem">Controllers</td><td style="font-size:.75rem">'+d.controller_count+'</td></tr><tr><td style="font-size:.75rem">Tables Owned</td><td style="font-size:.75rem">'+d.owned_tables.length+'</td></tr></table></div>'}).join('');
+drawDomainGraph();
+}
+
+function drawDomainGraph(){
+var canvas=document.getElementById('domainGraph');
+var ctx=canvas.getContext('2d');
+canvas.width=canvas.offsetWidth;canvas.height=300;
+var positions=[];var n=manifest.domains.length;
+for(var i=0;i<n;i++){positions.push({x:canvas.width*(i+1)/(n+1),y:150+Math.sin(i*1.2)*50})}
+manifest.domains.forEach(function(d,i){d.depends_on_domains.forEach(function(dep){var j=manifest.domains.findIndex(function(x){return x.slug===dep});if(j>=0){ctx.beginPath();ctx.moveTo(positions[j].x,positions[j].y);ctx.lineTo(positions[i].x,positions[i].y);ctx.strokeStyle='rgba(233,69,96,0.4)';ctx.lineWidth=2;ctx.stroke();var mx=(positions[j].x+positions[i].x)/2;var my=(positions[j].y+positions[i].y)/2;ctx.beginPath();ctx.moveTo(mx,my);var angle=Math.atan2(positions[i].y-positions[j].y,positions[i].x-positions[j].x);ctx.lineTo(mx-8*Math.cos(angle-0.4),my-8*Math.sin(angle-0.4));ctx.lineTo(mx-8*Math.cos(angle+0.4),my-8*Math.sin(angle+0.4));ctx.closePath();ctx.fillStyle='rgba(233,69,96,0.6)';ctx.fill()}})});
+manifest.domains.forEach(function(d,i){ctx.beginPath();ctx.arc(positions[i].x,positions[i].y,25,0,2*Math.PI);ctx.fillStyle=domainColors[i%domainColors.length];ctx.fill();ctx.fillStyle='#fff';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(d.name.split(' ')[0],positions[i].x,positions[i].y+4)});
+}
+
+function renderShared(){
+var seTable=document.querySelector('#sharedEntitiesTable tbody');
+seTable.innerHTML=manifest.shared_entities.map(function(e){return '<tr><td>'+e.name+'</td><td>'+e.table_name+'</td><td>'+e.owning_domain+'</td><td>'+e.used_by_domains.join(', ')+'</td></tr>'}).join('');
+
+var ccDiv=document.getElementById('crossCuttingCards');
+ccDiv.innerHTML=manifest.cross_cutting_concerns.map(function(c){return '<div class="card"><h3 style="text-transform:capitalize">'+c.concern.replace('_',' ')+'</h3><p style="font-size:.8rem;color:var(--text-muted)">'+c.summary+'</p></div>'}).join('');
+
+var skTable=document.querySelector('#sharedKernelTable tbody');
+skTable.innerHTML=manifest.shared_kernel_components.map(function(c){return '<tr><td>'+c.component_name+'</td><td>'+c.component_type+'</td><td>'+c.used_by_domains.join(', ')+'</td></tr>'}).join('');
+}
+
+function renderSchema(){
+var owTable=document.querySelector('#ownershipTable tbody');
+var rows=[];
+manifest.domains.forEach(function(d){d.entities.forEach(function(e){rows.push({table:e.table_name,domain:d.name,cols:e.columns_approx})})});
+owTable.innerHTML=rows.map(function(r){return '<tr><td>'+r.table+'</td><td>'+r.domain+'</td><td>'+r.cols+'</td></tr>'}).join('');
+
+var dbDiv=document.getElementById('dbStats');
+var totalTables=manifest.domains.reduce(function(s,d){return s+d.owned_tables.length},0);
+var totalCols=rows.reduce(function(s,r){return s+r.cols},0);
+dbDiv.innerHTML='<div class="grid-3"><div><div class="stat-value">'+totalTables+'</div><div class="stat-label">Total Tables</div></div><div><div class="stat-value">'+totalCols+'</div><div class="stat-label">Total Columns (approx)</div></div><div><div class="stat-value">'+manifest.shared_entities.length+'</div><div class="stat-label">Shared Entities</div></div></div>';
+}
+
+renderStats();renderOverview();renderBizLogic();renderDomains();renderShared();renderSchema();
+</script>
+</body>
+</html>

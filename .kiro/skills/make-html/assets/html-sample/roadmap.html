@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modernization Roadmap · Dental Dashboard ATX Assessment</title>
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3ED%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <section class="bg-aurora text-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12">
+          <span class="badge glass text-slate-100 border-white/20 mb-4"><span class="dot bg-emerald-400"></span> <span class="lang-en">Remediation &amp; Migration</span><span class="lang-th">การแก้ไข & การย้ายระบบ</span></span>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight"><span class="lang-en">Modernization Roadmap</span><span class="lang-th">แผนการปรับปรุงให้ทันสมัย</span></h1>
+          <p class="mt-3 max-w-2xl text-slate-300"><span class="lang-en">A four-priority remediation plan drawn from the technical debt report: fix the security misconfigurations first, then modernize the frontend build, update dependencies, and finally restructure the architecture.</span><span class="lang-th">แผนแก้ไขสี่ระดับความสำคัญที่สรุปจากรายงานหนี้ทางเทคนิค เริ่มจากแก้การตั้งค่าความปลอดภัยที่ผิดพลาด ต่อด้วยปรับปรุงระบบ build ฝั่งหน้าเว็บ อัปเดต dependency และปรับโครงสร้างสถาปัตยกรรมเป็นลำดับสุดท้าย</span></p>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-10 space-y-14">
+
+        <!-- RECOMMENDATION -->
+        <section class="card p-7 border-l-4 border-indigo-500">
+          <div class="flex items-center gap-2 mb-3">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0071e3" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>
+            <h2 class="text-xl font-bold text-slate-900"><span class="lang-en">AWS Transformation Recommendation</span><span class="lang-th">คำแนะนำการปรับเปลี่ยนบน AWS</span></h2>
+          </div>
+          <p class="text-slate-600 leading-relaxed"><span class="lang-en">The recommended transformation is <strong>AWS/modernization-readiness-analysis</strong>, already completed and scoring <strong>1.50 / 4.0 — Needs Work</strong>. Four AWS pathways were triggered: Cloud Native, Containers, Managed Databases and Modern DevOps. The suggested route is a <strong>Strangler Fig</strong> decomposition into five bounded contexts, which the report sizes at 6–18 months, with containerization, CI/CD and the RDS migration as the highest-priority earlier steps.</span><span class="lang-th">Transformation ที่แนะนำคือ <strong>AWS/modernization-readiness-analysis</strong> ซึ่งดำเนินการแล้วและได้คะแนน <strong>1.50 จาก 4.0 — ยังไม่พร้อม</strong> มีเส้นทาง AWS ที่ถูกกระตุ้น 4 เส้นทาง คือ Cloud Native, Containers, Managed Databases และ Modern DevOps แนวทางที่เสนอคือแยกระบบแบบ <strong>Strangler Fig</strong> ออกเป็น 5 bounded context ซึ่งรายงานประเมินไว้ที่ 6–18 เดือน โดยงาน containerization, CI/CD และการย้ายไป RDS เป็นงานลำดับต้นที่ควรทำก่อน</span></p>
+        </section>
+
+        <!-- REMEDIATION TIMELINE -->
+        <section id="remediation">
+          <h2 class="text-2xl font-bold text-slate-900 mb-6"><span class="lang-en">Prioritized Remediation Plan</span><span class="lang-th">แผนการแก้ไขตามลำดับความสำคัญ</span></h2>
+          <div class="timeline">
+            <!-- P1 -->
+            <div class="timeline-item">
+              <div class="card p-6">
+                <div class="flex items-center gap-3 flex-wrap mb-3">
+                  <span class="badge badge-red">Priority 1</span>
+                  <h3 class="font-bold text-slate-900"><span class="lang-en">Critical Security Fixes</span><span class="lang-th">แก้ไขความปลอดภัยที่สำคัญ</span></h3>
+                  <span class="chip ml-auto"><span class="lang-en">Quick Wins</span><span class="lang-th">ทำได้เร็ว</span></span>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-lg bg-rose-50 border border-rose-100 p-3"><strong class="text-slate-800">1.1</strong> <span class="lang-en">Remove the TLS certificate bypass in <code>server/event-bridge.js</code> and install the proper CA chain for TrakCare — coordinate with infrastructure first, since a self-signed certificate will otherwise break the connection.</span><span class="lang-th">ลบการข้ามตรวจใบรับรอง TLS ใน <code>server/event-bridge.js</code> และติดตั้งใบรับรอง CA ที่ถูกต้องสำหรับ TrakCare โดยต้องประสานกับทีมโครงสร้างพื้นฐานก่อน เพราะหากใบรับรองเป็นแบบ self-signed การเชื่อมต่อจะล้มเหลว</span></div>
+                  <div class="rounded-lg bg-rose-50 border border-rose-100 p-3"><strong class="text-slate-800">1.2</strong> <span class="lang-en">Replace <code>origin: "*"</code> in <code>server/middlewares/index.js</code> with the specific frontend domain from an environment variable.</span><span class="lang-th">เปลี่ยน <code>origin: "*"</code> ใน <code>server/middlewares/index.js</code> ให้เป็นโดเมนของหน้าเว็บที่ระบุผ่านตัวแปรสภาพแวดล้อม</span></div>
+                  <div class="rounded-lg bg-rose-50 border border-rose-100 p-3"><strong class="text-slate-800">1.3</strong> <span class="lang-en">Upgrade <code>axios</code> from 0.19.2 to 1.7.x and adjust the <code>.data</code> access and FormData usage that changes with it.</span><span class="lang-th">อัปเกรด <code>axios</code> จาก 0.19.2 เป็น 1.7.x และปรับการเข้าถึง <code>.data</code> กับการใช้ FormData ที่เปลี่ยนไปตามเวอร์ชัน</span></div>
+                  <div class="rounded-lg bg-rose-50 border border-rose-100 p-3"><strong class="text-slate-800">1.4</strong> <span class="lang-en">Replace the blanket <code>trust proxy</code> return value with an explicit list of trusted proxy IPs so rate limiting identifies real client addresses.</span><span class="lang-th">เปลี่ยนค่า <code>trust proxy</code> ที่คืนค่าเชื่อถือทุกตัว ให้เป็นรายการ IP ของ proxy ที่เชื่อถือได้อย่างชัดเจน เพื่อให้การจำกัดอัตราระบุ IP ของไคลเอนต์จริงได้</span></div>
+                </div>
+              </div>
+            </div>
+            <!-- P2 -->
+            <div class="timeline-item">
+              <div class="card p-6">
+                <div class="flex items-center gap-3 flex-wrap mb-3">
+                  <span class="badge badge-amber">Priority 2</span>
+                  <h3 class="font-bold text-slate-900"><span class="lang-en">Frontend Modernization</span><span class="lang-th">ปรับปรุงฝั่งหน้าเว็บให้ทันสมัย</span></h3>
+                  <span class="chip ml-auto"><span class="lang-en">Sprint</span><span class="lang-th">Sprint</span></span>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-lg bg-amber-50 border border-amber-100 p-3"><strong class="text-slate-800">2.1</strong> <span class="lang-en">Migrate the build from Create React App to Vite — add <code>@vitejs/plugin-react</code>, move <code>public/index.html</code> to the root, rewrite the npm scripts and drop <code>react-scripts</code>. This clears the Webpack 4 debt in one step.</span><span class="lang-th">ย้ายระบบ build จาก Create React App ไปเป็น Vite โดยเพิ่ม <code>@vitejs/plugin-react</code> ย้าย <code>public/index.html</code> ไปไว้ที่ราก เขียนสคริปต์ npm ใหม่ และถอด <code>react-scripts</code> ออก ซึ่งจะลบหนี้จาก Webpack 4 ได้ในขั้นตอนเดียว</span></div>
+                  <div class="rounded-lg bg-amber-50 border border-amber-100 p-3"><strong class="text-slate-800">2.2</strong> <span class="lang-en">Upgrade React 16 to 18 and Material UI 4 to MUI 5 — swap <code>ReactDOM.render</code> for <code>createRoot</code>, run the MUI v5 codemods, and replace Enzyme with React Testing Library. Vite must land first, since CRA 3 cannot run React 18.</span><span class="lang-th">อัปเกรด React 16 เป็น 18 และ Material UI 4 เป็น MUI 5 โดยเปลี่ยน <code>ReactDOM.render</code> เป็น <code>createRoot</code> รัน codemod ของ MUI v5 และเปลี่ยนจาก Enzyme ไปใช้ React Testing Library ทั้งนี้ต้องย้ายไป Vite ให้เสร็จก่อน เพราะ CRA 3 ไม่รองรับ React 18</span></div>
+                </div>
+              </div>
+            </div>
+            <!-- P3 -->
+            <div class="timeline-item">
+              <div class="card p-6">
+                <div class="flex items-center gap-3 flex-wrap mb-3">
+                  <span class="badge badge-blue">Priority 3</span>
+                  <h3 class="font-bold text-slate-900"><span class="lang-en">Dependency Updates</span><span class="lang-th">อัปเดต Dependency</span></h3>
+                  <span class="chip ml-auto"><span class="lang-en">Sprint → Epic</span><span class="lang-th">Sprint → Epic</span></span>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-lg bg-blue-50 border border-blue-100 p-3"><strong class="text-slate-800">3.1</strong> <span class="lang-en">Move react-router-dom 5 to 6: replace <code>&lt;Switch&gt;</code> with <code>&lt;Routes&gt;</code> and the <code>component</code> prop with <code>element</code> throughout <code>src/routes/index.js</code>.</span><span class="lang-th">อัปเกรด react-router-dom จาก 5 เป็น 6 โดยเปลี่ยน <code>&lt;Switch&gt;</code> เป็น <code>&lt;Routes&gt;</code> และเปลี่ยน prop <code>component</code> เป็น <code>element</code> ทั้งไฟล์ <code>src/routes/index.js</code></span></div>
+                  <div class="rounded-lg bg-blue-50 border border-blue-100 p-3"><strong class="text-slate-800">3.2</strong> <span class="lang-en">Retire unmaintained packages — swap <code>react-autosuggest</code> for MUI Autocomplete and remove the unused <code>bulma-extensions</code>.</span><span class="lang-th">เลิกใช้แพ็กเกจที่ไม่มีการดูแลต่อ โดยเปลี่ยน <code>react-autosuggest</code> ไปใช้ MUI Autocomplete และลบ <code>bulma-extensions</code> ที่ไม่ได้ใช้</span></div>
+                  <div class="rounded-lg bg-blue-50 border border-blue-100 p-3"><strong class="text-slate-800">3.3</strong> <span class="lang-en">Update the remaining majors one at a time with testing between each: antd 4→5, react-calendar 2→5 and node-schedule 1→2.</span><span class="lang-th">อัปเดตเวอร์ชันหลักที่เหลือทีละรายการพร้อมทดสอบระหว่างแต่ละขั้น คือ antd 4→5, react-calendar 2→5 และ node-schedule 1→2</span></div>
+                  <div class="rounded-lg bg-blue-50 border border-blue-100 p-3"><strong class="text-slate-800">3.4</strong> <span class="lang-en">Replace the alpha <code>express-fileupload 1.1.7-alpha.2</code> with a stable release before it reaches production again.</span><span class="lang-th">เปลี่ยน <code>express-fileupload 1.1.7-alpha.2</code> ที่เป็นรุ่น alpha ไปใช้รุ่นเสถียร ก่อนที่จะขึ้น production อีกครั้ง</span></div>
+                </div>
+              </div>
+            </div>
+            <!-- P4 -->
+            <div class="timeline-item">
+              <div class="card p-6">
+                <div class="flex items-center gap-3 flex-wrap mb-3">
+                  <span class="badge badge-violet">Priority 4</span>
+                  <h3 class="font-bold text-slate-900"><span class="lang-en">Architectural Improvements</span><span class="lang-th">ปรับปรุงเชิงสถาปัตยกรรม</span></h3>
+                  <span class="chip ml-auto"><span class="lang-en">Program</span><span class="lang-th">Program</span></span>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-3 text-sm">
+                  <div class="rounded-lg bg-violet-50 border border-violet-100 p-3"><strong class="text-slate-800">4.1</strong> <span class="lang-en">Break up the god component — move data fetching, the WebSocket subscription and the alarm calculation into custom hooks, and hold shared state in Context or Zustand.</span><span class="lang-th">แยก god component ออก โดยย้ายการดึงข้อมูล การ subscribe WebSocket และการคำนวณการแจ้งเตือนไปเป็น custom hook และเก็บสถานะที่ใช้ร่วมกันไว้ใน Context หรือ Zustand</span></div>
+                  <div class="rounded-lg bg-violet-50 border border-violet-100 p-3"><strong class="text-slate-800">4.2</strong> <span class="lang-en">Delete the dead code — the whole <code>server/modules.old/</code> tree, every <code>.old</code> duplicate and the commented-out blocks, roughly 2,500 lines in total.</span><span class="lang-th">ลบโค้ดที่ไม่ใช้ทั้งหมด ทั้งไดเรกทอรี <code>server/modules.old/</code> ไฟล์ <code>.old</code> ทุกไฟล์ และโค้ดที่คอมเมนต์ทิ้งไว้ รวมประมาณ 2,500 บรรทัด</span></div>
+                  <div class="rounded-lg bg-violet-50 border border-violet-100 p-3"><strong class="text-slate-800">4.3</strong> <span class="lang-en">Add real test coverage — unit tests for the <code>patientAppointment</code> business rules, integration tests for the 19 endpoints, and component tests for the blink and alarm logic.</span><span class="lang-th">เพิ่มการทดสอบให้ครอบคลุมจริง ทั้งการทดสอบหน่วยสำหรับกฎธุรกิจใน <code>patientAppointment</code> การทดสอบการเชื่อมต่อของ endpoint ทั้ง 19 เส้นทาง และการทดสอบคอมโพเนนต์สำหรับตรรกะไฟกะพริบและการแจ้งเตือน</span></div>
+                  <div class="rounded-lg bg-violet-50 border border-violet-100 p-3"><strong class="text-slate-800">4.4</strong> <span class="lang-en">Extract the SQL layer — move queries out of template literals, centralize the status-mapping CASE, and add migration tooling such as knex.</span><span class="lang-th">แยกชั้น SQL ออกมา โดยย้ายคิวรีออกจาก template literal รวมศูนย์ CASE ที่แปลงสถานะ และเพิ่มเครื่องมือ migration เช่น knex</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PHASED SEQUENCE (GANTT) -->
+        <section id="sequence">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Phased Sequence</span><span class="lang-th">ลำดับการดำเนินงานเป็นระยะ</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">Indicative sequencing of the four remediation phases. Timelines are relative and should be calibrated to team capacity.</span><span class="lang-th">ลำดับเวลาโดยประมาณของทั้งสี่เฟส เป็นค่าสัมพัทธ์และควรปรับตามกำลังของทีม</span></p>
+          <div class="mermaid-wrap">
+            <pre class="mermaid">
+gantt
+    title Dental Dashboard Modernization Phases
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b %Y
+    section Priority 1 · Security
+    TLS bypass and CORS          :p1a, 2026-07-01, 14d
+    axios upgrade and proxy fix  :p1b, after p1a, 14d
+    section Priority 2 · Frontend
+    CRA to Vite migration        :p2a, after p1b, 30d
+    React 18 and MUI 5           :p2b, after p2a, 45d
+    section Priority 3 · Dependencies
+    Router 6 and package sweep   :p3a, after p2b, 30d
+    section Priority 4 · Architecture
+    State extraction and hooks   :p4a, after p3a, 45d
+    Dead code and SQL layer      :p4b, after p4a, 30d
+    Test coverage build-out      :p4c, after p4a, 60d
+    section AWS quick wins
+    Containerize and CI/CD       :aw1, 2026-07-15, 30d
+    RDS migration                :aw2, after aw1, 21d
+            </pre>
+          </div>
+        </section>
+
+        <!-- TECH DEBT REGISTER -->
+        <section id="debt-register">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Technical Debt Register</span><span class="lang-th">ทะเบียนหนี้ทางเทคนิค</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">20 findings from the technical debt report — 6 High, 12 Medium and 2 Low.</span><span class="lang-th">20 ประเด็นจากรายงานหนี้ทางเทคนิค แบ่งเป็นระดับสูง 6 กลาง 12 และต่ำ 2 รายการ</span></p>
+          <div class="card overflow-hidden">
+            <div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>#</th><th><span class="lang-en">Severity</span><span class="lang-th">ความรุนแรง</span></th><th><span class="lang-en">Finding</span><span class="lang-th">ประเด็น</span></th><th><span class="lang-en">Location</span><span class="lang-th">ตำแหน่ง</span></th></tr></thead>
+              <tbody id="debtRows"></tbody>
+            </table></div>
+          </div>
+        </section>
+
+        <!-- LEARNING -->
+        <section id="learning">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Learning Resources</span><span class="lang-th">แหล่งเรียนรู้</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">AWS learning plans aligned to the triggered modernization pathways.</span><span class="lang-th">แผนการเรียนรู้ของ AWS ที่สอดคล้องกับเส้นทางการปรับปรุงที่ถูกกระตุ้น</span></p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <a href="https://skillbuilder.aws/learning-plan/CMK2J48MVN" target="_blank" rel="noopener" class="card card-hover p-5 flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600 grid place-items-center shrink-0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5Z"/><path d="M12 14v7"/></svg></span>
+              <div><div class="font-semibold text-slate-800 text-sm">Move to Cloud Native Serverless</div><div class="text-xs text-slate-400">skillbuilder.aws · Cloud Design Patterns</div></div>
+            </a>
+            <a href="https://skillbuilder.aws/learning-plan/CDA8Y4JRRR" target="_blank" rel="noopener" class="card card-hover p-5 flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-sky-100 text-sky-600 grid place-items-center shrink-0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span>
+              <div><div class="font-semibold text-slate-800 text-sm">Move to Containers with Amazon ECS</div><div class="text-xs text-slate-400">skillbuilder.aws · EKS Workshop</div></div>
+            </a>
+            <a href="https://skillbuilder.aws/learning-plan/VNJ8FZ3ZRC" target="_blank" rel="noopener" class="card card-hover p-5 flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 grid place-items-center shrink-0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/></svg></span>
+              <div><div class="font-semibold text-slate-800 text-sm">Move to Managed Databases</div><div class="text-xs text-slate-400">skillbuilder.aws · AWS DMS Getting Started</div></div>
+            </a>
+            <a href="https://skillbuilder.aws/learning-plan/1FGEQKGPQD" target="_blank" rel="noopener" class="card card-hover p-5 flex items-center gap-4">
+              <span class="w-10 h-10 rounded-lg bg-violet-100 text-violet-600 grid place-items-center shrink-0"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M3 20h.01M12 4v16M6 8l6-4 6 4"/></svg></span>
+              <div><div class="font-semibold text-slate-800 text-sm">Move to Modern DevOps</div><div class="text-xs text-slate-400">skillbuilder.aws · DevOps on AWS</div></div>
+            </a>
+          </div>
+          <p class="text-xs text-slate-400 mt-4"><span class="lang-en">Links open AWS Skill Builder. Content sourced from the AWS Transform (ATX) modernization-readiness report.</span><span class="lang-th">ลิงก์เปิดไปยัง AWS Skill Builder เนื้อหาอ้างอิงจากรายงาน modernization-readiness ของ AWS Transform (ATX)</span></p>
+        </section>
+
+        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+          <a href="index.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+            <div><div class="text-xs text-slate-400"><span class="lang-en">Back to</span><span class="lang-th">กลับไปที่</span></div><div class="font-bold text-slate-800"><span class="lang-en">Executive Dashboard</span><span class="lang-th">แดชบอร์ดผู้บริหาร</span></div></div>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 text-center text-xs text-slate-400">© <span data-year></span> CUSTOMER_NAME · <span class="lang-en">Generated from AWS Transform (ATX) reports</span><span class="lang-th">สร้างจากรายงาน AWS Transform (ATX)</span></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+  (function () {
+    // Shape: [{ s:"High|Medium|Low", en:"finding (EN)", th:"finding (TH)", loc:"source location" }, ...]
+    const debt = [
+      {
+            "s": "High",
+            "en": "React 16.13.1 is end of life — no security patches, no hooks-era APIs",
+            "th": "React 16.13.1 หมดระยะสนับสนุน ไม่มีแพตช์ความปลอดภัยและไม่มี API ยุค hooks",
+            "loc": "package.json"
+      },
+      {
+            "s": "High",
+            "en": "react-scripts 3.4.1 — Create React App is deprecated",
+            "th": "react-scripts 3.4.1 — Create React App เลิกสนับสนุนแล้ว",
+            "loc": "package.json"
+      },
+      {
+            "s": "High",
+            "en": "Webpack 4.42.0 is end of life; Webpack 5 stable since 2020",
+            "th": "Webpack 4.42.0 หมดระยะสนับสนุน ขณะที่ Webpack 5 เสถียรตั้งแต่ปี 2020",
+            "loc": "webpack.config.js"
+      },
+      {
+            "s": "High",
+            "en": "Material UI 4.x is end of life; current line is MUI 5/6",
+            "th": "Material UI 4.x หมดระยะสนับสนุน เวอร์ชันปัจจุบันคือ MUI 5/6",
+            "loc": "package.json"
+      },
+      {
+            "s": "High",
+            "en": "TLS certificate validation disabled for all outbound HTTPS",
+            "th": "ปิดการตรวจสอบใบรับรอง TLS สำหรับการเรียก HTTPS ออกทั้งหมด",
+            "loc": "server/event-bridge.js"
+      },
+      {
+            "s": "High",
+            "en": "Plaintext credentials committed in environment files",
+            "th": "ข้อมูลรับรองแบบข้อความธรรมดาถูก commit ไว้ในไฟล์ environment",
+            "loc": ".env.production"
+      },
+      {
+            "s": "Medium",
+            "en": "axios 0.19.2 — security fixes shipped in the 1.x line",
+            "th": "axios 0.19.2 — การแก้ช่องโหว่อยู่ในสาย 1.x",
+            "loc": "package.json"
+      },
+      {
+            "s": "Medium",
+            "en": "react-router-dom 5.1.2 — v6 stable since 2021",
+            "th": "react-router-dom 5.1.2 — เวอร์ชัน 6 เสถียรตั้งแต่ปี 2021",
+            "loc": "src/routes/index.js"
+      },
+      {
+            "s": "Medium",
+            "en": "express-fileupload 1.1.7-alpha.2 — alpha release in production",
+            "th": "express-fileupload 1.1.7-alpha.2 — ใช้รุ่น alpha ใน production",
+            "loc": "package.json"
+      },
+      {
+            "s": "Medium",
+            "en": "CORS configured as origin \"*\" on the App Service",
+            "th": "ตั้งค่า CORS เป็น origin \"*\" บน App Service",
+            "loc": "server/middlewares/index.js"
+      },
+      {
+            "s": "Medium",
+            "en": "trust proxy accepts every proxy, allowing rate-limit bypass",
+            "th": "trust proxy เชื่อถือ proxy ทุกตัว ทำให้เลี่ยงการจำกัดอัตราได้",
+            "loc": "server/event-bridge.js"
+      },
+      {
+            "s": "Medium",
+            "en": "God component holds all state, fetching, sockets and alarm logic",
+            "th": "god component เก็บสถานะ การดึงข้อมูล socket และตรรกะแจ้งเตือนไว้ทั้งหมด",
+            "loc": "src/routes/index.js"
+      },
+      {
+            "s": "Medium",
+            "en": "Mixed concerns — HTTP, SQL, business rules and TrakCare in one file",
+            "th": "ปนหลายหน้าที่ — HTTP, SQL, กฎธุรกิจ และ TrakCare อยู่ในไฟล์เดียว",
+            "loc": "server/modules/patientAppointment.js"
+      },
+      {
+            "s": "Medium",
+            "en": "Module-level mutable cache breaks under PM2 cluster mode",
+            "th": "แคชระดับโมดูลที่แก้ค่าได้ทำงานผิดพลาดในโหมด cluster ของ PM2",
+            "loc": "server/modules/*.js"
+      },
+      {
+            "s": "Medium",
+            "en": "Polling every 6 seconds duplicates the Socket.IO push path",
+            "th": "การ poll ทุก 6 วินาทีซ้ำซ้อนกับการ push ผ่าน Socket.IO",
+            "loc": "src/routes/index.js"
+      },
+      {
+            "s": "Medium",
+            "en": "antd 4.1.1, bulma 0.8.1 and node-schedule 1.3.2 are majors behind",
+            "th": "antd 4.1.1, bulma 0.8.1 และ node-schedule 1.3.2 ตามหลังหลายเวอร์ชันหลัก",
+            "loc": "package.json"
+      },
+      {
+            "s": "Medium",
+            "en": "Enzyme is unmaintained for modern React",
+            "th": "Enzyme ไม่มีการดูแลต่อสำหรับ React รุ่นใหม่",
+            "loc": "src/setupTests.js"
+      },
+      {
+            "s": "Medium",
+            "en": "Only one test file exists for the whole product",
+            "th": "มีไฟล์ทดสอบเพียงไฟล์เดียวสำหรับทั้งระบบ",
+            "loc": "src/pages/Calendar/index.test.js"
+      },
+      {
+            "s": "Low",
+            "en": "Dead code retained in modules.old/ and .old duplicates",
+            "th": "โค้ดที่ไม่ใช้ยังค้างอยู่ใน modules.old/ และไฟล์ .old",
+            "loc": "server/modules.old/"
+      },
+      {
+            "s": "Low",
+            "en": "No structured logging or observability instrumentation",
+            "th": "ไม่มี structured logging หรือการติดตั้งเครื่องมือ observability",
+            "loc": "server/logger.js"
+      }
+];
+    const b = { High:"badge-red", Medium:"badge-amber", Low:"badge-green" };
+    const th = { High:"สูง", Medium:"กลาง", Low:"ต่ำ" };
+    document.getElementById("debtRows").innerHTML = debt.map((d,i)=>`
+      <tr><td class="text-slate-400">${i+1}</td>
+        <td><span class="badge ${b[d.s]}"><span class="lang-en">${d.s}</span><span class="lang-th">${th[d.s]}</span></span></td>
+        <td class="text-slate-700"><span class="lang-en">${d.en}</span><span class="lang-th">${d.th}</span></td>
+        <td><code>${d.loc}</code></td></tr>`).join("");
+    document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+  })();
+  </script>
+</body>
+</html>

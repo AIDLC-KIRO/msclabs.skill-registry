@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dental Dashboard · AWS Transform Assessment — Executive Dashboard</title>
+  <meta name="description" content="Enterprise assessment of the Dental Dashboard application: codebase analysis, business rules, and modernization readiness for CUSTOMER_NAME." />
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "Noto Sans Thai", "ui-sans-serif", "system-ui", "sans-serif"],
+            mono: ["JetBrains Mono", "ui-monospace", "monospace"],
+          },
+          colors: {
+            brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"},
+            ink:{950:"#000000"},
+          },
+        },
+      },
+    };
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3ES%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <!-- HERO -->
+      <section class="bg-aurora text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.06]" style="background-image:radial-gradient(#fff 1px,transparent 1px);background-size:22px 22px;"></div>
+        <div class="relative max-w-[1180px] mx-auto px-6 lg:px-10 py-14 lg:py-20">
+          <div class="flex flex-wrap items-center gap-2 mb-5">
+            <span class="badge glass text-slate-100 border-white/20"><span class="dot bg-emerald-400"></span> AWS Transform (ATX)</span>
+            <span class="badge glass text-slate-100 border-white/20"><span class="lang-en">Assessment Report</span><span class="lang-th">รายงานการประเมิน</span></span>
+            <span class="badge glass text-slate-100 border-white/20">CUSTOMER_NAME</span>
+          </div>
+          <h1 class="text-4xl lg:text-6xl font-black tracking-tight leading-[1.05]">
+            Dental Dashboard
+            <span class="block text-2xl lg:text-3xl font-bold mt-3 text-gradient">
+              <span class="lang-en">Modernization Assessment & Codebase Intelligence</span>
+              <span class="lang-th">การประเมินความพร้อมสู่ความทันสมัยและการวิเคราะห์เชิงลึกของโค้ด</span>
+            </span>
+          </h1>
+          <p class="mt-6 max-w-2xl text-slate-300 text-base lg:text-lg leading-relaxed">
+            <span class="lang-en">An evidence-based analysis of the dental-dashboard-app platform — architecture, real-time event flow, technical debt and AWS modernization readiness for a 30-room dental clinic integrated with TrakCare.</span>
+            <span class="lang-th">การวิเคราะห์แพลตฟอร์ม dental-dashboard-app บนพื้นฐานหลักฐานจริง ครอบคลุมสถาปัตยกรรม การไหลของเหตุการณ์แบบเรียลไทม์ หนี้ทางเทคนิค และความพร้อมสู่การปรับปรุงบน AWS สำหรับคลินิกทันตกรรม 30 ห้องที่เชื่อมต่อกับ TrakCare</span>
+          </p>
+
+          <div class="mt-9 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl">
+            <div class="glass rounded-2xl p-4">
+              <div class="text-3xl font-black kpi"><span data-count="7800">0</span></div>
+              <div class="text-xs text-slate-400 mt-1"><span class="lang-en">Lines of Code · app source</span><span class="lang-th">บรรทัดโค้ด · ซอร์สแอป</span></div>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <div class="text-3xl font-black kpi"><span data-count="5">0</span></div>
+              <div class="text-xs text-slate-400 mt-1"><span class="lang-en">Business Domains</span><span class="lang-th">โดเมนธุรกิจ</span></div>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <div class="text-3xl font-black kpi"><span data-count="13">0</span></div>
+              <div class="text-xs text-slate-400 mt-1"><span class="lang-en">Database Tables</span><span class="lang-th">ตารางฐานข้อมูล</span></div>
+            </div>
+            <div class="glass rounded-2xl p-4">
+              <div class="text-3xl font-black kpi text-rose-400"><span data-count="0">0</span>%</div>
+              <div class="text-xs text-slate-400 mt-1"><span class="lang-en">Test Coverage <span class="text-slate-500">(1 test file)</span></span><span class="lang-th">ความครอบคลุมการทดสอบ <span class="text-slate-500">(มีไฟล์ทดสอบ 1 ไฟล์)</span></span></div>
+            </div>
+          </div>
+
+          <div class="mt-9 flex flex-wrap gap-3">
+            <a href="modernization.html" class="inline-flex items-center gap-2 bg-white text-indigo-700 font-bold text-sm px-5 py-3 rounded-xl hover:bg-indigo-50 transition shadow-lg shadow-indigo-900/30">
+              <span class="lang-en">View Readiness Assessment</span><span class="lang-th">ดูการประเมินความพร้อม</span>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+            <a href="codebase.html" class="inline-flex items-center gap-2 glass text-white font-semibold text-sm px-5 py-3 rounded-xl hover:bg-white/10 transition border-white/20">
+              <span class="lang-en">Explore Codebase Analysis</span><span class="lang-th">สำรวจการวิเคราะห์โค้ด</span>
+            </a>
+            <a href="knowledge-graph.html" class="inline-flex items-center gap-2 glass text-white font-semibold text-sm px-5 py-3 rounded-xl hover:bg-white/10 transition border-white/20">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M6.7 7.4 10.6 15.9M17.3 7.4 13.4 15.9M7.2 6h9.6"/></svg>
+              <span class="lang-en">Open Knowledge Graph</span><span class="lang-th">เปิด Knowledge Graph</span>
+            </a>
+            <a href="application-reference.html" class="inline-flex items-center gap-2 glass text-white font-semibold text-sm px-5 py-3 rounded-xl hover:bg-white/10 transition border-white/20">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg>
+              <span class="lang-en">Application Reference</span><span class="lang-th">คู่มืออ้างอิงแอป</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12 space-y-14">
+
+        <!-- VERDICT + APP IDENTITY -->
+        <section class="grid lg:grid-cols-3 gap-6">
+          <div class="card p-7 lg:col-span-2 reveal">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="w-2 h-6 rounded brand-gradient"></span>
+              <h2 class="text-xl font-bold text-slate-900"><span class="lang-en">Executive Summary</span><span class="lang-th">บทสรุปสำหรับผู้บริหาร</span></h2>
+            </div>
+            <p class="text-slate-600 leading-relaxed text-[0.95rem]">
+              <span class="lang-en"><strong>dental-dashboard-app v1.1.0</strong> is a real-time dental clinic operations dashboard built on <strong>React 16.13</strong> and <strong>Express 4.21</strong> with <strong>PostgreSQL 14.2</strong>. Three PM2-managed Node processes — an App Service on port 8081, an Event Bridge on 8080 and a cron Scheduler — keep 30 exam rooms, doctor schedules and patient queues in sync with the TrakCare hospital information system and the OPD Queue.</span>
+              <span class="lang-th"><strong>dental-dashboard-app v1.1.0</strong> คือแดชบอร์ดบริหารงานคลินิกทันตกรรมแบบเรียลไทม์ พัฒนาบน <strong>React 16.13</strong> และ <strong>Express 4.21</strong> ใช้ <strong>PostgreSQL 14.2</strong> ประกอบด้วยโปรเซส Node ที่จัดการด้วย PM2 สามตัว คือ App Service พอร์ต 8081, Event Bridge พอร์ต 8080 และ Scheduler แบบ cron ซึ่งทำให้ห้องตรวจ 30 ห้อง ตารางแพทย์ และคิวผู้ป่วย ซิงก์กับระบบสารสนเทศโรงพยาบาล TrakCare และระบบคิว OPD</span>
+            </p>
+            <p class="text-slate-600 leading-relaxed text-[0.95rem] mt-4">
+              <span class="lang-en">The assessment scores the platform <strong>1.50 / 4.0 — Needs Work</strong> for cloud-native adoption. The blockers are operational rather than functional: no Infrastructure as Code, no CI/CD, plaintext credentials in <code>.env</code> files, and a single PostgreSQL instance with no replica. A Strangler Fig migration into five bounded contexts is recommended, with containerization, CI/CD and an RDS move as the highest-priority earlier steps.</span>
+              <span class="lang-th">ผลประเมินให้คะแนนแพลตฟอร์มนี้ <strong>1.50 จาก 4.0 — ยังไม่พร้อม</strong> สำหรับการใช้งานแบบ cloud-native อุปสรรคหลักเป็นเรื่องการปฏิบัติการมากกว่าฟังก์ชันงาน คือไม่มี Infrastructure as Code ไม่มี CI/CD เก็บข้อมูลรับรองแบบข้อความธรรมดาในไฟล์ <code>.env</code> และมีฐานข้อมูล PostgreSQL ชุดเดียวโดยไม่มี replica จึงแนะนำให้ย้ายระบบแบบ Strangler Fig ออกเป็น 5 bounded context พร้อมทำ containerization, CI/CD และย้ายไป RDS เป็นงานลำดับต้นที่ควรทำก่อน</span>
+            </p>
+
+            <div class="grid sm:grid-cols-3 gap-3 mt-6">
+              <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
+                <div class="text-xs text-slate-500 mb-1"><span class="lang-en">Architecture</span><span class="lang-th">สถาปัตยกรรม</span></div>
+                <div class="font-bold text-slate-800 text-sm">Multi-service monolith</div>
+              </div>
+              <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
+                <div class="text-xs text-slate-500 mb-1"><span class="lang-en">Deployment</span><span class="lang-th">การติดตั้ง</span></div>
+                <div class="font-bold text-slate-800 text-sm">PM2 · bare-metal / VM</div>
+              </div>
+              <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
+                <div class="text-xs text-slate-500 mb-1"><span class="lang-en">Source Files</span><span class="lang-th">ไฟล์ซอร์สโค้ด</span></div>
+                <div class="font-bold text-slate-800 text-sm">63 <span class="lang-en">files</span><span class="lang-th">ไฟล์</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Score gauge -->
+          <div class="card p-7 flex flex-col items-center justify-center text-center reveal">
+            <div class="text-sm font-semibold text-slate-500 mb-4"><span class="lang-en">Overall Modernization Readiness</span><span class="lang-th">ความพร้อมสู่ความทันสมัยโดยรวม</span></div>
+            <div class="ring" data-p="37.5" style="--ring-c:#ff9500;">
+              <div class="text-center">
+                <div class="text-4xl font-black text-slate-900 kpi">1.50</div>
+                <div class="text-xs text-slate-400 font-semibold">/ 4.0</div>
+              </div>
+            </div>
+            <span class="badge badge-amber mt-5 text-sm px-4 py-1.5"><span class="lang-en">🟠 Needs Work</span><span class="lang-th">🟠 ต้องปรับปรุง</span></span>
+            <p class="text-xs text-slate-500 mt-4 leading-relaxed"><span class="lang-en">10 High · 23 Medium · 1 Low findings across 5 categories · INF, SEC &amp; OPS rated Not Ready</span><span class="lang-th">พบประเด็นระดับสูง 10 · กลาง 23 · ต่ำ 1 ครอบคลุม 5 หมวด · หมวด INF, SEC และ OPS อยู่ระดับยังไม่พร้อม</span></p>
+          </div>
+        </section>
+
+        <!-- REPORT CARDS -->
+        <section class="reveal">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="w-2 h-6 rounded brand-gradient"></span>
+            <h2 class="text-xl font-bold text-slate-900"><span class="lang-en">Assessment Reports</span><span class="lang-th">รายงานการประเมิน</span></h2>
+          </div>
+          <div class="grid md:grid-cols-3 gap-6">
+            <a href="codebase.html" class="card card-hover p-6 group">
+              <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 grid place-items-center mb-4 group-hover:scale-110 transition">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></svg>
+              </div>
+              <h3 class="font-bold text-slate-900 mb-2"><span class="lang-en">Comprehensive Codebase Analysis</span><span class="lang-th">การวิเคราะห์โค้ดแบบครอบคลุม</span></h3>
+              <p class="text-sm text-slate-500 leading-relaxed"><span class="lang-en">Architecture, components, patterns, code metrics, technical debt, and security posture.</span><span class="lang-th">สถาปัตยกรรม องค์ประกอบ รูปแบบการออกแบบ เมตริกโค้ด หนี้ทางเทคนิค และสถานะความปลอดภัย</span></p>
+              <div class="mt-4 text-indigo-600 text-sm font-semibold flex items-center gap-1"><span class="lang-en">Explore</span><span class="lang-th">สำรวจ</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></div>
+            </a>
+            <a href="domains.html" class="card card-hover p-6 group">
+              <div class="w-12 h-12 rounded-xl bg-violet-100 text-violet-600 grid place-items-center mb-4 group-hover:scale-110 transition">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"/><path d="m7 16.5-4.74-2.85M7 16.5l5-3M7 16.5v5.17"/><path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"/></svg>
+              </div>
+              <h3 class="font-bold text-slate-900 mb-2"><span class="lang-en">Business Rules Extraction</span><span class="lang-th">การสกัดกฎทางธุรกิจ</span></h3>
+              <p class="text-sm text-slate-500 leading-relaxed"><span class="lang-en">5 bounded contexts, domain decomposition, workflows, and cross-cutting concerns.</span><span class="lang-th">5 bounded contexts การแยกโดเมน เวิร์กโฟลว์ และ cross-cutting concerns</span></p>
+              <div class="mt-4 text-violet-600 text-sm font-semibold flex items-center gap-1"><span class="lang-en">Explore</span><span class="lang-th">สำรวจ</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></div>
+            </a>
+            <a href="modernization.html" class="card card-hover p-6 group">
+              <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 grid place-items-center mb-4 group-hover:scale-110 transition">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+              </div>
+              <h3 class="font-bold text-slate-900 mb-2"><span class="lang-en">Modernization Readiness</span><span class="lang-th">ความพร้อมสู่ความทันสมัย</span></h3>
+              <p class="text-sm text-slate-500 leading-relaxed"><span class="lang-en">Scored assessment across INF, APP, DATA, SEC, OPS with AWS modernization pathways.</span><span class="lang-th">การประเมินแบบให้คะแนนใน INF, APP, DATA, SEC, OPS พร้อมเส้นทางการปรับปรุงบน AWS</span></p>
+              <div class="mt-4 text-sky-600 text-sm font-semibold flex items-center gap-1"><span class="lang-en">Explore</span><span class="lang-th">สำรวจ</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></div>
+            </a>
+          </div>
+        </section>
+
+        <!-- READINESS BREAKDOWN -->
+        <section class="card p-7 reveal">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="w-2 h-6 rounded brand-gradient"></span>
+            <h2 class="text-xl font-bold text-slate-900"><span class="lang-en">Readiness by Category</span><span class="lang-th">ความพร้อมแยกตามหมวด</span></h2>
+          </div>
+          <div class="grid md:grid-cols-2 gap-x-10 gap-y-5">
+            <!-- items -->
+            <div>
+              <div class="flex justify-between text-sm mb-1.5"><span class="font-semibold text-slate-700">Infrastructure &amp; DevOps (INF)</span><span class="font-bold text-slate-900">1.09</span></div>
+              <div class="bar"><span data-w="27.25%" style="background:linear-gradient(90deg,#ff3b30,#ff9500)"></span></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1.5"><span class="font-semibold text-slate-700">Application Architecture (APP)</span><span class="font-bold text-slate-900">2.00</span></div>
+              <div class="bar"><span data-w="50%" style="background:linear-gradient(90deg,#ff9500,#ffcc00)"></span></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1.5"><span class="font-semibold text-slate-700">Data Platform (DATA)</span><span class="font-bold text-slate-900">2.25</span></div>
+              <div class="bar"><span data-w="56.25%" style="background:linear-gradient(90deg,#ff9500,#ffcc00)"></span></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1.5"><span class="font-semibold text-slate-700">Security Baseline (SEC)</span><span class="font-bold text-slate-900">1.17</span></div>
+              <div class="bar"><span data-w="29.25%" style="background:linear-gradient(90deg,#ff3b30,#ff9500)"></span></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-1.5"><span class="font-semibold text-slate-700">Operations &amp; Observability (OPS)</span><span class="font-bold text-slate-900">1.00</span></div>
+              <div class="bar"><span data-w="25%" style="background:linear-gradient(90deg,#ff3b30,#ff9500)"></span></div>
+            </div>
+            <div class="flex items-end">
+              <p class="text-xs text-slate-500 leading-relaxed"><span class="lang-en">Scale: 1 = Not Ready · 2 = Needs Work · 3 = Ready · 4 = Optimized. INF, SEC and OPS sit below the 2.0 threshold (Not Ready); APP and DATA reach the Needs Work band.</span><span class="lang-th">เกณฑ์: 1 = ยังไม่พร้อม · 2 = ต้องปรับปรุง · 3 = พร้อม · 4 = เหมาะสมที่สุด หมวด INF, SEC และ OPS ต่ำกว่าเกณฑ์ 2.0 (ยังไม่พร้อม) ส่วน APP และ DATA อยู่ในช่วงต้องปรับปรุง</span></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOP GAPS -->
+        <section class="reveal">
+          <div class="flex items-center gap-2 mb-6">
+            <span class="w-2 h-6 rounded brand-gradient"></span>
+            <h2 class="text-xl font-bold text-slate-900"><span class="lang-en">Top 5 Critical Gaps</span><span class="lang-th">ช่องว่างวิกฤต 5 อันดับแรก</span></h2>
+          </div>
+          <div class="space-y-3">
+            <div class="card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+              <span class="badge badge-red shrink-0">INF-Q10</span>
+              <div class="flex-1">
+                <div class="font-semibold text-slate-800 text-sm"><span class="lang-en">Infrastructure as Code Coverage</span><span class="lang-th">ความครอบคลุมของ Infrastructure as Code</span></div>
+                <div class="text-sm text-slate-500"><span class="lang-en">No IaC — all infrastructure is manually provisioned, so deployments cannot be automated and disaster recovery is impossible.</span><span class="lang-th">ไม่มี IaC เลย โครงสร้างพื้นฐานทั้งหมดสร้างด้วยมือ ทำให้ไม่สามารถทำ deployment แบบอัตโนมัติและไม่สามารถกู้คืนระบบได้</span></div>
+              </div>
+              <span class="chip text-rose-600 border-rose-200 bg-rose-50"><span class="lang-en">Critical</span><span class="lang-th">วิกฤต</span></span>
+            </div>
+            <div class="card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+              <span class="badge badge-red shrink-0">INF-Q11</span>
+              <div class="flex-1">
+                <div class="font-semibold text-slate-800 text-sm"><span class="lang-en">CI/CD Automation</span><span class="lang-th">ระบบ CI/CD อัตโนมัติ</span></div>
+                <div class="text-sm text-slate-500"><span class="lang-en">No CI/CD pipeline — releases run as manual PM2 deployments driven by batch scripts.</span><span class="lang-th">ไม่มี CI/CD pipeline การปล่อยเวอร์ชันใช้การ deploy ด้วย PM2 แบบมือผ่านสคริปต์ batch</span></div>
+              </div>
+              <span class="chip text-rose-600 border-rose-200 bg-rose-50"><span class="lang-en">Critical</span><span class="lang-th">วิกฤต</span></span>
+            </div>
+            <div class="card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+              <span class="badge badge-red shrink-0">SEC-Q5</span>
+              <div class="flex-1">
+                <div class="font-semibold text-slate-800 text-sm"><span class="lang-en">Secrets Management</span><span class="lang-th">การจัดการความลับ</span></div>
+                <div class="text-sm text-slate-500"><span class="lang-en">Plaintext database, API and TrakCare credentials sit in .env files inside the repository.</span><span class="lang-th">รหัสผ่านฐานข้อมูล API key และข้อมูลรับรองของ TrakCare เก็บเป็นข้อความธรรมดาในไฟล์ .env ภายใน repository</span></div>
+              </div>
+              <span class="chip text-rose-600 border-rose-200 bg-rose-50"><span class="lang-en">Critical</span><span class="lang-th">วิกฤต</span></span>
+            </div>
+            <div class="card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+              <span class="badge badge-red shrink-0">OPS-Q6</span>
+              <div class="flex-1">
+                <div class="font-semibold text-slate-800 text-sm"><span class="lang-en">Integration Testing</span><span class="lang-th">การทดสอบแบบ Integration</span></div>
+                <div class="text-sm text-slate-500"><span class="lang-en">Only one test file exists in the entire repository; no integration test suite, which blocks safe decomposition.</span><span class="lang-th">มีไฟล์ทดสอบเพียงไฟล์เดียวทั้ง repository ไม่มีชุดทดสอบ integration ซึ่งเป็นอุปสรรคต่อการแยกระบบอย่างปลอดภัย</span></div>
+              </div>
+              <span class="chip text-rose-600 border-rose-200 bg-rose-50"><span class="lang-en">Critical</span><span class="lang-th">วิกฤต</span></span>
+            </div>
+            <div class="card p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+              <span class="badge badge-red shrink-0">INF-Q1</span>
+              <div class="flex-1">
+                <div class="font-semibold text-slate-800 text-sm"><span class="lang-en">Managed Compute</span><span class="lang-th">Managed Compute</span></div>
+                <div class="text-sm text-slate-500"><span class="lang-en">All compute runs on bare-metal or VM infrastructure managed via PM2 — no managed compute, no auto-scaling.</span><span class="lang-th">การประมวลผลทั้งหมดอยู่บน bare-metal หรือ VM ที่จัดการด้วย PM2 ไม่มี managed compute และไม่มี auto-scaling</span></div>
+              </div>
+              <span class="chip text-amber-600 border-amber-200 bg-amber-50"><span class="lang-en">High</span><span class="lang-th">สูง</span></span>
+            </div>
+          </div>
+        </section>
+
+        <!-- DOMAIN GRID -->
+        <section class="reveal">
+          <div class="flex items-center justify-between gap-2 mb-6 flex-wrap">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-6 rounded brand-gradient"></span>
+              <h2 class="text-xl font-bold text-slate-900"><span class="lang-en">5 Business Domains</span><span class="lang-th">5 โดเมนธุรกิจ</span></h2>
+            </div>
+            <a href="domains.html" class="text-sm font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1"><span class="lang-en">View all details</span><span class="lang-th">ดูรายละเอียดทั้งหมด</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></a>
+          </div>
+          <div id="domainGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </section>
+
+        <!-- SYSTEM CONTEXT DIAGRAM -->
+        <section class="card p-7 reveal">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-6 rounded brand-gradient"></span>
+            <h2 class="text-xl font-bold text-slate-900"><span class="lang-en">System Context</span><span class="lang-th">บริบทของระบบ</span></h2>
+          </div>
+          <p class="text-sm text-slate-500 mb-5"><span class="lang-en">High-level view of the platform: clinic staff on the React SPA, the three PM2 services, the single dental_db instance, and the two external systems — TrakCare HIS and the OPD Queue.</span><span class="lang-th">มุมมองระดับสูงของแพลตฟอร์ม ประกอบด้วยเจ้าหน้าที่คลินิกที่ใช้ React SPA, เซอร์วิส PM2 สามตัว, ฐานข้อมูล dental_db ชุดเดียว และระบบภายนอกสองระบบ คือ TrakCare HIS และระบบคิว OPD</span></p>
+          <div class="mermaid-wrap">
+            <pre class="mermaid">
+graph TB
+    subgraph USERS["Clinic staff"]
+        STAFF["Dentists · assistants · front desk<br/>web browser"]
+    end
+    subgraph SYS["Dental Dashboard system"]
+        SPA["React 16 SPA<br/>port 3001"]
+        APP["App Service<br/>REST :8081 · PM2 cluster"]
+        EB["Event Bridge<br/>Socket.IO :8080"]
+        SCH["Scheduler Service<br/>node-schedule cron"]
+    end
+    subgraph EXTERNAL["External systems"]
+        TRAK["TrakCare HIS<br/>OAuth2 REST"]
+        OPD["OPD Queue<br/>HTTP POST events"]
+    end
+    PG[("PostgreSQL 14.2<br/>dental_db · 13 tables")]
+    STAFF --> SPA
+    SPA -->|"REST · 6s polling"| APP
+    SPA <-->|"WebSocket"| EB
+    OPD -->|"room + patient events"| EB
+    APP --> PG
+    EB --> PG
+    SCH --> PG
+    SCH -->|"sync every 60s · 06:00-22:00"| TRAK
+    APP -->|"delegated login"| TRAK
+            </pre>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 flex flex-col md:flex-row items-center gap-4 justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg brand-gradient grid place-items-center"><span class="text-white font-black text-sm">D</span></div>
+            <div class="text-sm text-slate-500"><span class="lang-en">Dental Dashboard Assessment · Generated from AWS Transform (ATX) reports</span><span class="lang-th">การประเมิน Dental Dashboard · สร้างจากรายงาน AWS Transform (ATX)</span></div>
+          </div>
+          <div class="text-xs text-slate-400">© <span data-year></span> CUSTOMER_NAME · <span class="lang-en">Confidential</span><span class="lang-th">เป็นความลับ</span></div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+    /* Domain cards */
+    (function () {
+      // Each item: { en, th, slug, size:"Large|Medium|Small", tables, features, rules, color }
+      // Source of truth: business-rules-extraction/domain-decomposition-overview/domain-manifest.json
+      const domains = [
+        { en: "Patient Appointment", th: "นัดหมายผู้ป่วย",        slug: "patient-appointment", size: "Large",  tables: 4, features: 10, rules: 11, color: "indigo" },
+        { en: "Care Provider",       th: "ผู้ให้บริการ (แพทย์/ผู้ช่วย)", slug: "care-provider",       size: "Medium", tables: 4, features: 7,  rules: 8,  color: "emerald" },
+        { en: "Doctor Schedule",     th: "ตารางเวรแพทย์",         slug: "doctor-schedule",     size: "Medium", tables: 2, features: 5,  rules: 6,  color: "violet" },
+        { en: "Room Management",     th: "จัดการห้องตรวจ",        slug: "room-management",     size: "Small",  tables: 1, features: 7,  rules: 6,  color: "sky" },
+        { en: "Booking",             th: "การจองห้อง",            slug: "booking",             size: "Medium", tables: 2, features: 7,  rules: 8,  color: "amber" },
+      ];
+      const sizeBadge = { Large:"badge-red", Medium:"badge-amber", Small:"badge-green" };
+      const sizeTh = { Large:"ใหญ่", Medium:"กลาง", Small:"เล็ก" };
+      // Map of domain slug -> domain-detail anchor id
+      const FULL = { "patient-appointment": "patient-appointment", "care-provider": "care-provider", "doctor-schedule": "doctor-schedule", "room-management": "room-management", "booking": "booking" };
+      const grid = document.getElementById("domainGrid");
+      if (!grid) return;
+      grid.innerHTML = domains.map(d => `
+        <a href="domain-detail.html#domain=${FULL[d.slug]}" class="card card-hover p-5 block">
+          <div class="flex items-start justify-between gap-2 mb-3">
+            <div class="w-10 h-10 rounded-lg bg-${d.color}-100 text-${d.color}-600 grid place-items-center font-black">${d.en.charAt(0)}</div>
+            <span class="badge ${sizeBadge[d.size]}"><span class="lang-en">${d.size}</span><span class="lang-th">${sizeTh[d.size]}</span></span>
+          </div>
+          <div class="font-bold text-slate-900 text-[0.95rem] mb-1"><span class="lang-en">${d.en}</span><span class="lang-th">${d.th}</span></div>
+          <div class="flex gap-3 text-xs text-slate-500 mt-3">
+            <span><strong class="text-slate-700">${d.tables}</strong> <span class="lang-en">tables</span><span class="lang-th">ตาราง</span></span>
+            <span><strong class="text-slate-700">${d.features}</strong> <span class="lang-en">features</span><span class="lang-th">ฟีเจอร์</span></span>
+            <span><strong class="text-slate-700">${d.rules}</strong> <span class="lang-en">rules</span><span class="lang-th">กฎ</span></span>
+          </div>
+        </a>`).join("");
+      // re-apply language to injected nodes
+      document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+    })();
+  </script>
+</body>
+</html>

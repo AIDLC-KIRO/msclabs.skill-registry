@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Reference · {{APP_NAME}} ATX Assessment</title>
+  <meta name="description" content="Complete developer documentation for {{APP_NAME}} — architecture, business rules, workflows, data models, API catalog, database schema, and diagrams." />
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <script src="assets/js/vendor/marked-12.min.js"></script>
+  <link rel="stylesheet" href="assets/css/highlight-github-dark.min.css" />
+  <script src="assets/js/vendor/highlight-11.9.0.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3E{{BRAND_INITIAL}}%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <div id="topbar"></div>
+
+  <!-- Doc tree sidebar -->
+  <aside id="docTree" class="doctree">
+    <div class="px-4 py-3 border-b border-white/10 shrink-0">
+      <div class="flex items-center gap-2 mb-3">
+        <a href="index.html" class="w-8 h-8 rounded-lg brand-gradient grid place-items-center shrink-0"><span class="text-white font-black text-sm">{{BRAND_INITIAL}}</span></a>
+        <div class="leading-tight"><div class="text-white font-bold text-sm"><span class="lang-en">Developer Reference</span><span class="lang-th">คู่มือนักพัฒนา</span></div><div class="text-[0.62rem] text-slate-400 tracking-wide">{{APP_NAME}} · FULL DOCS</div></div>
+      </div>
+      <div class="relative">
+        <svg class="absolute left-2.5 top-2.5 text-slate-500" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="docSearch" type="text" placeholder="Search docs…" class="w-full bg-white/5 border border-white/10 rounded-lg pl-8 pr-3 py-1.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-400" />
+      </div>
+    </div>
+    <nav id="treeNav" class="flex-1 overflow-y-auto px-2 py-3 space-y-0.5"></nav>
+  </aside>
+
+  <!-- Main -->
+  <div class="doctree-main min-h-screen flex flex-col">
+    <div class="max-w-[1500px] w-full mx-auto grid lg:grid-cols-[1fr_230px] gap-8 px-5 lg:px-10 py-8 flex-1">
+      <article id="docContent" class="md-body min-w-0">
+        <div class="doc-loading"><span class="spin"></span> <span class="lang-en">Loading documentation…</span><span class="lang-th">กำลังโหลดเอกสาร…</span></div>
+      </article>
+      <aside class="hidden lg:block">
+        <div class="sticky top-24" data-toc>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-3"><span class="lang-en">On this page</span><span class="lang-th">ในหน้านี้</span></div>
+          <nav id="docTocNav" class="toc space-y-0.5"></nav>
+          <div class="mt-5 px-3">
+            <a id="rawLink" href="#" target="_blank" rel="noopener" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+              <span class="lang-en">View raw source</span><span class="lang-th">ดูไฟล์ต้นฉบับ</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <footer class="border-t border-slate-200 bg-white">
+      <div class="max-w-[1500px] mx-auto px-5 lg:px-10 py-6 text-center text-xs text-slate-400">© <span data-year></span> {{COMPANY_NAME}} · <span class="lang-en">Rendered from AWS Transform (ATX) source documents</span><span class="lang-th">แสดงผลจากเอกสารต้นฉบับของ AWS Transform (ATX)</span></div>
+    </footer>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <!-- Embedded docs so the page works over file:// (fetch is blocked there) -->
+  <script src="assets/data/docs-data.js?v=1"></script>
+  <script>
+  (function () {
+    const CONTENT = "content/";
+
+    // ---------- Build the documentation tree ----------
+    // Each item: [ "domain-<slug>", enName, thName ] — drives the Detailed Domain BRE subgroups.
+    const domains = /*{{REFERENCE_DOMAINS_JSON}}*/ [];
+    // The document set repeated for every business domain. Each entry:
+    //   [ "<file path under bre/detailed-domain-bre/domain-<slug>/>", enName, thName ]
+    // Shipped value is the standard ATX per-domain output.
+    const domainDocs = /*{{REFERENCE_DOMAIN_DOCS_JSON}}*/ [
+      ["overview.md","Overview","ภาพรวม"],
+      ["features.md","Features","ฟีเจอร์"],
+      ["business-rules.md","Business Rules","กฎทางธุรกิจ"],
+      ["workflows.md","Workflows","เวิร์กโฟลว์"],
+      ["validations.md","Validations","การตรวจสอบ"],
+      ["integrations.md","Integrations","การเชื่อมต่อ"],
+      ["diagrams/component-diagram.md","Component Diagram","ไดอะแกรมองค์ประกอบ"],
+      ["diagrams/sequence-diagram.md","Sequence Diagram","ไดอะแกรมลำดับ"],
+      ["diagrams/workflow-diagram.md","Workflow Diagram","ไดอะแกรมเวิร์กโฟลว์"],
+    ];
+    const domainSubgroups = domains.map(([slug,en,th]) => ({
+      sg: { en, th },
+      items: domainDocs.map(([f,e,t]) => ({ en:e, th:t, doc:`bre/detailed-domain-bre/${slug}/${f}` })),
+    }));
+
+    // Each item: [ "<slug>", enName ] — drives the Target Service Specs group (doc: bre/domain-decomposition-overview/service-<slug>.md).
+    const services = /*{{REFERENCE_SERVICES_JSON}}*/ [];
+
+    /* ==================================================================
+       DOCUMENT TREE TEMPLATE
+       ------------------------------------------------------------------
+       The tree is declared as data so the topic outline can be retitled,
+       reordered, trimmed or extended without touching render code.
+
+       Group shape : { g:{en,th}, open?:boolean, items:[ item | subgroup ] }
+       Item shape  : { en, th, doc:"<path under content/>" }
+       Subgroup    : { sg:{en,th}, items:[ item, ... ] }   (one nesting level)
+
+       WHAT TO EDIT
+       · {{REF_Gnn_TITLE_EN/TH}} — the group heading shown in the sidebar.
+         Mirror any change in the "Full Documentation" group of NAV in
+         assets/js/app.js so sidebar and browser agree.
+       · {{REF_Gnn_ITEMS}} — the group's document list. The value shipped
+         after each token is the standard AWS Transform (ATX) output
+         layout, so the browser works unmodified against an ATX run;
+         replace a list only when your run emits different documents.
+
+       ORDER CONTRACT: group order here defines the reading order of the
+       whole documentation set and must match NAV's Full Documentation
+       group in assets/js/app.js.
+       ================================================================== */
+    const TREE = [
+      { g:{ en:"{{REF_G01_TITLE_EN}}", th:"{{REF_G01_TITLE_TH}}" }, open:true,
+        items: /*{{REF_G01_ITEMS}}*/ [
+          {en:"Master Index",th:"ดัชนีหลัก",doc:"bre/00-master-index.md"},
+          {en:"Usage Guide",th:"คู่มือการใช้งาน",doc:"bre/00-guide.md"},
+          {en:"Project Overview",th:"ภาพรวมโปรเจกต์",doc:"codebase/project-overview.md"},
+          {en:"Documentation Index",th:"ดัชนีเอกสาร",doc:"codebase/README.md"},
+        ]},
+      { g:{ en:"{{REF_G02_TITLE_EN}}", th:"{{REF_G02_TITLE_TH}}" },
+        items: /*{{REF_G02_ITEMS}}*/ [
+          {en:"System Overview",th:"ภาพรวมระบบ",doc:"codebase/architecture/system-overview.md"},
+          {en:"Components",th:"องค์ประกอบ",doc:"codebase/architecture/components.md"},
+          {en:"Dependencies",th:"Dependencies",doc:"codebase/architecture/dependencies.md"},
+          {en:"Patterns",th:"รูปแบบการออกแบบ",doc:"codebase/architecture/patterns.md"},
+        ]},
+      { g:{ en:"{{REF_G03_TITLE_EN}}", th:"{{REF_G03_TITLE_TH}}" },
+        items: /*{{REF_G03_ITEMS}}*/ [
+          {en:"Business Logic",th:"ตรรกะทางธุรกิจ",doc:"codebase/behavior/business-logic.md"},
+          {en:"Workflows",th:"เวิร์กโฟลว์",doc:"codebase/behavior/workflows.md"},
+          {en:"Decision Logic",th:"ตรรกะการตัดสินใจ",doc:"codebase/behavior/decision-logic.md"},
+          {en:"Error Handling",th:"การจัดการข้อผิดพลาด",doc:"codebase/behavior/error-handling.md"},
+        ]},
+      { g:{ en:"{{REF_G04_TITLE_EN}}", th:"{{REF_G04_TITLE_TH}}" },
+        items: /*{{REF_G04_ITEMS}}*/ [
+          {en:"Program Structure",th:"โครงสร้างโปรแกรม",doc:"codebase/reference/program-structure.md"},
+          {en:"Modules",th:"โมดูล",doc:"codebase/reference/modules.md"},
+          {en:"Interfaces",th:"อินเทอร์เฟซ",doc:"codebase/reference/interfaces.md"},
+          {en:"Data Models",th:"โมเดลข้อมูล",doc:"codebase/reference/data-models.md"},
+          {en:"API Reference",th:"อ้างอิง API",doc:"codebase/reference/api-reference.md"},
+        ]},
+      { g:{ en:"{{REF_G05_TITLE_EN}}", th:"{{REF_G05_TITLE_TH}}" },
+        items: /*{{REF_G05_ITEMS}}*/ [
+          {en:"Code Metrics",th:"เมตริกโค้ด",doc:"codebase/analysis/code-metrics.md"},
+          {en:"Complexity Analysis",th:"การวิเคราะห์ความซับซ้อน",doc:"codebase/analysis/complexity-analysis.md"},
+          {en:"Dependency Analysis",th:"การวิเคราะห์ Dependency",doc:"codebase/analysis/dependency-analysis.md"},
+          {en:"Security Patterns",th:"รูปแบบความปลอดภัย",doc:"codebase/analysis/security-patterns.md"},
+          {en:"Tech Debt",th:"หนี้ทางเทคนิค",doc:"codebase/analysis/tech-debt.md"},
+        ]},
+      { g:{ en:"{{REF_G06_TITLE_EN}}", th:"{{REF_G06_TITLE_TH}}" },
+        items: /*{{REF_G06_ITEMS}}*/ [
+          {en:"Database Patterns",th:"รูปแบบฐานข้อมูล",doc:"codebase/specialized/database-patterns.md"},
+          {en:"External Integration",th:"การเชื่อมต่อภายนอก",doc:"codebase/specialized/external-integration.md"},
+          {en:"Real-time Events",th:"เหตุการณ์เรียลไทม์",doc:"codebase/specialized/realtime-events.md"},
+        ]},
+      { g:{ en:"{{REF_G07_TITLE_EN}}", th:"{{REF_G07_TITLE_TH}}" },
+        items: /*{{REF_G07_ITEMS}}*/ [
+          {en:"TD Report",th:"รายงานหนี้เทคนิค",doc:"codebase/technical-debt-report.md"},
+          {en:"Summary",th:"สรุป",doc:"codebase/technical-debt/summary.md"},
+          {en:"Outdated Components",th:"องค์ประกอบล้าสมัย",doc:"codebase/technical-debt/outdated-components.md"},
+          {en:"Maintenance Burden",th:"ภาระการบำรุงรักษา",doc:"codebase/technical-debt/maintenance-burden.md"},
+          {en:"Remediation Plan",th:"แผนการแก้ไข",doc:"codebase/technical-debt/remediation-plan.md"},
+        ]},
+      { g:{ en:"{{REF_G08_TITLE_EN}}", th:"{{REF_G08_TITLE_TH}}" },
+        items: /*{{REF_G08_ITEMS}}*/ [
+          {en:"Component Order",th:"ลำดับองค์ประกอบ",doc:"codebase/migration/component-order.md"},
+          {en:"Test Specifications",th:"ข้อกำหนดการทดสอบ",doc:"codebase/migration/test-specifications.md"},
+          {en:"Validation Criteria",th:"เกณฑ์การตรวจสอบ",doc:"codebase/migration/validation-criteria.md"},
+        ]},
+      { g:{ en:"{{REF_G09_TITLE_EN}}", th:"{{REF_G09_TITLE_TH}}" },
+        items: /*{{REF_G09_ITEMS}}*/ [
+          {en:"Overview",th:"ภาพรวม",doc:"bre/domain-decomposition-overview/README.md"},
+          {en:"Bounded Contexts",th:"Bounded Contexts",doc:"bre/domain-decomposition-overview/bounded-contexts.md"},
+          {en:"Data Ownership",th:"ความเป็นเจ้าของข้อมูล",doc:"bre/domain-decomposition-overview/data-ownership.md"},
+          {en:"Shared Kernel",th:"Shared Kernel",doc:"bre/domain-decomposition-overview/shared-kernel.md"},
+          {en:"Execution Order",th:"ลำดับการดำเนินการ",doc:"bre/domain-decomposition-overview/execution-order.md"},
+          {en:"Anti-Corruption Layers",th:"Anti-Corruption Layers",doc:"bre/domain-decomposition-overview/anti-corruption-layers.md"},
+        ]},
+      /* Items are generated from REFERENCE_SERVICES_JSON — one entry per
+         proposed target service. Retitle the group, not the list. */
+      { g:{ en:"{{REF_G10_TITLE_EN}}", th:"{{REF_G10_TITLE_TH}}" },
+        items: services.map(([slug,en]) => ({ en, th:en, doc:`bre/domain-decomposition-overview/service-${slug}.md` })) },
+      /* Fixed entries first, then one nested subgroup per business domain
+         (generated from REFERENCE_DOMAINS_JSON × domainDocs). */
+      { g:{ en:"{{REF_G11_TITLE_EN}}", th:"{{REF_G11_TITLE_TH}}" },
+        items: [
+          ...(/*{{REF_G11_ITEMS}}*/ [
+            {en:"README",th:"README",doc:"bre/detailed-domain-bre/README.md"},
+            {en:"Cross-Domain Features",th:"ฟีเจอร์ข้ามโดเมน",doc:"bre/detailed-domain-bre/cross-domain-features.md"},
+            {en:"Requirements Summary",th:"สรุปข้อกำหนด",doc:"bre/detailed-domain-bre/requirements-summary.md"},
+            {en:"Traceability Matrix",th:"Traceability Matrix",doc:"bre/detailed-domain-bre/traceability-matrix.md"},
+          ]),
+          ...domainSubgroups,
+        ]},
+      { g:{ en:"{{REF_G12_TITLE_EN}}", th:"{{REF_G12_TITLE_TH}}" },
+        items: /*{{REF_G12_ITEMS}}*/ [
+          {en:"Authentication & Authorization",th:"การยืนยันตัวตน & สิทธิ์",doc:"bre/cross-cutting-documentation/authentication-authorization.md"},
+          {en:"Error Handling Patterns",th:"รูปแบบการจัดการข้อผิดพลาด",doc:"bre/cross-cutting-documentation/error-handling-patterns.md"},
+          {en:"Event Publishing Patterns",th:"รูปแบบการเผยแพร่ Event",doc:"bre/cross-cutting-documentation/event-publishing-patterns.md"},
+          {en:"Caching Patterns",th:"รูปแบบ Caching",doc:"bre/cross-cutting-documentation/caching-patterns.md"},
+          {en:"Shared Entities",th:"เอนทิตีร่วม",doc:"bre/cross-cutting-documentation/shared-entities.md"},
+          {en:"Common Error Codes",th:"รหัสข้อผิดพลาดร่วม",doc:"bre/cross-cutting-documentation/common-error-codes.md"},
+          {en:"Common Permissions",th:"สิทธิ์ร่วม",doc:"bre/cross-cutting-documentation/common-permissions.md"},
+          {en:"Common Events",th:"Event ร่วม",doc:"bre/cross-cutting-documentation/common-events.md"},
+        ]},
+      { g:{ en:"{{REF_G13_TITLE_EN}}", th:"{{REF_G13_TITLE_TH}}" },
+        items: /*{{REF_G13_ITEMS}}*/ [
+          {en:"API Endpoint Catalog",th:"แคตตาล็อก API Endpoint",doc:"bre/reference-documentation/api-endpoint-catalog.md"},
+          {en:"External Integrations Map",th:"แผนที่การเชื่อมต่อภายนอก",doc:"bre/reference-documentation/external-integrations-map.md"},
+          {en:"Service/Component Inventory",th:"รายการบริการ/องค์ประกอบ",doc:"bre/reference-documentation/service-component-inventory.md"},
+          {en:"Coupling Hotspots",th:"จุดผูกกันสูง",doc:"bre/reference-documentation/coupling-hotspots.md"},
+          {en:"Dead Code Notes",th:"บันทึกโค้ดที่ไม่ใช้",doc:"bre/reference-documentation/dead-code-decomposition-notes.md"},
+          {en:"Cron/Daemon Inventory",th:"รายการ Cron/Daemon",doc:"bre/reference-documentation/cron-daemon-inventory.md"},
+          {en:"Feature Flag Inventory",th:"รายการ Feature Flag",doc:"bre/reference-documentation/feature-flag-inventory.md"},
+        ]},
+      { g:{ en:"{{REF_G14_TITLE_EN}}", th:"{{REF_G14_TITLE_TH}}" },
+        items: /*{{REF_G14_ITEMS}}*/ [
+          {en:"Architecture Diagrams",th:"ไดอะแกรมสถาปัตยกรรม",doc:"bre/diagrams/architecture-diagrams.md"},
+          {en:"Sequence Diagrams",th:"ไดอะแกรมลำดับ",doc:"bre/diagrams/sequence-diagrams.md"},
+          {en:"Class / ER Diagrams",th:"ไดอะแกรม Class / ER",doc:"bre/diagrams/class-er-diagrams.md"},
+          {en:"Method Call Graphs",th:"กราฟการเรียกเมธอด",doc:"bre/diagrams/method-call-graphs.md"},
+          {en:"Service Relationship Graph",th:"กราฟความสัมพันธ์บริการ",doc:"bre/diagrams/service-relationship-graph.md"},
+          {en:"Server Connection Diagrams",th:"ไดอะแกรมการเชื่อมต่อเซิร์ฟเวอร์",doc:"bre/diagrams/server-connection-diagrams.md"},
+          {en:"System Context (codebase)",th:"บริบทระบบ (codebase)",doc:"codebase/diagrams/architecture/system-context.md"},
+          {en:"Structural Components",th:"องค์ประกอบเชิงโครงสร้าง",doc:"codebase/diagrams/structural/component-diagrams.md"},
+          {en:"Behavioral Sequences",th:"ลำดับเชิงพฤติกรรม",doc:"codebase/diagrams/behavioral/sequence-diagrams.md"},
+        ]},
+      { g:{ en:"{{REF_G15_TITLE_EN}}", th:"{{REF_G15_TITLE_TH}}" },
+        items: /*{{REF_G15_ITEMS}}*/ [
+          {en:"Service Candidates",th:"บริการที่เสนอแยก",doc:"bre/service-candidates.md"},
+          {en:"Method Dependency Matrix",th:"เมทริกซ์ Dependency ของเมธอด",doc:"bre/method-dependency-matrix.md"},
+        ]},
+      { g:{ en:"{{REF_G16_TITLE_EN}}", th:"{{REF_G16_TITLE_TH}}" },
+        items: /*{{REF_G16_ITEMS}}*/ [
+          {en:"Global Schema (DDL)",th:"สคีมาฐานข้อมูล (DDL)",doc:"bre/database-documentation/00-global-schema.sql"},
+          {en:"Seed Data (JSON)",th:"ข้อมูลตั้งต้น (JSON)",doc:"bre/database-documentation/00-seed-data.json"},
+        ]},
+      { g:{ en:"{{REF_G17_TITLE_EN}}", th:"{{REF_G17_TITLE_TH}}" },
+        items: /*{{REF_G17_ITEMS}}*/ [
+          {en:"Domain Manifest (contract)",th:"Domain Manifest (สัญญา)",doc:"bre/domain-decomposition-overview/domain-manifest.json"},
+          {en:"Dependency Graph",th:"กราฟ Dependency",doc:"bre/graph.json"},
+          {en:"Method Call Graph",th:"กราฟการเรียกเมธอด",doc:"bre/method-call-graph.json"},
+          {en:"Service Relationship Graph",th:"กราฟความสัมพันธ์บริการ",doc:"bre/service-relationship-graph.json"},
+        ]},
+    ];
+
+    // ---------- Render tree ----------
+    const treeNav = document.getElementById("treeNav");
+    const bilEl = (en, th) => `<span class="lang-en">${en}</span><span class="lang-th">${th}</span>`;
+    function leaf(item) {
+      return `<a class="tree-link" data-doc="${item.doc}">${bilEl(item.en, item.th)}</a>`;
+    }
+    function renderItems(items) {
+      return items.map(it => it.sg
+        ? `<details class="tree-group tree-sub"><summary>${bilEl(it.sg.en, it.sg.th)}<svg class="caret" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></summary><div class="mt-0.5">${it.items.map(leaf).join("")}</div></details>`
+        : leaf(it)
+      ).join("");
+    }
+    treeNav.innerHTML = TREE.map((sec,i) => `
+      <details class="tree-group" ${sec.open?"open":""}>
+        <summary>${bilEl(sec.g.en, sec.g.th)}<svg class="caret" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></summary>
+        <div class="mt-0.5">${renderItems(sec.items)}</div>
+      </details>`).join("");
+
+    // ---------- Markdown rendering ----------
+    marked.setOptions({ gfm: true, breaks: false });
+    const content = document.getElementById("docContent");
+    const tocNav = document.getElementById("docTocNav");
+    const rawLink = document.getElementById("rawLink");
+
+    function slugify(s){ return s.toLowerCase().trim().replace(/[^\w\u0E00-\u0E7F]+/g,"-").replace(/^-+|-+$/g,""); }
+
+    function resolvePath(cur, href) {
+      // resolve a relative link against the current doc path (within content/)
+      try {
+        const base = "http://x/" + CONTENT + cur;
+        const u = new URL(href, base);
+        return u.pathname.replace(/^\/content\//, "");
+      } catch (e) { return href; }
+    }
+
+    async function loadDoc(path, push) {
+      if (!path) return;
+      content.innerHTML = '<div class="doc-loading"><span class="spin"></span> <span class="lang-en">Loading…</span><span class="lang-th">กำลังโหลด…</span></div>';
+      tocNav.innerHTML = "";
+      let text;
+      // Prefer embedded content (works on file://); fall back to fetch (http).
+      const emb = (window.__DOCS__ && Object.prototype.hasOwnProperty.call(window.__DOCS__, path)) ? window.__DOCS__[path] : undefined;
+      if (emb !== undefined) {
+        text = emb;
+      } else {
+        try {
+          const res = await fetch(CONTENT + path, { cache: "no-cache" });
+          if (!res.ok) throw new Error(res.status);
+          text = await res.text();
+        } catch (e) {
+          content.innerHTML = `<h1><span class="lang-en">Document not found</span><span class="lang-th">ไม่พบเอกสาร</span></h1><p><code>${path}</code></p>`;
+          return;
+        }
+      }
+      const ext = path.split(".").pop().toLowerCase();
+      let html;
+      if (ext === "md") {
+        html = marked.parse(text);
+      } else {
+        const lang = ext === "sql" ? "sql" : ext === "json" ? "json" : "";
+        html = marked.parse("```" + lang + "\n" + text + "\n```");
+      }
+      content.innerHTML = html;
+
+      // Mermaid: convert fenced mermaid code blocks into .mermaid divs
+      content.querySelectorAll("code.language-mermaid").forEach((c) => {
+        const pre = c.closest("pre");
+        const div = document.createElement("div");
+        div.className = "mermaid";
+        div.textContent = c.textContent;
+        if (pre) pre.replaceWith(div); else c.replaceWith(div);
+      });
+      // Syntax highlight the rest
+      content.querySelectorAll("pre code").forEach((c) => { try { hljs.highlightElement(c); } catch (e) {} });
+      // Run mermaid
+      if (window.mermaid) {
+        try { await window.mermaid.run({ nodes: content.querySelectorAll(".mermaid") }); } catch (e) {}
+      }
+
+      // Add ids + build TOC
+      const heads = content.querySelectorAll("h2, h3");
+      const used = {};
+      const tocItems = [];
+      heads.forEach((h) => {
+        let id = slugify(h.textContent) || "sec";
+        if (used[id]) { used[id]++; id = id + "-" + used[id]; } else used[id] = 1;
+        h.id = id;
+        tocItems.push({ id, text: h.textContent, lvl: h.tagName === "H3" ? 1 : 0 });
+      });
+      tocNav.innerHTML = tocItems.map((t) => `<a href="#${t.id}" class="${t.lvl ? "pl-6" : ""}" data-anchor>${t.text}</a>`).join("");
+
+      // Intercept internal links to other docs
+      content.querySelectorAll("a[href]").forEach((a) => {
+        const href = a.getAttribute("href");
+        if (/^(https?:)?\/\//.test(href) || href.startsWith("mailto:")) { a.target = "_blank"; a.rel = "noopener"; return; }
+        if (href.startsWith("#")) return;
+        if (/\.(md|sql|json)(#.*)?$/i.test(href)) {
+          a.addEventListener("click", (e) => { e.preventDefault(); const rp = resolvePath(path, href.split("#")[0]); location.hash = "#doc=" + rp; });
+        }
+      });
+
+      // TOC anchor smooth handling
+      tocNav.querySelectorAll("[data-anchor]").forEach((a) => a.addEventListener("click", (e) => {
+        e.preventDefault(); const el = document.getElementById(a.getAttribute("href").slice(1));
+        if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 84, behavior: "smooth" });
+      }));
+
+      rawLink.href = CONTENT + path;
+
+      // active tree link + reveal its groups
+      treeNav.querySelectorAll(".tree-link").forEach((l) => {
+        const on = l.getAttribute("data-doc") === path;
+        l.classList.toggle("active", on);
+        if (on) { let p = l.parentElement; while (p && p !== treeNav) { if (p.tagName === "DETAILS") p.open = true; p = p.parentElement; } l.scrollIntoView({ block: "nearest" }); }
+      });
+
+      window.scrollTo({ top: 0, behavior: "auto" });
+      // scrollspy for this doc
+      initDocScrollspy();
+      if (push !== false) history.replaceState(null, "", "#doc=" + path);
+      // re-assert language on freshly injected nodes
+      document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+    }
+
+    let spyObs = null;
+    function initDocScrollspy() {
+      if (spyObs) spyObs.disconnect();
+      const links = Array.from(tocNav.querySelectorAll("a"));
+      const map = new Map();
+      links.forEach((a) => { const t = document.getElementById(a.getAttribute("href").slice(1)); if (t) map.set(t, a); });
+      if (!map.size) return;
+      spyObs = new IntersectionObserver((entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { links.forEach((l) => l.classList.remove("active")); const a = map.get(e.target); if (a) a.classList.add("active"); }
+      }), { rootMargin: "-80px 0px -70% 0px" });
+      map.forEach((_, t) => spyObs.observe(t));
+    }
+
+    // tree link clicks
+    treeNav.addEventListener("click", (e) => {
+      const link = e.target.closest(".tree-link");
+      if (!link) return;
+      const doc = link.getAttribute("data-doc");
+      location.hash = "#doc=" + doc;
+      if (window.innerWidth < 1024) document.getElementById("docTree").classList.remove("open");
+    });
+
+    // search filter
+    document.getElementById("docSearch").addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      treeNav.querySelectorAll(".tree-link").forEach((l) => {
+        const match = !q || l.textContent.toLowerCase().includes(q);
+        l.style.display = match ? "" : "none";
+      });
+      // open all groups while searching; keep those with visible children
+      treeNav.querySelectorAll("details").forEach((d) => {
+        if (q) { const anyVisible = Array.from(d.querySelectorAll(".tree-link")).some((l) => l.style.display !== "none"); d.open = anyVisible; d.style.display = anyVisible ? "" : "none"; }
+        else { d.style.display = ""; }
+      });
+    });
+
+    // routing
+    function currentDocFromHash() {
+      const m = location.hash.match(/doc=([^&]+)/);
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    window.addEventListener("hashchange", () => { const d = currentDocFromHash(); if (d) loadDoc(d); });
+
+    // mobile: repurpose topbar menu button to toggle doc tree (topbar injected by app.js)
+    function wireMobile() {
+      const btn = document.getElementById("menuBtn");
+      const tree = document.getElementById("docTree");
+      if (btn && tree) btn.addEventListener("click", (e) => { e.stopPropagation(); tree.classList.toggle("open"); });
+      document.addEventListener("click", (e) => { if (window.innerWidth < 1024 && tree && !tree.contains(e.target) && e.target !== btn && (!btn || !btn.contains(e.target))) tree.classList.remove("open"); });
+    }
+
+    // init after app.js has built the topbar
+    function boot() {
+      wireMobile();
+      const start = currentDocFromHash() || "bre/00-master-index.md";
+      loadDoc(start);
+    }
+    if (document.readyState === "loading") window.addEventListener("DOMContentLoaded", () => setTimeout(boot, 60));
+    else setTimeout(boot, 60);
+  })();
+  </script>
+</body>
+</html>

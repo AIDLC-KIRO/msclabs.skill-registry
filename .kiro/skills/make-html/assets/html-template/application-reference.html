@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Application Reference · {{APP_NAME}} ATX Assessment</title>
+  <meta name="description" content="Complete developer deep-dive for the {{APP_NAME}} application — identity, program structure, runtime configuration, page & endpoint inventory, service classes, data access, data models, core workflows, business rules, integrations, and database schema." />
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3E{{BRAND_INITIAL}}%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+  <style>
+    .tree-pre { background:#1d1d1f; color:#a1a1a6; border-radius:14px; padding:1.15rem 1.35rem; overflow-x:auto; font-family:'JetBrains Mono',ui-monospace,monospace; font-size:.78rem; line-height:1.7; border:1px solid #1d1d1f; }
+    .tree-pre .c { color:#6e6e73; }
+    .tree-pre .d { color:#7dd3fc; }
+    .tree-pre .f { color:#c9e2fb; }
+    .cfg code { font-size:.8rem; }
+  </style>
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <!-- Hero -->
+      <section class="bg-aurora text-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12">
+          <span class="badge glass text-slate-100 border-white/20 mb-4"><span class="dot bg-emerald-400"></span> <span class="lang-en">Developer Deep-Dive</span><span class="lang-th">เจาะลึกสำหรับนักพัฒนา</span></span>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight"><span class="lang-en">Application Reference</span><span class="lang-th">คู่มืออ้างอิงแอปพลิเคชัน</span></h1>
+          <p class="mt-3 max-w-3xl text-slate-300"><span class="lang-en">{{APPREF_HERO_INTRO_EN}}</span><span class="lang-th">{{APPREF_HERO_INTRO_TH}}</span></p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <!-- APPREF_HERO_KPIS: repeat one glass card per KPI — { value: number/string, label_en, label_th } -->
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">{{APPREF_KPI_1_VALUE}}</span> <span class="text-xs text-slate-300"><span class="lang-en">{{APPREF_KPI_1_LABEL_EN}}</span><span class="lang-th">{{APPREF_KPI_1_LABEL_TH}}</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">{{APPREF_KPI_2_VALUE}}</span> <span class="text-xs text-slate-300"><span class="lang-en">{{APPREF_KPI_2_LABEL_EN}}</span><span class="lang-th">{{APPREF_KPI_2_LABEL_TH}}</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">{{APPREF_KPI_3_VALUE}}</span> <span class="text-xs text-slate-300"><span class="lang-en">{{APPREF_KPI_3_LABEL_EN}}</span><span class="lang-th">{{APPREF_KPI_3_LABEL_TH}}</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">{{APPREF_KPI_4_VALUE}}</span> <span class="text-xs text-slate-300"><span class="lang-en">{{APPREF_KPI_4_LABEL_EN}}</span><span class="lang-th">{{APPREF_KPI_4_LABEL_TH}}</span></span></div>
+            <div class="glass rounded-xl px-4 py-2"><span class="text-2xl font-black kpi">{{APPREF_KPI_5_VALUE}}</span> <span class="text-xs text-slate-300"><span class="lang-en">{{APPREF_KPI_5_LABEL_EN}}</span><span class="lang-th">{{APPREF_KPI_5_LABEL_TH}}</span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-10 grid lg:grid-cols-[1fr_220px] gap-10">
+        <div class="doc space-y-14 min-w-0">
+
+          <!-- IDENTITY -->
+          <section id="identity" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Application Identity &amp; Entry Points</span><span class="lang-th">ข้อมูลระบุแอปและจุดเริ่มต้น</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">{{APPREF_IDENTITY_SUMMARY_EN}}</span><span class="lang-th">{{APPREF_IDENTITY_SUMMARY_TH}}</span></p>
+            <div class="grid sm:grid-cols-2 gap-4 mb-6">
+              <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+                <thead><tr><th colspan="2"><span class="lang-en">Identity</span><span class="lang-th">ข้อมูลระบุ</span></th></tr></thead>
+                <tbody>
+                  <!-- APPREF_IDENTITY_TABLE_ROWS: repeat <tr> per identity attribute — <td> label (bilingual span or plain) + <td> value (bilingual span or plain, may contain <code>) -->
+                  {{APPREF_IDENTITY_TABLE_ROWS}}
+                </tbody>
+              </table></div></div>
+              <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+                <thead><tr><th><span class="lang-en">Entry Point</span><span class="lang-th">จุดเริ่มต้น</span></th><th><span class="lang-en">Purpose</span><span class="lang-th">วัตถุประสงค์</span></th></tr></thead>
+                <tbody>
+                  <!-- APPREF_ENTRYPOINTS_TABLE_ROWS: repeat <tr> per entry point — <td><code>file</code></td> + <td> bilingual purpose -->
+                  {{APPREF_ENTRYPOINTS_TABLE_ROWS}}
+                </tbody>
+              </table></div></div>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Environments</span><span class="lang-th">สภาพแวดล้อม</span></h3>
+            <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>Environment</th><th>Pipeline</th><th>Server / Agent</th></tr></thead>
+              <tbody>
+                <!-- APPREF_ENVIRONMENTS_TABLE_ROWS: repeat <tr> per environment — <td> env name + <td><code>pipeline.yml</code></td> + <td> server/agent -->
+                {{APPREF_ENVIRONMENTS_TABLE_ROWS}}
+              </tbody>
+            </table></div></div>
+          </section>
+
+          <!-- STRUCTURE -->
+          <section id="structure" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Solution &amp; Program Structure</span><span class="lang-th">โครงสร้างโซลูชันและโปรแกรม</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">{{APPREF_STRUCTURE_INTRO_EN}}</span><span class="lang-th">{{APPREF_STRUCTURE_INTRO_TH}}</span></p>
+            <!-- APPREF_STRUCTURE_TREE: annotated source-tree body for <pre class="tree-pre"> — may use <span class="d"> (dir), <span class="f"> (file), <span class="c"> (comment) -->
+            <pre class="tree-pre">{{APPREF_STRUCTURE_TREE}}</pre>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">
+              <!-- APPREF_STRUCTURE_STAT_CARDS: repeat card per stat — <div class="card p-4 text-center"><div class="text-2xl font-black text-slate-900">value</div><div class="text-xs text-slate-500"><span class="lang-en">label</span><span class="lang-th">label</span></div></div> -->
+              <div class="card p-4 text-center"><div class="text-2xl font-black text-slate-900">{{APPREF_STRUCTURE_STAT_1_VALUE}}</div><div class="text-xs text-slate-500"><span class="lang-en">{{APPREF_STRUCTURE_STAT_1_LABEL_EN}}</span><span class="lang-th">{{APPREF_STRUCTURE_STAT_1_LABEL_TH}}</span></div></div>
+              <div class="card p-4 text-center"><div class="text-2xl font-black text-slate-900">{{APPREF_STRUCTURE_STAT_2_VALUE}}</div><div class="text-xs text-slate-500"><span class="lang-en">{{APPREF_STRUCTURE_STAT_2_LABEL_EN}}</span><span class="lang-th">{{APPREF_STRUCTURE_STAT_2_LABEL_TH}}</span></div></div>
+              <div class="card p-4 text-center"><div class="text-2xl font-black text-slate-900">{{APPREF_STRUCTURE_STAT_3_VALUE}}</div><div class="text-xs text-slate-500"><span class="lang-en">{{APPREF_STRUCTURE_STAT_3_LABEL_EN}}</span><span class="lang-th">{{APPREF_STRUCTURE_STAT_3_LABEL_TH}}</span></div></div>
+              <div class="card p-4 text-center"><div class="text-2xl font-black text-slate-900">{{APPREF_STRUCTURE_STAT_4_VALUE}}</div><div class="text-xs text-slate-500"><span class="lang-en">{{APPREF_STRUCTURE_STAT_4_LABEL_EN}}</span><span class="lang-th">{{APPREF_STRUCTURE_STAT_4_LABEL_TH}}</span></div></div>
+            </div>
+            <p class="text-xs text-slate-400 mt-3"><span class="lang-en">{{APPREF_STRUCTURE_DEADCODE_EN}}</span><span class="lang-th">{{APPREF_STRUCTURE_DEADCODE_TH}}</span></p>
+          </section>
+
+          <!-- CONFIG -->
+          <section id="config" class="scroll-mt-24 cfg">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Runtime Configuration Reference</span><span class="lang-th">คู่มืออ้างอิงการตั้งค่ารันไทม์</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">{{APPREF_CONFIG_INTRO_EN}}</span><span class="lang-th">{{APPREF_CONFIG_INTRO_TH}}</span></p>
+
+            <div class="rounded-xl bg-rose-50 border border-rose-200 p-4 mb-6 flex gap-3">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#d70015" stroke-width="2" class="shrink-0 mt-0.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/></svg>
+              <p class="text-sm text-rose-800"><span class="lang-en">{{APPREF_CONFIG_SECURITY_WARNING_EN}}</span><span class="lang-th">{{APPREF_CONFIG_SECURITY_WARNING_TH}}</span></p>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Connection Strings ({{APPREF_DATABASE_COUNT}} databases)</span><span class="lang-th">Connection String ({{APPREF_DATABASE_COUNT}} ฐานข้อมูล)</span></h3>
+            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4 mb-2">
+              <div class="text-xs text-slate-500 mb-3"><span class="lang-en">{{APPREF_CONFIG_CONNSTR_NOTE_EN}}</span><span class="lang-th">{{APPREF_CONFIG_CONNSTR_NOTE_TH}}</span></div>
+              <div class="grid sm:grid-cols-2 gap-x-8 gap-y-2 text-sm">
+                <!-- APPREF_CONFIG_CONNSTR_FIELDS: repeat per field — <div class="flex justify-between gap-3 border-b border-slate-200 pb-1"><span class="text-slate-500">field name</span><code class="text-slate-800">value</code></div> (redact secret values e.g. <code class="text-rose-500">[REDACTED]</code>) -->
+                {{APPREF_CONFIG_CONNSTR_FIELDS}}
+              </div>
+              <div class="text-xs text-slate-400 mt-3"><span class="lang-en">{{APPREF_CONFIG_CONNSTR_TRUST_NOTE_EN}}</span><span class="lang-th">{{APPREF_CONFIG_CONNSTR_TRUST_NOTE_TH}}</span></div>
+            </div>
+            <p class="text-xs text-slate-500 mb-6"><span class="lang-en">{{APPREF_CONFIG_CONNSTR_DETAIL_EN}}</span><span class="lang-th">{{APPREF_CONFIG_CONNSTR_DETAIL_TH}}</span></p>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">appSettings Keys</span><span class="lang-th">คีย์ appSettings</span></h3>
+            <div class="card overflow-hidden mb-6"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>Key</th><th>Value</th><th><span class="lang-en">Purpose</span><span class="lang-th">วัตถุประสงค์</span></th></tr></thead>
+              <tbody>
+                <!-- APPREF_CONFIG_APPSETTINGS_TABLE_ROWS: repeat <tr> per appSettings key — <td><code>key</code></td> + <td><code>value</code></td> + <td> bilingual purpose -->
+                {{APPREF_CONFIG_APPSETTINGS_TABLE_ROWS}}
+              </tbody>
+            </table></div></div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Runtime Settings &amp; Notable Flags</span><span class="lang-th">การตั้งค่ารันไทม์และแฟล็กที่ควรทราบ</span></h3>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <!-- APPREF_CONFIG_RUNTIME_CARDS: repeat card per runtime setting — <div class="card p-4 text-sm"> (optional accent: border-l-4 border-rose-400 / border-amber-400) <strong class="text-slate-800">setting name</strong> <code>value</code><p class="text-slate-500 mt-1"> bilingual description (may contain <code>) </p></div> -->
+              {{APPREF_CONFIG_RUNTIME_CARDS}}
+            </div>
+          </section>
+
+          <!-- PAGES -->
+          <section id="pages" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Page &amp; Endpoint Inventory</span><span class="lang-th">รายการหน้าและ Endpoint</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">{{APPREF_PAGES_INTRO_EN}}</span><span class="lang-th">{{APPREF_PAGES_INTRO_TH}}</span></p>
+            <div class="card overflow-hidden mb-6"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th><span class="lang-en">Domain</span><span class="lang-th">โดเมน</span></th><th class="text-right"><span class="lang-en">Pages</span><span class="lang-th">หน้า</span></th><th><span class="lang-en">Representative pages</span><span class="lang-th">หน้าตัวแทน</span></th></tr></thead>
+              <tbody>
+                <!-- APPREF_PAGES_TABLE_ROWS: repeat <tr> per domain — <td> domain name + <td class="text-right font-semibold"> page count + <td class="text-xs"> <code>Page.aspx</code> · … representative pages -->
+                {{APPREF_PAGES_TABLE_ROWS}}
+              </tbody>
+            </table></div></div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Data Endpoints (JSON / Binary)</span><span class="lang-th">Data Endpoint (JSON / ไบนารี)</span></h3>
+            <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>Page</th><th><span class="lang-en">Response</span><span class="lang-th">ผลลัพธ์</span></th><th><span class="lang-en">Purpose</span><span class="lang-th">วัตถุประสงค์</span></th></tr></thead>
+              <tbody>
+                <!-- APPREF_DATA_ENDPOINTS_TABLE_ROWS: repeat <tr> per endpoint — <td><code>page</code></td> + <td><span class="badge badge-blue|badge-violet">type</span></td> + <td> bilingual purpose -->
+                {{APPREF_DATA_ENDPOINTS_TABLE_ROWS}}
+              </tbody>
+            </table></div></div>
+          </section>
+
+          <!-- SERVICES -->
+          <section id="services" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Service &amp; Utility Classes</span><span class="lang-th">คลาสบริการและยูทิลิตี้</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">{{APPREF_SERVICES_INTRO_EN}}</span><span class="lang-th">{{APPREF_SERVICES_INTRO_TH}}</span></p>
+            <div class="card overflow-hidden"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>Class</th><th><span class="lang-en">Responsibility</span><span class="lang-th">หน้าที่</span></th><th><span class="lang-en">Used by</span><span class="lang-th">ใช้โดย</span></th></tr></thead>
+              <tbody>
+                <!-- APPREF_SERVICES_TABLE_ROWS: repeat <tr> per class — <td><code>ClassName</code></td> + <td> bilingual responsibility + <td> used-by (plain or bilingual) -->
+                {{APPREF_SERVICES_TABLE_ROWS}}
+              </tbody>
+            </table></div></div>
+          </section>
+
+          <!-- DATA ACCESS -->
+          <section id="data-access" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Data Access Layer</span><span class="lang-th">ชั้นการเข้าถึงข้อมูล</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">{{APPREF_DATA_ACCESS_INTRO_EN}}</span><span class="lang-th">{{APPREF_DATA_ACCESS_INTRO_TH}}</span></p>
+            <div class="card overflow-hidden mb-4"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th>DataContext</th><th><span class="lang-en">Database</span><span class="lang-th">ฐานข้อมูล</span></th><th>Server</th><th class="text-right"><span class="lang-en">Tables</span><span class="lang-th">ตาราง</span></th><th><span class="lang-en">Primary domain</span><span class="lang-th">โดเมนหลัก</span></th></tr></thead>
+              <tbody>
+                <!-- APPREF_DATACONTEXTS_TABLE_ROWS: repeat <tr> per DataContext — <td><code>Name</code></td> + <td> database + <td> server + <td class="text-right font-semibold"> table count + <td> primary domain (plain or bilingual) -->
+                {{APPREF_DATACONTEXTS_TABLE_ROWS}}
+              </tbody>
+            </table></div></div>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">Common query pattern</span><span class="lang-th">รูปแบบคิวรีทั่วไป</span></strong><p class="text-slate-500 mt-1"><code>{{APPREF_DATA_ACCESS_QUERY_CODE}}</code> <span class="lang-en">{{APPREF_DATA_ACCESS_QUERY_NOTE_EN}}</span><span class="lang-th">{{APPREF_DATA_ACCESS_QUERY_NOTE_TH}}</span></p></div>
+              <div class="card p-4 text-sm border-l-4 border-rose-400"><strong class="text-slate-800"><span class="lang-en">Anti-pattern</span><span class="lang-th">Anti-pattern</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">{{APPREF_DATA_ACCESS_ANTIPATTERN_EN}}</span><span class="lang-th">{{APPREF_DATA_ACCESS_ANTIPATTERN_TH}}</span></p></div>
+            </div>
+          </section>
+
+          <!-- DATA MODELS -->
+          <section id="data-models" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Data Models &amp; Contracts</span><span class="lang-th">โมเดลข้อมูลและ Contract</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">{{APPREF_DATA_MODELS_INTRO_EN}}</span><span class="lang-th">{{APPREF_DATA_MODELS_INTRO_TH}}</span></p>
+            <div class="grid md:grid-cols-2 gap-4 mb-5">
+              <div class="card p-5">
+                <div class="text-xs font-bold uppercase tracking-wide text-indigo-500 mb-2"><span class="lang-en">Key code-defined models</span><span class="lang-th">โมเดลที่นิยามในโค้ด</span></div>
+                <ul class="text-sm text-slate-600 space-y-1.5">
+                  <!-- APPREF_DATA_MODELS_LIST: repeat <li> per code-defined model — <code>Name</code> + optional bilingual description -->
+                  {{APPREF_DATA_MODELS_LIST}}
+                </ul>
+              </div>
+              <div class="card p-5">
+                <div class="text-xs font-bold uppercase tracking-wide text-emerald-600 mb-2"><span class="lang-en">Recommended interfaces (for migration)</span><span class="lang-th">อินเทอร์เฟซที่แนะนำ (เพื่อย้ายระบบ)</span></div>
+                <div class="flex flex-wrap gap-1.5">
+                  <!-- APPREF_DATA_MODELS_INTERFACE_CHIPS: repeat <span class="chip font-mono text-[0.7rem]">IName</span> per recommended interface -->
+                  {{APPREF_DATA_MODELS_INTERFACE_CHIPS}}
+                </div>
+                <p class="text-xs text-slate-500 mt-3"><span class="lang-en">{{APPREF_DATA_MODELS_INTERFACE_NOTE_EN}}</span><span class="lang-th">{{APPREF_DATA_MODELS_INTERFACE_NOTE_TH}}</span></p>
+              </div>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">{{APPREF_DATA_MODELS_ER_HEADING_EN}}</span><span class="lang-th">{{APPREF_DATA_MODELS_ER_HEADING_TH}}</span></h3>
+            <div class="mermaid-wrap">
+              <pre class="mermaid">
+graph TB
+    PLACEHOLDER["{{APPREF_DATA_MODELS_ER_MERMAID}}"]
+              </pre>
+            </div>
+          </section>
+
+          <!-- WORKFLOWS -->
+          <section id="workflows" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Core Workflows</span><span class="lang-th">เวิร์กโฟลว์หลัก</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">{{APPREF_WORKFLOWS_INTRO_EN}}</span><span class="lang-th">{{APPREF_WORKFLOWS_INTRO_TH}}</span></p>
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">{{APPREF_WORKFLOW_1_HEADING_EN}}</span><span class="lang-th">{{APPREF_WORKFLOW_1_HEADING_TH}}</span></h3>
+            <div class="mermaid-wrap mb-6">
+              <pre class="mermaid">
+graph TB
+    PLACEHOLDER["{{APPREF_WORKFLOW_1_MERMAID}}"]
+              </pre>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">{{APPREF_WORKFLOW_2_HEADING_EN}}</span><span class="lang-th">{{APPREF_WORKFLOW_2_HEADING_TH}}</span></h3>
+                <div class="mermaid-wrap">
+                  <pre class="mermaid">
+graph TB
+    PLACEHOLDER["{{APPREF_WORKFLOW_2_MERMAID}}"]
+                  </pre>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">{{APPREF_WORKFLOW_3_HEADING_EN}}</span><span class="lang-th">{{APPREF_WORKFLOW_3_HEADING_TH}}</span></h3>
+                <div class="mermaid-wrap">
+                  <pre class="mermaid">
+graph TB
+    PLACEHOLDER["{{APPREF_WORKFLOW_3_MERMAID}}"]
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- RULES -->
+          <section id="rules" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Business Rules Highlights</span><span class="lang-th">สรุปกฎทางธุรกิจสำคัญ</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">Concrete rules a developer must preserve when refactoring or migrating.</span><span class="lang-th">กฎรูปธรรมที่นักพัฒนาต้องรักษาไว้เมื่อ refactor หรือย้ายระบบ</span></p>
+            <div class="grid md:grid-cols-2 gap-3">
+              <!-- APPREF_RULES_CARDS: repeat card per business rule — <div class="card p-4 text-sm"><strong class="text-slate-800"><span class="lang-en">label</span><span class="lang-th">label</span></strong><p class="text-slate-500 mt-1"><span class="lang-en">description (may contain <code>)</span><span class="lang-th">description</span></p></div> -->
+              {{APPREF_RULES_CARDS}}
+            </div>
+            <p class="text-xs text-slate-400 mt-4"><span class="lang-en">{{APPREF_RULES_FOOTNOTE_EN}}</span><span class="lang-th">{{APPREF_RULES_FOOTNOTE_TH}}</span></p>
+          </section>
+
+          <!-- INTEGRATIONS -->
+          <section id="integrations" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">External Integrations &amp; Dependencies</span><span class="lang-th">การเชื่อมต่อภายนอกและ Dependency</span></h2>
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+              <div class="card p-5"><div class="flex items-center gap-2 mb-2"><span class="w-9 h-9 rounded-lg bg-sky-100 text-sky-600 grid place-items-center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span><strong class="text-slate-800 text-sm">{{APPREF_INTEGRATION_1_NAME}}</strong></div><p class="text-xs text-slate-500"><span class="lang-en">{{APPREF_INTEGRATION_1_DESC_EN}}</span><span class="lang-th">{{APPREF_INTEGRATION_1_DESC_TH}}</span></p></div>
+              <div class="card p-5"><div class="flex items-center gap-2 mb-2"><span class="w-9 h-9 rounded-lg bg-rose-100 text-rose-600 grid place-items-center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span><strong class="text-slate-800 text-sm">{{APPREF_INTEGRATION_2_NAME}}</strong></div><p class="text-xs text-slate-500"><span class="lang-en">{{APPREF_INTEGRATION_2_DESC_EN}}</span><span class="lang-th">{{APPREF_INTEGRATION_2_DESC_TH}}</span></p></div>
+              <div class="card p-5"><div class="flex items-center gap-2 mb-2"><span class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 grid place-items-center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></span><strong class="text-slate-800 text-sm">{{APPREF_INTEGRATION_3_NAME}}</strong></div><p class="text-xs text-slate-500"><span class="lang-en">{{APPREF_INTEGRATION_3_DESC_EN}}</span><span class="lang-th">{{APPREF_INTEGRATION_3_DESC_TH}}</span></p></div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="card p-5">
+                <div class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2"><span class="lang-en">Other external</span><span class="lang-th">ภายนอกอื่น ๆ</span></div>
+                <ul class="text-sm text-slate-600 space-y-1">
+                  <!-- APPREF_INTEGRATIONS_OTHER_LIST: repeat <li> per external dependency — <strong>Name</strong> — bilingual description (may contain <code>) -->
+                  {{APPREF_INTEGRATIONS_OTHER_LIST}}
+                </ul>
+              </div>
+              <div class="card p-5">
+                <div class="text-xs font-bold uppercase tracking-wide text-slate-400 mb-2"><span class="lang-en">Key NuGet / libraries ({{APPREF_NUGET_COUNT}} total)</span><span class="lang-th">ไลบรารี NuGet หลัก (รวม {{APPREF_NUGET_COUNT}})</span></div>
+                <div class="flex flex-wrap gap-1.5">
+                  <!-- APPREF_INTEGRATIONS_NUGET_CHIPS: repeat <span class="chip text-[0.72rem]">Package version</span> per key library -->
+                  {{APPREF_INTEGRATIONS_NUGET_CHIPS}}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SCHEMA -->
+          <section id="schema" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Database Schema Overview</span><span class="lang-th">ภาพรวมสคีมาฐานข้อมูล</span></h2>
+            <p class="text-slate-600 mb-5"><span class="lang-en">{{APPREF_SCHEMA_INTRO_EN}}</span><span class="lang-th">{{APPREF_SCHEMA_INTRO_TH}}</span></p>
+            <div class="grid sm:grid-cols-2 gap-3 mb-5">
+              <div>
+                <!-- APPREF_SCHEMA_BARS_PRIMARY: repeat per database — <div class="flex justify-between text-sm mb-1.5[ mt-3]"><span class="font-semibold text-slate-700">db name</span><span class="font-bold text-slate-900">table count</span></div><div class="bar"><span data-w="NN%" style="background:linear-gradient(90deg,#0071e3,#9ac9ff)"></span></div> -->
+                {{APPREF_SCHEMA_BARS_PRIMARY}}
+              </div>
+              <div>
+                <!-- APPREF_SCHEMA_BARS_SECONDARY: repeat per database — same shape as primary, gradient #0ea5e9,#38bdf8 -->
+                {{APPREF_SCHEMA_BARS_SECONDARY}}
+                <div class="mt-6 rounded-xl bg-slate-50 border border-slate-200 p-3 text-xs text-slate-500"><span class="lang-en">{{APPREF_SCHEMA_STOREDPROC_NOTE_EN}}</span><span class="lang-th">{{APPREF_SCHEMA_STOREDPROC_NOTE_TH}}</span></div>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <a href="reference.html#doc=bre/database-documentation/00-global-schema.sql" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-4 py-2.5 rounded-xl transition"><span class="lang-en">View full schema (DDL)</span><span class="lang-th">ดูสคีมาฉบับเต็ม (DDL)</span><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></a>
+              <a href="knowledge-graph.html" class="inline-flex items-center gap-2 border border-slate-200 text-slate-600 hover:border-indigo-300 hover:text-indigo-600 text-sm font-semibold px-4 py-2.5 rounded-xl transition"><span class="lang-en">Explore Knowledge Graph</span><span class="lang-th">สำรวจ Knowledge Graph</span></a>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- On-page TOC -->
+        <aside class="hidden lg:block">
+          <div class="sticky top-24" data-toc>
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-3"><span class="lang-en">On this page</span><span class="lang-th">ในหน้านี้</span></div>
+            <nav class="toc space-y-0.5">
+              <a href="#identity"><span class="lang-en">Identity &amp; Entry Points</span><span class="lang-th">ระบุแอป &amp; จุดเริ่มต้น</span></a>
+              <a href="#structure"><span class="lang-en">Program Structure</span><span class="lang-th">โครงสร้างโปรแกรม</span></a>
+              <a href="#config"><span class="lang-en">Configuration</span><span class="lang-th">การตั้งค่า</span></a>
+              <a href="#pages"><span class="lang-en">Pages &amp; Endpoints</span><span class="lang-th">หน้า &amp; Endpoint</span></a>
+              <a href="#services"><span class="lang-en">Service Classes</span><span class="lang-th">คลาสบริการ</span></a>
+              <a href="#data-access"><span class="lang-en">Data Access</span><span class="lang-th">การเข้าถึงข้อมูล</span></a>
+              <a href="#data-models"><span class="lang-en">Data Models</span><span class="lang-th">โมเดลข้อมูล</span></a>
+              <a href="#workflows"><span class="lang-en">Core Workflows</span><span class="lang-th">เวิร์กโฟลว์หลัก</span></a>
+              <a href="#rules"><span class="lang-en">Business Rules</span><span class="lang-th">กฎทางธุรกิจ</span></a>
+              <a href="#integrations"><span class="lang-en">Integrations</span><span class="lang-th">การเชื่อมต่อ</span></a>
+              <a href="#schema"><span class="lang-en">Database Schema</span><span class="lang-th">สคีมาฐานข้อมูล</span></a>
+            </nav>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 text-center text-xs text-slate-400">© <span data-year></span> {{COMPANY_NAME}} · <span class="lang-en">Application reference — assembled from AWS Transform (ATX) reports &amp; analyzed source</span><span class="lang-th">คู่มืออ้างอิงแอป — รวบรวมจากรายงาน AWS Transform (ATX) และซอร์สที่วิเคราะห์แล้ว</span></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+</body>
+</html>

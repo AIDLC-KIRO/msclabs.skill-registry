@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modernization Readiness · {{APP_NAME}} ATX Assessment</title>
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3E{{BRAND_INITIAL}}%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <section class="bg-aurora text-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12">
+          <span class="badge glass text-slate-100 border-white/20 mb-4"><span class="dot bg-sky-400"></span> AWS/modernization-readiness-analysis</span>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight"><span class="lang-en">Modernization Readiness Analysis</span><span class="lang-th">การวิเคราะห์ความพร้อมสู่ความทันสมัย</span></h1>
+          <p class="mt-3 max-w-2xl text-slate-300"><span class="lang-en">A scored evaluation across five modernization dimensions with detailed findings and recommended AWS modernization pathways.</span><span class="lang-th">การประเมินแบบให้คะแนนใน 5 มิติของการปรับปรุงให้ทันสมัย พร้อมผลการประเมินโดยละเอียดและเส้นทางการปรับปรุงบน AWS ที่แนะนำ</span></p>
+          <div class="mt-6 flex flex-wrap items-center gap-4">
+            <div class="glass rounded-2xl px-5 py-3 flex items-center gap-3">
+              <span class="text-4xl font-black kpi">{{READINESS_SCORE}}</span><span class="text-slate-400 text-sm">/ 4.0</span>
+              <span class="badge badge-red ml-1"><span class="lang-en">{{READINESS_STATUS_EN}}</span><span class="lang-th">{{READINESS_STATUS_TH}}</span></span>
+            </div>
+            <div class="text-sm text-slate-300"><span class="lang-en">Archetype:</span><span class="lang-th">รูปแบบ:</span> <strong class="text-white">{{MODERN_ARCHETYPE}}</strong> · <span class="lang-en">Repo type:</span><span class="lang-th">ประเภท repo:</span> <strong class="text-white">{{MODERN_REPO_TYPE}}</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-10 space-y-14">
+
+        <!-- CLASSIFICATION -->
+        <section class="grid lg:grid-cols-3 gap-6">
+          <div class="card p-6 lg:col-span-2">
+            <h2 class="text-xl font-bold text-slate-900 mb-3"><span class="lang-en">Classification</span><span class="lang-th">การจัดระดับ</span></h2>
+            <div class="rounded-xl bg-rose-50 border border-rose-200 p-4 mb-4">
+              <div class="font-bold text-rose-700 mb-1">❌ <span class="lang-en">Tier: {{READINESS_STATUS_EN}}</span><span class="lang-th">ระดับ: {{READINESS_STATUS_TH}}</span></div>
+              <p class="text-sm text-rose-800"><span class="lang-en">{{MODERN_CLASSIFICATION_SUMMARY_EN}}</span><span class="lang-th">{{MODERN_CLASSIFICATION_SUMMARY_TH}}</span></p>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed"><span class="lang-en"><strong>Archetype justification:</strong> {{MODERN_ARCHETYPE_JUSTIFICATION_EN}}</span><span class="lang-th"><strong>เหตุผลของรูปแบบ:</strong> {{MODERN_ARCHETYPE_JUSTIFICATION_TH}}</span></p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200">has_persistent_data_store</span>
+              <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200">has_deployed_workload</span>
+              <span class="chip text-emerald-700 bg-emerald-50 border-emerald-200">has_api_surface</span>
+              <span class="chip text-rose-600 bg-rose-50 border-rose-200">no multi_instance_deployment</span>
+              <span class="chip text-rose-600 bg-rose-50 border-rose-200">no iac_provisioning</span>
+            </div>
+          </div>
+          <div class="card p-6 flex flex-col items-center justify-center">
+            <div class="ring" data-p="{{MODERN_READINESS_PCT}}" style="--ring-c:#ff3b30;--sz:150px;">
+              <div class="text-center"><div class="text-4xl font-black text-slate-900 kpi">{{READINESS_SCORE}}</div><div class="text-xs text-slate-400 font-semibold">/ 4.0</div></div>
+            </div>
+            <div class="text-xs text-slate-500 mt-4 text-center"><span class="lang-en">Overall weighted across 5 categories</span><span class="lang-th">คะแนนรวมถ่วงน้ำหนักจาก 5 หมวด</span></div>
+          </div>
+        </section>
+
+        <!-- SCORE SUMMARY -->
+        <section id="scores">
+          <h2 class="text-2xl font-bold text-slate-900 mb-6"><span class="lang-en">Score Summary</span><span class="lang-th">สรุปคะแนน</span></h2>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4" id="scoreCards"></div>
+          <div class="mt-4 rounded-xl bg-slate-50 border border-slate-200 p-4 text-xs text-slate-500 font-mono leading-relaxed">
+            {{MODERN_SCORE_MATH}} = <strong class="text-slate-700">{{READINESS_SCORE}}</strong>
+          </div>
+        </section>
+
+        <!-- FINDINGS -->
+        <section id="findings" class="scroll-mt-24">
+          <div class="flex items-center justify-between flex-wrap gap-3 mb-2">
+            <h2 class="text-2xl font-bold text-slate-900"><span class="lang-en">Detailed Findings</span><span class="lang-th">ผลการประเมินโดยละเอียด</span></h2>
+            <div class="flex flex-wrap gap-1.5" id="findingFilters"></div>
+          </div>
+          <p class="text-slate-600 mb-6"><span class="lang-en">Filter by category. Each finding includes score, gap, and AWS recommendation. Click to expand.</span><span class="lang-th">กรองตามหมวด แต่ละประเด็นมีคะแนน ช่องว่าง และคำแนะนำบน AWS คลิกเพื่อขยาย</span></p>
+          <div id="findingsList" class="space-y-2.5"></div>
+        </section>
+
+        <!-- PATHWAYS -->
+        <section id="pathways" class="scroll-mt-24">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">AWS Modernization Pathways</span><span class="lang-th">เส้นทางการปรับปรุงบน AWS</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">Four of seven pathways were triggered based on the assessment findings.</span><span class="lang-th">มีเส้นทาง 4 จาก 7 เส้นทางที่ถูกกระตุ้น (triggered) ตามผลการประเมิน</span></p>
+          <div class="grid md:grid-cols-2 gap-4" id="pathwayCards"></div>
+        </section>
+
+        <!-- DECOMPOSITION -->
+        <section id="decomposition" class="scroll-mt-24">
+          <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Decomposition Strategy</span><span class="lang-th">กลยุทธ์การแยกโครงสร้าง</span></h2>
+          <p class="text-slate-600 mb-6"><span class="lang-en">A phased approach is recommended: strengthen the modular monolith first, then apply the Strangler Fig pattern. A big-bang rewrite is recommended against.</span><span class="lang-th">แนะนำแนวทางแบบเป็นระยะ: เสริมความแข็งแรงของ modular monolith ก่อน แล้วจึงใช้รูปแบบ Strangler Fig ไม่แนะนำให้เขียนใหม่ทั้งหมดในครั้งเดียว</span></p>
+          <div class="card overflow-hidden mb-8">
+            <div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th><span class="lang-en">Approach</span><span class="lang-th">แนวทาง</span></th><th><span class="lang-en">Effort</span><span class="lang-th">ความพยายาม</span></th><th><span class="lang-en">Recommendation</span><span class="lang-th">คำแนะนำ</span></th></tr></thead>
+              <tbody>
+                <tr><td><strong>Strengthen as Modular Monolith</strong></td><td><span class="badge badge-green">Low · 2–6 mo</span></td><td>✅ <span class="lang-en">Recommended Phase 1 — establish module boundaries per domain first.</span><span class="lang-th">แนะนำเป็นเฟส 1 — สร้างขอบเขตโมดูลตามโดเมนก่อน</span></td></tr>
+                <tr><td><strong>Strangler Fig (Parallel Track)</strong></td><td><span class="badge badge-amber">Med–High · 6–18 mo</span></td><td>✅ <span class="lang-en">Recommended Phase 2 — extract high-value bounded contexts incrementally.</span><span class="lang-th">แนะนำเป็นเฟส 2 — แยก bounded context ที่มีมูลค่าสูงทีละส่วน</span></td></tr>
+                <tr><td><strong>Conditional / Adaptive</strong></td><td><span class="badge badge-amber">Low–Med</span></td><td>✅ <span class="lang-en">Recommended if capacity is constrained.</span><span class="lang-th">แนะนำหากมีทรัพยากรจำกัด</span></td></tr>
+                <tr><td><strong>Big-Bang Rewrite</strong></td><td><span class="badge badge-red">Very High · 12–24+ mo</span></td><td>⚠️ <span class="lang-en">Recommended against — the app is functional; incremental is safer.</span><span class="lang-th">ไม่แนะนำ — แอปยังใช้งานได้ การทำแบบค่อยเป็นค่อยไปปลอดภัยกว่า</span></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+
+          <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Target Architecture Direction</span><span class="lang-th">ทิศทางสถาปัตยกรรมเป้าหมาย</span></h3>
+          <div class="mermaid-wrap">
+            <pre class="mermaid">
+graph TB
+    PLACEHOLDER["{{MODERN_TARGET_ARCH_MERMAID}}"]
+            </pre>
+          </div>
+
+          <h3 class="text-lg font-bold text-slate-800 mb-3 mt-8"><span class="lang-en">Pattern Recommendations</span><span class="lang-th">คำแนะนำรูปแบบ (Patterns)</span></h3>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div class="card p-4 text-sm"><strong class="text-slate-800">{{MODERN_PATTERN_1_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{MODERN_PATTERN_1_DESC_EN}}</span><span class="lang-th">{{MODERN_PATTERN_1_DESC_TH}}</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800">{{MODERN_PATTERN_2_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{MODERN_PATTERN_2_DESC_EN}}</span><span class="lang-th">{{MODERN_PATTERN_2_DESC_TH}}</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800">{{MODERN_PATTERN_3_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{MODERN_PATTERN_3_DESC_EN}}</span><span class="lang-th">{{MODERN_PATTERN_3_DESC_TH}}</span></p></div>
+            <div class="card p-4 text-sm"><strong class="text-slate-800">{{MODERN_PATTERN_4_TITLE}}</strong><p class="text-slate-500 mt-1"><span class="lang-en">{{MODERN_PATTERN_4_DESC_EN}}</span><span class="lang-th">{{MODERN_PATTERN_4_DESC_TH}}</span></p></div>
+          </div>
+        </section>
+
+        <div class="flex flex-col sm:flex-row gap-4 pt-2">
+          <a href="roadmap.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+            <div><div class="text-xs text-slate-400"><span class="lang-en">Next</span><span class="lang-th">ถัดไป</span></div><div class="font-bold text-slate-800"><span class="lang-en">Modernization Roadmap</span><span class="lang-th">แผนการปรับปรุง</span></div></div>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a href="codebase.html#security" class="card card-hover p-5 flex-1 flex items-center justify-between">
+            <div><div class="text-xs text-slate-400"><span class="lang-en">Related</span><span class="lang-th">ที่เกี่ยวข้อง</span></div><div class="font-bold text-slate-800"><span class="lang-en">Security Analysis</span><span class="lang-th">การวิเคราะห์ความปลอดภัย</span></div></div>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 text-center text-xs text-slate-400">© <span data-year></span> {{COMPANY_NAME}} · <span class="lang-en">Generated from AWS Transform (ATX) reports</span><span class="lang-th">สร้างจากรายงาน AWS Transform (ATX)</span></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+  (function () {
+    // ----- Score cards -----
+    const cats = [
+      { code:"INF", en:"Infrastructure & DevOps", th:"โครงสร้างพื้นฐาน & DevOps", score:/*{{SCORE_INF}}*/ 0, pct:/*{{SCORE_INF_PCT}}*/ 0 },
+      { code:"APP", en:"Application Architecture", th:"สถาปัตยกรรมแอปพลิเคชัน", score:/*{{SCORE_APP}}*/ 0, pct:/*{{SCORE_APP_PCT}}*/ 0 },
+      { code:"DATA", en:"Data Platform", th:"แพลตฟอร์มข้อมูล", score:/*{{SCORE_DATA}}*/ 0, pct:/*{{SCORE_DATA_PCT}}*/ 0 },
+      { code:"SEC", en:"Security Baseline", th:"พื้นฐานความปลอดภัย", score:/*{{SCORE_SEC}}*/ 0, pct:/*{{SCORE_SEC_PCT}}*/ 0 },
+      { code:"OPS", en:"Operations & Observability", th:"ปฏิบัติการ & Observability", score:/*{{SCORE_OPS}}*/ 0, pct:/*{{SCORE_OPS_PCT}}*/ 0 },
+    ];
+    const ratingOf = (s)=> s<1.5 ? {en:"Not Ready",th:"ยังไม่พร้อม",cls:"badge-red"} : s<2.5 ? {en:"Needs Work",th:"ต้องปรับปรุง",cls:"badge-amber"} : {en:"Ready",th:"พร้อม",cls:"badge-green"};
+    document.getElementById("scoreCards").innerHTML = cats.map(c=>{
+      const r = ratingOf(c.score); const col = c.score<1.5?"#ff3b30":c.score<2.5?"#ff9500":"#34c759";
+      return `<div class="card p-5">
+        <div class="flex items-center justify-between mb-3"><span class="chip font-bold">${c.code}</span><span class="badge ${r.cls}"><span class="lang-en">${r.en}</span><span class="lang-th">${r.th}</span></span></div>
+        <div class="text-3xl font-black text-slate-900 kpi">${c.score.toFixed(2)}</div>
+        <div class="text-xs text-slate-500 mb-3"><span class="lang-en">${c.en}</span><span class="lang-th">${c.th}</span></div>
+        <div class="bar"><span data-w="${c.pct}%" style="background:${col}"></span></div>
+      </div>`;
+    }).join("");
+
+    // ----- Findings -----
+    /* {{MODERN_FINDINGS_JSON}} -> JS array of finding objects.
+       Shape: { cat:"INF"|"APP"|"DATA"|"SEC"|"OPS", id:"CODE-QN",
+                s: 0..4 numeric score (0 with na:true = N/A),
+                na?:true, crit?:true,
+                en, th,      // finding title (EN / TH)
+                gEn, gTh,    // gap description (EN / TH)
+                rEn, rTh }   // AWS recommendation (EN / TH) */
+    const F = /*{{MODERN_FINDINGS_JSON}}*/ [];
+
+    const catMeta = { INF:{c:"indigo"}, APP:{c:"violet"}, DATA:{c:"emerald"}, SEC:{c:"rose"}, OPS:{c:"amber"} };
+    const scoreBadge = (f) => {
+      if (f.na) return `<span class="badge badge-slate">N/A</span>`;
+      const cls = f.s<=1?"badge-red":f.s===2?"badge-amber":"badge-green";
+      return `<span class="badge ${cls}">${f.s} / 4</span>`;
+    };
+    const sevTag = (f) => f.crit ? `<span class="badge badge-red">CRITICAL</span>` : "";
+
+    function renderFindings(filter) {
+      const list = document.getElementById("findingsList");
+      const items = F.filter(f => filter === "ALL" || f.cat === filter);
+      list.innerHTML = items.map(f => `
+        <details class="card overflow-hidden group">
+          <summary class="p-4 cursor-pointer list-none flex items-center gap-3 hover:bg-slate-50">
+            <span class="chip font-bold text-${catMeta[f.cat].c}-700 bg-${catMeta[f.cat].c}-50 border-${catMeta[f.cat].c}-200 shrink-0">${f.id}</span>
+            <span class="font-semibold text-slate-800 text-sm flex-1 min-w-0"><span class="lang-en">${f.en}</span><span class="lang-th">${f.th}</span></span>
+            ${sevTag(f)}
+            ${scoreBadge(f)}
+            <svg class="text-slate-400 transition group-open:rotate-180 shrink-0" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="px-4 pb-4 pt-1 border-t border-slate-100 space-y-3 text-sm">
+            <div><div class="text-xs font-bold uppercase tracking-wide text-rose-500 mb-1"><span class="lang-en">Gap</span><span class="lang-th">ช่องว่าง</span></div><p class="text-slate-600"><span class="lang-en">${f.gEn}</span><span class="lang-th">${f.gTh}</span></p></div>
+            <div><div class="text-xs font-bold uppercase tracking-wide text-emerald-600 mb-1"><span class="lang-en">AWS Recommendation</span><span class="lang-th">คำแนะนำบน AWS</span></div><p class="text-slate-600"><span class="lang-en">${f.rEn}</span><span class="lang-th">${f.rTh}</span></p></div>
+          </div>
+        </details>`).join("");
+      document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+    }
+
+    const filters = [["ALL","All","ทั้งหมด"],["INF","INF","INF"],["APP","APP","APP"],["DATA","DATA","DATA"],["SEC","SEC","SEC"],["OPS","OPS","OPS"]];
+    const fWrap = document.getElementById("findingFilters");
+    fWrap.innerHTML = filters.map((f,i)=>`<button data-filter="${f[0]}" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition ${i===0?'bg-indigo-600 text-white border-indigo-600':'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}"><span class="lang-en">${f[1]}</span><span class="lang-th">${f[2]}</span></button>`).join("");
+    fWrap.querySelectorAll(".filter-btn").forEach(btn=>btn.addEventListener("click",()=>{
+      fWrap.querySelectorAll(".filter-btn").forEach(b=>b.className="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:border-indigo-300");
+      btn.className="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-indigo-600 text-white border-indigo-600";
+      renderFindings(btn.getAttribute("data-filter"));
+    }));
+    renderFindings("ALL");
+
+    // ----- Pathways -----
+    /* {{MODERN_PATHWAYS_JSON}} -> JS array of pathway objects.
+       Shape: { name, th,        // pathway name (EN / TH)
+                status:"Triggered"|"Not Triggered",
+                pr, ef,          // priority / effort ("High"|"Medium"|"-")
+                svc:[ ...AWS service labels ],
+                en, tha }        // description (EN / TH) */
+    const P = /*{{MODERN_PATHWAYS_JSON}}*/ [];
+    const prBadge = (p)=> p==="High"?"badge-red":p==="Medium"?"badge-amber":"badge-slate";
+    document.getElementById("pathwayCards").innerHTML = P.map(p=>{
+      const trig = p.status==="Triggered";
+      return `<div class="card p-5 ${trig?'':'opacity-70'}">
+        <div class="flex items-start justify-between gap-2 mb-2">
+          <div class="font-bold text-slate-900"><span class="lang-en">${p.name}</span><span class="lang-th">${p.th}</span></div>
+          <span class="badge ${trig?'badge-green':'badge-slate'}"><span class="lang-en">${p.status}</span><span class="lang-th">${trig?'ถูกกระตุ้น':'ไม่ถูกกระตุ้น'}</span></span>
+        </div>
+        ${trig?`<div class="flex gap-2 mb-3"><span class="chip"><span class="lang-en">Priority</span><span class="lang-th">ลำดับความสำคัญ</span>: <strong class="ml-1">${p.pr}</strong></span><span class="chip"><span class="lang-en">Effort</span><span class="lang-th">ความพยายาม</span>: <strong class="ml-1">${p.ef}</strong></span></div>`:''}
+        <p class="text-sm text-slate-500 mb-3"><span class="lang-en">${p.en}</span><span class="lang-th">${p.tha}</span></p>
+        ${p.svc.length?`<div class="flex flex-wrap gap-1.5">${p.svc.map(s=>`<span class="chip text-[0.7rem] text-sky-700 bg-sky-50 border-sky-200">${s}</span>`).join("")}</div>`:''}
+      </div>`;
+    }).join("");
+
+    document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+  })();
+  </script>
+</body>
+</html>

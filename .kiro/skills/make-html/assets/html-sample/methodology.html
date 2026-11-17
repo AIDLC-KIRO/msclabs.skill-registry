@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assessment Methodology · Dental Dashboard ATX Assessment</title>
+  <meta name="description" content="How the Dental Dashboard assessment was produced — AWS Transform (ATX) transformations, analysis dimensions, severity rubric, scope, and reproducible configuration." />
+  <script src="assets/js/vendor/tailwindcss-3.4.17.min.js"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { sans: ["Inter","Noto Sans Thai","ui-sans-serif","system-ui","sans-serif"], mono: ["JetBrains Mono","ui-monospace","monospace"] },
+      colors: { brand: {50:"#f2f8fd",100:"#e8f2fd",200:"#c9e2fb",300:"#9ac9ff",400:"#5aa9f7",500:"#0a84ff",600:"#0071e3",700:"#0058b8",800:"#004a9c",900:"#003a7a"}, ink:{950:"#000000"} },
+    }}};
+  </script>
+  <script src="assets/js/vendor/mermaid-10.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071e3'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='bold' fill='white' text-anchor='middle' font-family='Arial,sans-serif'%3ED%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/styles.css?v=20" />
+</head>
+<body data-lang="en">
+  <script>try{document.body.dataset.lang=localStorage.getItem("ws-lang")||"en";}catch(e){}</script>
+  <aside id="sidebar" class="app-sidebar"></aside>
+  <div class="app-main min-h-screen flex flex-col">
+    <div id="topbar"></div>
+
+    <main class="flex-1">
+      <section class="bg-aurora text-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-12">
+          <span class="badge glass text-slate-100 border-white/20 mb-4"><span class="dot bg-amber-400"></span> <span class="lang-en">Governance &amp; Traceability</span><span class="lang-th">ธรรมาภิบาล & การตรวจสอบย้อนกลับ</span></span>
+          <h1 class="text-3xl lg:text-4xl font-black tracking-tight"><span class="lang-en">Assessment Methodology &amp; Configuration</span><span class="lang-th">ระเบียบวิธีและการตั้งค่าการประเมิน</span></h1>
+          <p class="mt-3 max-w-3xl text-slate-300"><span class="lang-en">How this assessment was produced — the AWS Transform (ATX) transformations, analysis dimensions, severity rubric, scope, and the exact, reproducible configuration used to generate every report on this site.</span><span class="lang-th">การประเมินนี้จัดทำขึ้นอย่างไร — ครอบคลุมชุด transformation ของ AWS Transform (ATX), มิติการวิเคราะห์, เกณฑ์ความรุนแรง (severity rubric), ขอบเขต และการตั้งค่าที่ทำซ้ำได้ (reproducible) ซึ่งใช้สร้างทุกรายงานบนเว็บไซต์นี้</span></p>
+        </div>
+      </section>
+
+      <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-10 grid lg:grid-cols-[1fr_220px] gap-10">
+        <div class="doc space-y-14 min-w-0">
+
+          <!-- ABOUT ATX -->
+          <section id="about" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">About AWS Transform (ATX)</span><span class="lang-th">เกี่ยวกับ AWS Transform (ATX)</span></h2>
+            <p class="text-slate-600 leading-relaxed mb-4"><span class="lang-en">AWS Transform (ATX) is an AWS-managed, agent-driven analysis toolchain. Each transformation performs deep static analysis of a repository and produces hierarchical, cross-referenced documentation. This assessment was run with the ATX CLI (v3.4.0+) against the Dental Dashboard repository in a clean Git state. Every finding is evidence-based and cites source files — the agent is instructed not to invent detail.</span><span class="lang-th">AWS Transform (ATX) คือชุดเครื่องมือวิเคราะห์ที่ขับเคลื่อนด้วย agent และบริหารจัดการโดย AWS แต่ละ transformation จะทำการวิเคราะห์โค้ดเชิงสถิต (static analysis) เชิงลึกและสร้างเอกสารแบบลำดับชั้นที่อ้างอิงข้ามกันได้ การประเมินนี้รันด้วย ATX CLI (v3.4.0+) กับ repository ของ Dental Dashboard ในสถานะ Git ที่สะอาด ทุกผลการวิเคราะห์อ้างอิงจากหลักฐานจริงและระบุไฟล์ต้นทาง — โดย agent ถูกกำหนดไม่ให้สร้างข้อมูลขึ้นเอง</span></p>
+            <div class="grid sm:grid-cols-3 gap-4">
+              <div class="card p-5"><div class="text-xs text-slate-500 mb-1"><span class="lang-en">Application</span><span class="lang-th">แอปพลิเคชัน</span></div><div class="font-bold text-slate-800">Dental Dashboard</div><div class="text-xs text-slate-400 mt-1">CUSTOMER_NAME</div></div>
+              <div class="card p-5"><div class="text-xs text-slate-500 mb-1"><span class="lang-en">Target Platform</span><span class="lang-th">แพลตฟอร์มเป้าหมาย</span></div><div class="font-bold text-slate-800">Go microservices + React SPA on AWS</div><div class="text-xs text-slate-400 mt-1">cloud-native</div></div>
+              <div class="card p-5"><div class="text-xs text-slate-500 mb-1"><span class="lang-en">ATX CLI</span><span class="lang-th">ATX CLI</span></div><div class="font-bold text-slate-800">v3.4.0+</div><div class="text-xs text-slate-400 mt-1">local execution mode</div></div>
+            </div>
+          </section>
+
+          <!-- REDACTION & DATA HANDLING -->
+          <section id="redaction" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Redaction &amp; Data Handling</span><span class="lang-th">การปิดบังข้อมูลและการจัดการข้อมูล</span></h2>
+            <p class="text-slate-600 leading-relaxed mb-4"><span class="lang-en">This site is a shareable file — it gets forwarded by email and opened outside the network it describes. Anything that identifies the organisation, exposes internal addressing, or names a credential is therefore replaced with a marking before the site ships. The markings below are literal placeholders, not real values; substitute them from your own environment records when you need the actual address.</span><span class="lang-th">เว็บไซต์นี้เป็นไฟล์ที่ส่งต่อได้ — ถูกส่งทางอีเมลและเปิดนอกเครือข่ายที่มันอธิบาย ดังนั้นสิ่งที่ระบุตัวองค์กร เปิดเผยการกำหนดที่อยู่ภายใน หรือระบุชื่อ credential จะถูกแทนด้วย marking ก่อนส่งมอบ marking ด้านล่างเป็น placeholder ตามตัวอักษร ไม่ใช่ค่าจริง — ให้แทนค่าจากบันทึกสภาพแวดล้อมของคุณเองเมื่อจำเป็นต้องใช้ที่อยู่จริง</span></p>
+            <div class="card overflow-hidden mb-4"><div class="overflow-x-auto"><table class="tbl">
+              <thead><tr><th><span class="lang-en">Marking</span><span class="lang-th">Marking</span></th><th><span class="lang-en">Stands for</span><span class="lang-th">แทนสิ่งใด</span></th><th><span class="lang-en">Why redacted</span><span class="lang-th">เหตุผล</span></th></tr></thead>
+              <tbody>
+                <tr><td><code>CUSTOMER_NAME</code></td><td><span class="lang-en">The operating organisation</span><span class="lang-th">องค์กรผู้ใช้ระบบ</span></td><td><span class="lang-en">Customer identity is not carried in a portable artifact.</span><span class="lang-th">ไม่นำชื่อลูกค้าไปกับไฟล์ที่ส่งต่อได้</span></td></tr>
+                <tr><td><code>CUSTOMER_DOMAIN</code></td><td><span class="lang-en">The organisation's DNS domain</span><span class="lang-th">โดเมน DNS ขององค์กร</span></td><td><span class="lang-en">Identifies the customer and maps its estate.</span><span class="lang-th">ระบุตัวลูกค้าและเปิดเผยผังระบบ</span></td></tr>
+                <tr><td><code>app-host</code> · <code>app-host-dev</code></td><td><span class="lang-en">Application server, prod / dev</span><span class="lang-th">เครื่องแอปพลิเคชัน prod / dev</span></td><td><span class="lang-en">Internal addressing — a role label carries the same meaning without the target.</span><span class="lang-th">ที่อยู่ภายใน — ใช้ชื่อบทบาทสื่อความหมายเดิมโดยไม่เปิดเผยเป้าหมาย</span></td></tr>
+                <tr><td><code>db-host</code> · <code>db-host-dev</code></td><td><span class="lang-en">PostgreSQL server, prod / dev</span><span class="lang-th">เครื่อง PostgreSQL prod / dev</span></td><td><span class="lang-en">Internal addressing.</span><span class="lang-th">ที่อยู่ภายใน</span></td></tr>
+                <tr><td><code>trakcare-host</code></td><td><span class="lang-en">TrakCare API host</span><span class="lang-th">โฮสต์ TrakCare API</span></td><td><span class="lang-en">Internal addressing of an upstream system.</span><span class="lang-th">ที่อยู่ภายในของระบบต้นทาง</span></td></tr>
+                <tr><td><code>internal-subnet</code></td><td><span class="lang-en">The private subnet both hosts sit on</span><span class="lang-th">ซับเน็ตส่วนตัวที่เครื่องทั้งสองอยู่</span></td><td><span class="lang-en">Network topology detail.</span><span class="lang-th">รายละเอียดโทโพโลยีเครือข่าย</span></td></tr>
+                <tr><td><code>DB_USER</code></td><td><span class="lang-en">Database account name</span><span class="lang-th">ชื่อบัญชีฐานข้อมูล</span></td><td><span class="lang-en">Half of a credential pair.</span><span class="lang-th">เป็นครึ่งหนึ่งของคู่ credential</span></td></tr>
+                <tr><td><code>[REDACTED]</code></td><td><span class="lang-en">Secret values — DB password, API key, service-account password</span><span class="lang-th">ค่าความลับ — รหัสผ่าน DB, API key, รหัสผ่านบัญชีบริการ</span></td><td><span class="lang-en">Never reproduced, in any form.</span><span class="lang-th">ไม่ทำซ้ำในทุกรูปแบบ</span></td></tr>
+                <tr><td><code>AUTHOR_REDACTED</code> · <code>VENDOR_REDACTED</code></td><td><span class="lang-en">Named individual, implementation vendor</span><span class="lang-th">ชื่อบุคคล ผู้พัฒนา/ผู้ให้บริการ</span></td><td><span class="lang-en">Personal and commercial attribution.</span><span class="lang-th">ข้อมูลบุคคลและข้อมูลเชิงพาณิชย์</span></td></tr>
+                <tr><td><code>Svc*</code> <span class="lang-en">column prefix</span><span class="lang-th">คำนำหน้าคอลัมน์</span></td><td><span class="lang-en">Service-catalogue columns whose real names embed the organisation's acronym</span><span class="lang-th">คอลัมน์แคตตาล็อกบริการที่ชื่อจริงมีตัวย่อองค์กรอยู่</span></td><td><span class="lang-en">Renamed consistently across schema, diagrams and prose so the model stays coherent.</span><span class="lang-th">เปลี่ยนชื่อให้สอดคล้องกันทั้ง schema ไดอะแกรม และเนื้อความ เพื่อให้แบบจำลองยังตรงกัน</span></td></tr>
+              </tbody>
+            </table></div></div>
+            <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
+              <p class="text-sm text-slate-600"><span class="lang-en"><strong>Database export handling.</strong> The schema DDL was read in full and drives the ER diagram and data-model sections. The accompanying row export was used for analysis only — row counts per table, which tables are empty in practice, and the real value domain of status and flag columns. No record-level data was read into this deliverable, and no sample rows appear anywhere on this site, masked or otherwise: a name, a birth date and a room number together re-identify a person, and a value domain already tells you what an example row would.</span><span class="lang-th"><strong>การจัดการข้อมูลที่ export จากฐานข้อมูล</strong> อ่าน schema DDL ทั้งหมดและใช้ขับ ER diagram กับส่วน data model ส่วนข้อมูลแถวที่ export มาใช้เพื่อการวิเคราะห์เท่านั้น — จำนวนแถวต่อตาราง ตารางที่ไม่มีข้อมูลจริง และโดเมนค่าจริงของคอลัมน์สถานะและ flag ไม่มีข้อมูลระดับ record เข้ามาในเอกสารส่งมอบนี้ และไม่มีแถวตัวอย่างปรากฏที่ใดบนเว็บไซต์นี้ ทั้งแบบปิดบังและไม่ปิดบัง เพราะชื่อ วันเกิด และหมายเลขห้องรวมกันสามารถระบุตัวบุคคลได้ ขณะที่โดเมนค่าก็บอกสิ่งที่แถวตัวอย่างจะบอกอยู่แล้ว</span></p>
+            </div>
+          </section>
+
+          <!-- TRANSFORMATIONS -->
+          <section id="transformations" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Transformations Used</span><span class="lang-th">Transformation ที่ใช้</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">Three ATX transformations were run against Dental Dashboard. Each maps to a section of this documentation site.</span><span class="lang-th">มีการรัน ATX transformation สามชุดกับ Dental Dashboard โดยแต่ละชุดสอดคล้องกับส่วนต่าง ๆ ของเว็บไซต์เอกสารนี้</span></p>
+            <div class="space-y-4">
+              <div class="card p-6 border-l-4 border-indigo-500">
+                <div class="flex items-center gap-3 flex-wrap mb-2">
+                  <code class="text-sm font-bold text-indigo-700 bg-indigo-50 px-2 py-1 rounded">AWS/comprehensive-codebase-analysis</code>
+                  <span class="chip">v2026-04-14</span>
+                  <a href="codebase.html" class="ml-auto text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1"><span class="lang-en">View report</span><span class="lang-th">ดูรายงาน</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></a>
+                </div>
+                <p class="text-sm text-slate-600"><span class="lang-en">Deep static analysis producing hierarchical, cross-referenced documentation covering behavioral analysis, architectural documentation, and business-intelligence extraction. Emphasizes technical-debt analysis with actionable insights at the root level.</span><span class="lang-th">การวิเคราะห์เชิงสถิตเชิงลึกที่สร้างเอกสารแบบลำดับชั้นและอ้างอิงข้ามกัน ครอบคลุมการวิเคราะห์พฤติกรรม เอกสารสถาปัตยกรรม และการสกัดข้อมูลเชิงธุรกิจ โดยเน้นการวิเคราะห์หนี้ทางเทคนิคพร้อมข้อเสนอที่นำไปปฏิบัติได้</span></p>
+              </div>
+              <div class="card p-6 border-l-4 border-violet-500">
+                <div class="flex items-center gap-3 flex-wrap mb-2">
+                  <code class="text-sm font-bold text-violet-700 bg-violet-50 px-2 py-1 rounded">AWS/business-rules-extraction</code>
+                  <span class="chip">v2026-06-22</span>
+                  <span class="badge badge-violet">Early-access</span>
+                  <a href="domains.html" class="ml-auto text-xs font-semibold text-violet-600 hover:text-violet-800 flex items-center gap-1"><span class="lang-en">View report</span><span class="lang-th">ดูรายงาน</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></a>
+                </div>
+                <p class="text-sm text-slate-600"><span class="lang-en">Statically analyzes a monolithic codebase to produce rewrite-ready documentation without building, running, or modifying source. Decomposes into bounded domains and extracts per-domain business rules, workflows, cross-cutting concerns, and DB structure into a manifest and interactive dashboard. Tuned here to go to the function/method level with a method call graph and method→data-access map for microservices decomposition.</span><span class="lang-th">วิเคราะห์โค้ด monolith เชิงสถิตเพื่อสร้างเอกสารที่พร้อมสำหรับการเขียนใหม่ โดยไม่ build ไม่รัน และไม่แก้ไขซอร์ส แยกออกเป็น bounded domains และสกัดกฎทางธุรกิจ เวิร์กโฟลว์ cross-cutting concerns และโครงสร้างฐานข้อมูลของแต่ละโดเมน สำหรับงานนี้ปรับให้ลงลึกถึงระดับฟังก์ชัน/เมธอด พร้อม method call graph และแผนที่ method→data-access เพื่อการแยก microservices</span></p>
+              </div>
+              <div class="card p-6 border-l-4 border-sky-500">
+                <div class="flex items-center gap-3 flex-wrap mb-2">
+                  <code class="text-sm font-bold text-sky-700 bg-sky-50 px-2 py-1 rounded">AWS/modernization-readiness-analysis</code>
+                  <span class="chip">v2026-05-14</span>
+                  <span class="badge badge-violet">Early-access</span>
+                  <a href="modernization.html" class="ml-auto text-xs font-semibold text-sky-600 hover:text-sky-800 flex items-center gap-1"><span class="lang-en">View report</span><span class="lang-th">ดูรายงาน</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg></a>
+                </div>
+                <p class="text-sm text-slate-600"><span class="lang-en">Scans portfolios for cloud-native maturity gaps and maps findings to AWS modernization pathways across five dimensions (INF, APP, DATA, SEC, OPS).</span><span class="lang-th">สแกนหาช่องว่างด้านความพร้อมสู่ cloud-native และจับคู่ผลการประเมินกับเส้นทางการปรับปรุงบน AWS ใน 5 มิติ (INF, APP, DATA, SEC, OPS)</span></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- PIPELINE -->
+          <section id="pipeline" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Assessment Pipeline</span><span class="lang-th">ขั้นตอนการประเมิน</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">The repository feeds all three transformations; their outputs consolidate into this documentation site.</span><span class="lang-th">Repository ถูกป้อนเข้าสู่ transformation ทั้งสามชุด และผลลัพธ์ถูกรวมเข้าเป็นเว็บไซต์เอกสารนี้</span></p>
+            <div class="mermaid-wrap">
+              <pre class="mermaid">
+graph LR
+    Repo["dental-dashboard repo<br/>clean Git state"]
+    CLI["ATX CLI v3.4.0+<br/>local execution"]
+    subgraph T["Transformations"]
+        CCA["comprehensive-<br/>codebase-analysis"]
+        MRA["modernization-<br/>readiness-analysis"]
+    end
+    OUT1["ATXDocumentation/<br/>34 documents"]
+    OUT2["mod-report<br/>json / md / html"]
+    SITE["This documentation site"]
+    Repo --> CLI
+    CLI --> CCA
+    CLI --> MRA
+    CCA --> OUT1
+    MRA --> OUT2
+    OUT1 --> SITE
+    OUT2 --> SITE
+            </pre>
+            </div>
+          </section>
+
+          <!-- SEVERITY RUBRIC -->
+          <section id="rubric" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Severity Rubric</span><span class="lang-th">เกณฑ์ความรุนแรง (Severity Rubric)</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">Every finding is scored on Risk × Business Impact using a consistent four-level rubric.</span><span class="lang-th">ทุกผลการประเมินถูกให้คะแนนตาม ความเสี่ยง × ผลกระทบทางธุรกิจ โดยใช้เกณฑ์สี่ระดับที่สอดคล้องกัน</span></p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="card p-5"><span class="badge badge-red mb-3">CRITICAL</span><p class="text-sm text-slate-600"><span class="lang-en">Security, data-loss, compliance, or a hard blocker.</span><span class="lang-th">ความปลอดภัย การสูญเสียข้อมูล การปฏิบัติตามกฎ หรือเป็นอุปสรรคที่ปิดกั้น</span></p></div>
+              <div class="card p-5"><span class="badge badge-amber mb-3">HIGH</span><p class="text-sm text-slate-600"><span class="lang-en">Must fix before migration.</span><span class="lang-th">ต้องแก้ไขก่อนการย้ายระบบ</span></p></div>
+              <div class="card p-5"><span class="badge badge-blue mb-3">MEDIUM</span><p class="text-sm text-slate-600"><span class="lang-en">Schedulable improvement.</span><span class="lang-th">การปรับปรุงที่จัดกำหนดการได้</span></p></div>
+              <div class="card p-5"><span class="badge badge-green mb-3">LOW</span><p class="text-sm text-slate-600"><span class="lang-en">Minor issue or optimization.</span><span class="lang-th">ประเด็นเล็กน้อยหรือการปรับให้เหมาะสม</span></p></div>
+            </div>
+          </section>
+
+          <!-- DIMENSIONS -->
+          <section id="dimensions" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">14 Analysis Dimensions</span><span class="lang-th">14 มิติการวิเคราะห์</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">The comprehensive-codebase-analysis evaluates the repository across fourteen dimensions. Inapplicable dimensions are explicitly marked "Not applicable" rather than padded.</span><span class="lang-th">comprehensive-codebase-analysis ประเมิน repository ครอบคลุม 14 มิติ โดยมิติที่ไม่เกี่ยวข้องจะถูกระบุว่า "Not applicable" อย่างชัดเจนแทนการเติมเนื้อหา</span></p>
+            <div id="dimGrid" class="grid sm:grid-cols-2 gap-3"></div>
+          </section>
+
+          <!-- BRE DEPTH -->
+          <section id="bre-depth" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Method-Level Decomposition Depth</span><span class="lang-th">ความลึกระดับเมธอดสำหรับการแยกบริการ</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">Business-rules extraction was configured to go to the function/method level so its output is a direct input for microservices decomposition. For each method it captures:</span><span class="lang-th">การสกัดกฎทางธุรกิจถูกตั้งค่าให้ลงลึกถึงระดับฟังก์ชัน/เมธอด เพื่อให้ผลลัพธ์เป็นอินพุตโดยตรงสำหรับการแยก microservices โดยแต่ละเมธอดจะบันทึก:</span></p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div class="card p-4"><div class="font-semibold text-slate-800 text-sm mb-1"><span class="lang-en">Identity &amp; ownership</span><span class="lang-th">Identity &amp; ownership</span></div><p class="text-xs text-slate-500"><code>file :: Class.Method(params)</code> + <span class="lang-en">owning domain</span><span class="lang-th">โดเมนเจ้าของ</span></p></div>
+              <div class="card p-4"><div class="font-semibold text-slate-800 text-sm mb-1">calls / called_by</div><p class="text-xs text-slate-500"><span class="lang-en">Outbound calls + inbound callers (fan-in / fan-out).</span><span class="lang-th">การเรียกออก + ผู้เรียกเข้า (fan-in / fan-out)</span></p></div>
+              <div class="card p-4"><div class="font-semibold text-slate-800 text-sm mb-1">data_access</div><p class="text-xs text-slate-500"><span class="lang-en">Tables/entities with R/W mode → DataContext → database.</span><span class="lang-th">ตาราง/เอนทิตีพร้อมโหมด R/W → DataContext → ฐานข้อมูล</span></p></div>
+              <div class="card p-4"><div class="font-semibold text-slate-800 text-sm mb-1">external_io</div><p class="text-xs text-slate-500">SMTP, SMS/HTTP, file, cache, <span class="lang-en">third-party libs.</span><span class="lang-th">ไลบรารีภายนอก</span></p></div>
+              <div class="card p-4"><div class="font-semibold text-slate-800 text-sm mb-1">rules</div><p class="text-xs text-slate-500"><span class="lang-en">Business rules &amp; validations enforced, in plain language.</span><span class="lang-th">กฎทางธุรกิจ &amp; การตรวจสอบที่บังคับใช้ อธิบายเป็นภาษาที่เข้าใจง่าย</span></p></div>
+              <div class="card p-4"><div class="font-semibold text-slate-800 text-sm mb-1">metrics</div><p class="text-xs text-slate-500"><span class="lang-en">Fan-in, fan-out, approx cyclomatic complexity, LOC.</span><span class="lang-th">Fan-in, fan-out, ความซับซ้อน cyclomatic โดยประมาณ, LOC</span></p></div>
+            </div>
+            <p class="text-sm text-slate-500 mt-4"><span class="lang-en">These signals cluster methods into candidate services (by call cohesion + shared data ownership), turn cross-cluster edges into candidate API contracts, and score decomposition blockers to sequence a strangler-fig migration.</span><span class="lang-th">สัญญาณเหล่านี้ใช้จัดกลุ่มเมธอดเป็นบริการที่เสนอแยก (ตามความเกาะเกี่ยวของการเรียกและการเป็นเจ้าของข้อมูลร่วม) แปลง edge ข้ามคลัสเตอร์เป็น API contract ที่เสนอ และให้คะแนนอุปสรรคการแยกเพื่อจัดลำดับการย้ายแบบ strangler-fig</span></p>
+          </section>
+
+          <!-- EFFORT MODEL -->
+          <section id="effort" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Effort Classification</span><span class="lang-th">การจัดระดับความพยายาม</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">Recommendations carry an effort tag so teams can plan work realistically.</span><span class="lang-th">ข้อเสนอแนะแต่ละข้อมีป้ายระดับความพยายาม เพื่อให้ทีมวางแผนงานได้อย่างสมจริง</span></p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="card p-5"><span class="chip text-emerald-700 bg-emerald-50 border-emerald-200 mb-2">Quick Win</span><p class="text-sm text-slate-600"><span class="lang-en">Hours to a few days; low risk.</span><span class="lang-th">ระดับชั่วโมงถึงไม่กี่วัน ความเสี่ยงต่ำ</span></p></div>
+              <div class="card p-5"><span class="chip text-sky-700 bg-sky-50 border-sky-200 mb-2">Sprint</span><p class="text-sm text-slate-600"><span class="lang-en">One iteration of focused work.</span><span class="lang-th">งานที่โฟกัสภายในหนึ่งรอบการพัฒนา</span></p></div>
+              <div class="card p-5"><span class="chip text-violet-700 bg-violet-50 border-violet-200 mb-2">Epic</span><p class="text-sm text-slate-600"><span class="lang-en">Multi-sprint initiative.</span><span class="lang-th">งานริเริ่มหลาย sprint</span></p></div>
+              <div class="card p-5"><span class="chip text-rose-700 bg-rose-50 border-rose-200 mb-2">Program</span><p class="text-sm text-slate-600"><span class="lang-en">Cross-team, multi-quarter program.</span><span class="lang-th">โปรแกรมข้ามทีมหลายไตรมาส</span></p></div>
+            </div>
+          </section>
+
+          <!-- REPRODUCIBILITY -->
+          <section id="reproducibility" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Reproducible Configuration</span><span class="lang-th">การตั้งค่าที่ทำซ้ำได้</span></h2>
+            <p class="text-slate-600 mb-6"><span class="lang-en">Each run is driven by a version-controlled config file with exactly four supported keys. The <code>additionalPlanContext</code> value has a hard 4,096-character API limit (rich guidance lives in file comments, which are not counted).</span><span class="lang-th">การรันแต่ละครั้งขับเคลื่อนด้วยไฟล์ config ที่อยู่ใน version control โดยรองรับคีย์เพียงสี่ตัวเท่านั้น ค่า <code>additionalPlanContext</code> มีขีดจำกัด API ที่ 4,096 ตัวอักษร (คำแนะนำเชิงลึกอยู่ในคอมเมนต์ของไฟล์ซึ่งไม่ถูกนับรวม)</span></p>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Supported config keys</span><span class="lang-th">คีย์การตั้งค่าที่รองรับ</span></h3>
+            <div class="card overflow-hidden mb-6">
+              <div class="overflow-x-auto"><table class="tbl">
+                <thead><tr><th>Key</th><th><span class="lang-en">Value used</span><span class="lang-th">ค่าที่ใช้</span></th></tr></thead>
+                <tbody>
+                  <tr><td><code>codeRepositoryPath</code></td><td><code>/opt/workspaces/dental-dashboard</code></td></tr>
+                  <tr><td><code>transformationName</code></td><td><code>AWS/comprehensive-codebase-analysis</code> · <code>AWS/modernization-readiness-analysis</code></td></tr>
+                  <tr><td><code>buildCommand</code></td><td><code>noop</code> <span class="text-slate-400">(<span class="lang-en">static-only analysis</span><span class="lang-th">วิเคราะห์เชิงสถิตเท่านั้น</span>)</span></td></tr>
+                  <tr><td><code>additionalPlanContext</code></td><td><span class="lang-en">Free-text agent guidance (role, scope, rubric, dimensions) — ≤ 4,096 chars</span><span class="lang-th">คำแนะนำ agent แบบข้อความอิสระ (บทบาท ขอบเขต เกณฑ์ มิติ) — ≤ 4,096 ตัวอักษร</span></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-3"><span class="lang-en">Execution commands</span><span class="lang-th">คำสั่งการรัน</span></h3>
+            <div class="rounded-xl bg-[#1d1d1f] border border-slate-800 p-5 overflow-x-auto">
+<pre class="text-[0.8rem] leading-relaxed font-mono text-slate-200"><span class="text-slate-500"># Run via a version-controlled config file</span>
+<span class="text-emerald-400">atx</span> custom def exec -g file://transform-config-cca.yaml -x -t
+
+<span class="text-slate-500"># Background run with logging</span>
+<span class="text-emerald-400">nohup</span> atx custom def exec \
+  -g file://transform-config-bre.yaml \
+  -x -t &gt; atx-business-rules.log 2&gt;&amp;1 &amp;
+
+<span class="text-slate-500"># Name + path form (enables version pinning with --tv)</span>
+<span class="text-emerald-400">atx</span> custom def exec -p /opt/workspaces/dental-dashboard \
+  -n AWS/modernization-readiness-analysis -c "noop" -x -t</pre>
+            </div>
+            <p class="text-xs text-slate-500 mt-3"><span class="lang-en">Reproducibility note: <code>--tv &lt;version&gt;</code> pins a transformation version but only works with the <code>-n</code> (name) form, not with <code>-g</code> (config file). Prerequisites: ATX CLI v3.4.0+ with <code>transform-custom:*</code> permissions, configured AWS credentials, and a clean Git state.</span><span class="lang-th">หมายเหตุการทำซ้ำ: <code>--tv &lt;version&gt;</code> ใช้ตรึงเวอร์ชันของ transformation แต่ทำงานได้เฉพาะกับรูปแบบ <code>-n</code> (ชื่อ) ไม่ใช่ <code>-g</code> (ไฟล์ config) ข้อกำหนดเบื้องต้น: ATX CLI v3.4.0+ ที่มีสิทธิ์ <code>transform-custom:*</code>, ตั้งค่า AWS credentials แล้ว และ repository อยู่ในสถานะ Git ที่สะอาด</span></p>
+          </section>
+
+          <!-- STANDARDS -->
+          <section id="standards" class="scroll-mt-24">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2"><span class="lang-en">Standards Alignment</span><span class="lang-th">การสอดคล้องกับมาตรฐาน</span></h2>
+            <div class="grid sm:grid-cols-3 gap-4">
+              <div class="card p-5"><div class="font-bold text-slate-800 mb-1">AWS Well-Architected</div><p class="text-sm text-slate-500"><span class="lang-en">Critical findings map to Well-Architected pillars.</span><span class="lang-th">ผลการประเมินระดับวิกฤตถูกจับคู่กับเสาหลักของ Well-Architected</span></p></div>
+              <div class="card p-5"><div class="font-bold text-slate-800 mb-1"><span class="lang-en">The 6 Rs</span><span class="lang-th">The 6 Rs</span></div><p class="text-sm text-slate-500"><span class="lang-en">Modernization readiness maps to the 6 Rs of migration.</span><span class="lang-th">ความพร้อมสู่ความทันสมัยถูกจับคู่กับ 6 Rs ของการย้ายระบบ</span></p></div>
+              <div class="card p-5"><div class="font-bold text-slate-800 mb-1"><span class="lang-en">12-Factor &amp; DDD</span><span class="lang-th">12-Factor &amp; DDD</span></div><p class="text-sm text-slate-500"><span class="lang-en">12-factor gaps and DDD bounded contexts drive decomposition.</span><span class="lang-th">ช่องว่าง 12-factor และ bounded context แบบ DDD ขับเคลื่อนการแยกบริการ</span></p></div>
+            </div>
+          </section>
+
+          <div class="flex flex-col sm:flex-row gap-4 pt-2">
+            <a href="codebase.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+              <div><div class="text-xs text-slate-400"><span class="lang-en">Next</span><span class="lang-th">ถัดไป</span></div><div class="font-bold text-slate-800"><span class="lang-en">Codebase Analysis</span><span class="lang-th">การวิเคราะห์โค้ด</span></div></div>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+            <a href="reference.html" class="card card-hover p-5 flex-1 flex items-center justify-between">
+              <div><div class="text-xs text-slate-400"><span class="lang-en">Related</span><span class="lang-th">ที่เกี่ยวข้อง</span></div><div class="font-bold text-slate-800"><span class="lang-en">Developer Reference</span><span class="lang-th">คู่มือนักพัฒนา</span></div></div>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#0071e3" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <aside class="hidden lg:block">
+          <div class="sticky top-24" data-toc>
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-3"><span class="lang-en">On this page</span><span class="lang-th">ในหน้านี้</span></div>
+            <nav class="toc space-y-0.5">
+              <a href="#about"><span class="lang-en">About ATX</span><span class="lang-th">เกี่ยวกับ ATX</span></a>
+              <a href="#redaction"><span class="lang-en">Redaction &amp; Data Handling</span><span class="lang-th">การปิดบังข้อมูล</span></a>
+              <a href="#transformations"><span class="lang-en">Transformations</span><span class="lang-th">Transformations</span></a>
+              <a href="#pipeline"><span class="lang-en">Pipeline</span><span class="lang-th">ขั้นตอน</span></a>
+              <a href="#rubric"><span class="lang-en">Severity Rubric</span><span class="lang-th">เกณฑ์ความรุนแรง</span></a>
+              <a href="#dimensions"><span class="lang-en">14 Dimensions</span><span class="lang-th">14 มิติ</span></a>
+              <a href="#bre-depth"><span class="lang-en">Method-Level Depth</span><span class="lang-th">ความลึกระดับเมธอด</span></a>
+              <a href="#effort"><span class="lang-en">Effort Model</span><span class="lang-th">ระดับความพยายาม</span></a>
+              <a href="#reproducibility"><span class="lang-en">Reproducibility</span><span class="lang-th">การทำซ้ำ</span></a>
+              <a href="#standards"><span class="lang-en">Standards</span><span class="lang-th">มาตรฐาน</span></a>
+            </nav>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-[1180px] mx-auto px-6 lg:px-10 py-8 text-center text-xs text-slate-400">© <span data-year></span> CUSTOMER_NAME · <span class="lang-en">Generated from AWS Transform (ATX) reports &amp; configuration</span><span class="lang-th">สร้างจากรายงานและการตั้งค่าของ AWS Transform (ATX)</span></div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="assets/js/app.js?v=20"></script>
+  <script>
+  (function () {
+    const dims = [
+      ["Technology Inventory","สำรวจเทคโนโลยี","Languages, versions, frameworks, runtimes, build tools, entry points, deployment, CI/CD, data stores.","ภาษา เวอร์ชัน เฟรมเวิร์ก รันไทม์ build tools จุดเริ่มต้น การติดตั้ง CI/CD และแหล่งข้อมูล"],
+      ["Dependency Analysis","วิเคราะห์ Dependency","Direct/transitive versions, EOL/deprecated, ranked CVEs, supply-chain risk, licenses, upgrade paths.","เวอร์ชันทางตรง/ทางอ้อม EOL/เลิกใช้ CVE จัดอันดับ ความเสี่ยง supply-chain ใบอนุญาต และเส้นทางอัปเกรด"],
+      ["Architecture","สถาปัตยกรรม","Style, coupling/cohesion, API surface & versioning; Mermaid integration, component, and data-flow diagrams.","รูปแบบ การผูก/เกาะเกี่ยว พื้นผิว API และเวอร์ชัน พร้อมไดอะแกรม Mermaid"],
+      ["Technical Debt & Code Quality","หนี้ทางเทคนิค & คุณภาพโค้ด","Debt severity, anti-patterns, complexity/duplication, dead code, prioritized backlog.","ระดับหนี้ anti-patterns ความซับซ้อน/ซ้ำซ้อน dead code และ backlog จัดลำดับ"],
+      ["Security","ความปลอดภัย","Secrets, insecure config, authn/z, OWASP Top 10, vulnerable deps, sensitive data, encryption.","ความลับ config ที่ไม่ปลอดภัย authn/z OWASP Top 10 dependency ที่มีช่องโหว่ ข้อมูลอ่อนไหว และการเข้ารหัส"],
+      ["Compliance & Governance","การปฏิบัติตามกฎ & ธรรมาภิบาล","Regulatory alignment, data residency, audit/log sufficiency, least-privilege, policy-as-code.","การสอดคล้องกฎ ถิ่นที่อยู่ข้อมูล ความเพียงพอของ audit/log สิทธิ์น้อยที่สุด และ policy-as-code"],
+      ["Performance","ประสิทธิภาพ","Hotspots, N+1/inefficient queries, resource/connection mgmt, blocking I/O, caching, concurrency.","จุดคอขวด N+1/คิวรีไม่มีประสิทธิภาพ การจัดการทรัพยากร/การเชื่อมต่อ I/O ที่บล็อก caching และ concurrency"],
+      ["Operational Readiness","ความพร้อมด้านปฏิบัติการ","Observability, CI/CD & IaC, health checks, resilience (retries/breakers), incident response.","Observability, CI/CD & IaC, health check, ความทนทาน (retry/breaker) และการตอบสนองเหตุการณ์"],
+      ["Maintainability","ความสามารถในการบำรุงรักษา","Testability & coverage, documentation gaps, config management, code organization, onboarding.","ความสามารถในการทดสอบ & coverage ช่องว่างเอกสาร การจัดการ config การจัดระเบียบโค้ด และการ onboard"],
+      ["Modernization Readiness","ความพร้อมสู่ความทันสมัย","12-factor gaps, statefulness/config/portability blockers, container/serverless fit; WAF + 6 Rs.","ช่องว่าง 12-factor อุปสรรค stateful/config/portability ความเหมาะสม container/serverless พร้อม WAF + 6 Rs"],
+      ["Business Logic & Capabilities","ตรรกะธุรกิจ & ความสามารถ","Workflows/rules in plain language, bounded contexts, domain events, integration points.","เวิร์กโฟลว์/กฎในภาษาที่เข้าใจง่าย bounded context domain event และจุดเชื่อมต่อ"],
+      ["Microservices Decomposition","การแยก Microservices","DDD boundaries, data ownership, call graphs, coupling; per-boundary API contracts.","ขอบเขตแบบ DDD การเป็นเจ้าของข้อมูล call graph การผูกกัน และ API contract ต่อขอบเขต"],
+      ["Frontend","Frontend","Architecture, state, routing, component reuse, API integration, accessibility (if present).","สถาปัตยกรรม state routing การใช้ component ซ้ำ การเชื่อม API และ accessibility (หากมี)"],
+      ["Knowledge Graph","Knowledge Graph","Typed entity/relationship graph (Person, Organization, Event, Product, Project, Service, …).","กราฟเอนทิตี/ความสัมพันธ์แบบมีประเภท (Person, Organization, Event, Product, Project, Service, …)"],
+    ];
+    document.getElementById("dimGrid").innerHTML = dims.map((d,i)=>`
+      <div class="card p-4 flex gap-3">
+        <span class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 grid place-items-center font-black text-xs shrink-0">${i+1}</span>
+        <div><div class="font-semibold text-slate-800 text-sm"><span class="lang-en">${d[0]}</span><span class="lang-th">${d[1]}</span></div><div class="text-xs text-slate-500 mt-0.5"><span class="lang-en">${d[2]}</span><span class="lang-th">${d[3]}</span></div></div>
+      </div>`).join("");
+    document.body.setAttribute("data-lang", document.body.getAttribute("data-lang"));
+  })();
+  </script>
+</body>
+</html>
